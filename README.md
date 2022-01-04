@@ -1,5 +1,5 @@
 - 👋 Hi, I’m @lavantien
 - 👀 I’m interested in the teaching of the Buddha
 - 🌱 I’m currently learning the teaching of the Buddha
-- 💞️ I’m looking to collaborate on go, docker, or anything related to programming
+- 💞️ I’m looking to collaborate on go, java, c, svelte, docker, or anything related to programming
 - 📫 How to reach me: via my email **lavantien96@gmail.com** or **https://linkedin.com/in/lavantien**
