@@ -9,6 +9,6 @@ I love to code and I get shit done.
 --- **Docker, Kubernetes, Terraform, GitHub Actions,** AWS & GCP, Tracing & Monitoring, ACID, BASE,  
 --- **Microservices, Distributed Systems, Concurrent Transactions, Linux Ecosystem,** Service Mesh,  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RRR Engineering, Cloud Native Computing Foundation Technologies, Teaching & Mentoring,  
---- **NestJS, NextJS, Strapi, Apollo Federation,** Stripe, SendGrid, Twilio, TDD, BDD, DDD  
+--- **NestJS, NextJS, Strapi, Apollo Federation,** Stripe, SendGrid, Twilio, TDD, BDD, DDD, Automation  
 
 Reach me via **https://linkedin.com/in/lavantien**
