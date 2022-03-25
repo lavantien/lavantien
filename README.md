@@ -8,7 +8,7 @@ I love to code and I get shit done.
 --- PostgresQL, Redis, Firebase, MongoDB, CockroachDB, RocksDB, InfluxDB, Solr, LSMTree & BTree,  
 --- Docker, Kubernetes, Terraform, GitHub Actions, AWS & GCP, Tracing & Monitoring, ACID, BASE,  
 --- Microservices, Distributed Systems, Concurrent Transactions, Linux Ecosystem, Service Mesh,  
-    RRR Engineering, Cloud Native Computing Foundation Technologies, Teaching & Mentoring,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RRR Engineering, Cloud Native Computing Foundation Technologies, Teaching & Mentoring,  
 --- NestJS, NextJS, Strapi, Apollo Federation, Stripe, SendGrid, Twilio, TDD, BDD, DDD  
 
 Reach me via **https://linkedin.com/in/lavantien**
