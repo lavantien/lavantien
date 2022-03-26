@@ -2,7 +2,7 @@ I love to code and I get shit done.
 
 - Professional Experience: **6+ years** (Fullstack Dev, as of 2022)
 - English: **bilingual**
-- Main technologies and paradigms:  
+- Preffered technologies and paradigms:  
 --- **Go, Node, TypeScript, React,** Svelte, Flutter, Ruby, PHP, C, C++, Java, Python, Rust, Lua  
 --- **RESTful, GRPC, GraphQL, WebSocket,** NATS, Kafka, MQTT, NGINX & Envoy, TCP & UDP, HTTP1.1/2/3  
 --- **PostgresQL, Redis, Firebase, MongoDB,** CockroachDB, RocksDB, InfluxDB, Solr, LSMTree & BTree  
