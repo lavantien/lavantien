@@ -3,7 +3,7 @@ I love to code and I get shit done.
 - Professional Experience: **6+ years** (Fullstack Dev, as of 2022)
 - English: **bilingual**
 - Preferred technologies:
---- Go, Node, TypeScript, React, Svelte, Flutter  
+--- Go, Node, TypeScript, React, Svelte, C  
 --- RESTful, GRPC, GraphQL, WebSocket, NATS  
 --- PostgresQL, Redis, Firebase, MongoDB, CockroachDB  
 --- Docker, Kubernetes, Terraform, GitHub Actions, AWS & GCP  
