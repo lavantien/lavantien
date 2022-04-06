@@ -2,7 +2,7 @@ I love to code and I get shit done.
 
 - **English**: Bilingual
 - **Years of Experience**: 6+
-- **Specialization**: Fullstack
+- **Specialization**: Full-stack
 - **Core**: Go, NestJS, NextJS | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git
 - **Secondary**: Strapi, Spring, Java, C | Firebase | NATS, Kafka | Kubernetes, Terraform, IoT, SRE
 
