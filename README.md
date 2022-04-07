@@ -1,3 +1,11 @@
+<div>
+  <a href="https://app.daily.dev/lavantien" target="_blank">
+    <img src="https://github.com/lavantien/lavantien/blob/main/devcard.svg" width="256" align="right" alt="Tien La's Dev Card"/>
+  </a>
+</div>
+
+<br />
+
 I love to code and I get shit done.
 
 - **English**: Bilingual
@@ -7,5 +15,3 @@ I love to code and I get shit done.
 - **Secondary**: Strapi, Spring, Java, C | Firebase | NATS, Kafka | Kubernetes, Terraform, IoT, SRE
 
 Reach me via **https://linkedin.com/in/lavantien**
-
-<a href="https://app.daily.dev/lavantien"><img src="https://github.com/lavantien/lavantien/blob/master/devcard.svg" width="400" alt="Tien La's Dev Card"/></a>
