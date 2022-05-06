@@ -8,10 +8,14 @@
 
 I love to code and I get shit done.
 
-- **English**: Bilingual
-- **Years of Experience**: 6+
-- **Specialization**: Backend
-- **Core**: Go, Nest, Next, Nuxt | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git | Microservices
-- **Secondary**: Rust, C, RedwoodJS, Strapi, Spring, Java | Firebase | NATS, Kafka | Kubernetes, Terraform, IoT | SRE
+- **Years of Experience**: 6 - Specialization: Backend - English: Bilingual
+
+- **Core**: Go | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
+
+- **Secondary**: Rust, C, JS, Java | Nest, Next, Nuxt, Tauri, Spring | Firebase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
 
 Reach me via **https://linkedin.com/in/lavantien**
+
+"A wise man should avoid uncelibacy as he would avoid falling into a pit of glowing charcoal. 
+If unable to lead a celibate life, he should not go to another's wives."
+- KN Snp 2.14
