@@ -12,7 +12,7 @@ I love to code and I get shit done.
 
 - **Core**: Go | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
 
-- **Secondary**: Rust, C, JS, Java | Nest, Next, Nuxt, Tauri, Spring | Firebase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
+- **Secondary**: Rust, C, JS, Java | Tauri, Yew, Nest, Next, Nuxt | Firebase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
 
 Reach me via **https://linkedin.com/in/lavantien**
 
