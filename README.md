@@ -8,7 +8,7 @@
 
 I love to code and I get shit done.
 
-- **Years of Experience**: 6 - Specialization: Backend - English: Bilingual
+- **Years of Experience**: 6 - **Specialization**: Backend - **English**: Bilingual
 
 - **Core**: Go | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
 
