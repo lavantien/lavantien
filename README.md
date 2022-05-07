@@ -14,6 +14,10 @@ I love to code and I get shit done.
 
 - **Secondary**: Rust, C, JS, Java | Tauri, Yew, Nest, Next, Nuxt | Firebase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
 
+- **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
+
+- **Gaming**: Dota 2/Auto Chess, LoL/TFT, CSGO, Grim Dawn, AoE 4, BTD Battles 1/2, Super Auto Pets
+
 Reach me via **https://linkedin.com/in/lavantien**
 
 "A wise man should avoid uncelibacy as he would avoid falling into a pit of glowing charcoal. 
