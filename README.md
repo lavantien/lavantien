@@ -6,6 +6,8 @@
 
 <br />
 
+Finding peace.
+
 - **Years of Experience**: 6 - **Specialization**: Backend - **English**: Bilingual
 
 - **Core**: Go | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
