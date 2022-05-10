@@ -6,8 +6,6 @@
 
 <br />
 
-I love to code and I get shit done.
-
 - **Years of Experience**: 6 - **Specialization**: Backend - **English**: Bilingual
 
 - **Core**: Go | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
@@ -16,7 +14,7 @@ I love to code and I get shit done.
 
 - **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
 
-- **Gaming**: Dota 2/Auto Chess, LoL/TFT, CSGO, Grim Dawn, AoE 4, BTD Battles 1/2, Super Auto Pets
+- **Gaming**: Dota 2/Auto Chess, LoL/TFT, CSGO, Grim Dawn, AoE 4, Bloons TD, Super Auto Pets
 
 Reach me via **https://linkedin.com/in/lavantien**
 
