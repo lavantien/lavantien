@@ -16,8 +16,6 @@ Finding peace.
 
 - **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
 
-- **Gaming**: Dota 2/Auto Chess, LoL/TFT, CSGO, Grim Dawn, AoE 4, Bloons TD, Super Auto Pets
-
 Reach me via **https://linkedin.com/in/lavantien**
 
 "A wise man should avoid uncelibacy as he would avoid falling into a pit of glowing charcoal. 
