@@ -16,7 +16,7 @@ Finding peace.
 
 - **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
 
-- **Gaming**: Dota 2, Auto Chess
+- **Gaming**: Dota 2, Auto Chess, Grim Dawn, AoE 4
 
 Reach me via **https://linkedin.com/in/lavantien**
 
