@@ -16,5 +16,3 @@ Finding peace.
 
 - **Gaming**: Dota 2, Auto Chess, Grim Dawn, AoE 4
 
-"A wise man should avoid uncelibacy as he would avoid falling into a pit of glowing charcoal. 
-If unable to lead a celibate life, he should not go to another's wives." - KN Snp 2.14
