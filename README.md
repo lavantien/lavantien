@@ -14,6 +14,6 @@ Finding peace.
 
 - **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
 
-- **Gaming**: Dota 2, Auto Chess, Grim Dawn, AoE 4
+- **Life Style and Nutrition**: https://www.reddit.com/user/AriyaSavaka/comments/xar38y/notes_on_healthy_lifestyle_and_nutrition/
 
 ![](./profile-3d-contrib/profile-night-rainbow.svg)
