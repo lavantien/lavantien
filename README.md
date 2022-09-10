@@ -8,9 +8,9 @@
 
 Finding peace.
 
-- **Core**: Go | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
+- **Core**: Go, JS | PostgreSQL, MongoDB, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
 
-- **Secondary**: Rust, C, JS, Java | Tauri, Yew, Nest, Next, Nuxt | Firebase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
+- **Secondary**: Rust, C, Java | Nest, Next, Nuxt | Firebase, Supabase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
 
 - **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
 
