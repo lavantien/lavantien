@@ -12,7 +12,7 @@ Finding peace.
 
 - **Secondary**: Rust, C, Java | Nest, Next, Nuxt | Firebase, Supabase | NATS, Kafka | Kubernetes, Terraform | IoT, SRE
 
-- **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language
+- **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language, Practical MongoDB Aggregations Book
 
 - **Life Style and Nutrition**:   https://www.reddit.com/user/AriyaSavaka/comments/xar38y/notes_on_healthy_lifestyle_and_nutrition/
 
