@@ -10,7 +10,7 @@ Finding peace.
 
 - **Core**: Go, JS/TS | Node, React | MongoDB, PostgreSQL, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
 
-- **Secondary**: Rust, Dart, C++, Java, Python | Flutter | Firebase | NATS, Kafka | Kubernetes, Terraform | Linux, Edge, SRE
+- **Secondary**: Rust, Dart, Java, Python | Flutter | Firebase | NATS, Kafka | Kubernetes, Terraform | Linux, Cryptography, Edge, SRE
 
 - **Reading**: Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga | Distributed Services with Go, The Rust Programming Language, Practical MongoDB Aggregations Book
 
