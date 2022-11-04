@@ -2,7 +2,7 @@ Finding peace.
 
 **Core**: Go, JS/TS | Node, React | MongoDB, PostgreSQL, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices  
 
-**Secondary**: Java, Rust, Python | Spring | Firebase | NATS, Kafka | Kubernetes, Terraform | Linux, Cryptography, Edge, SRE  
+**Secondary**: Java, Rust, Dart, Python | Spring, Flutter | Firebase | NATS, Kafka | Kubernetes, Terraform | Linux, Cryptography, Edge, SRE  
 
 **Reading**:  
 - Dīgha Nikāya, Majjhima Nikāya, Saṃyukta Nikāya, Aṅguttara Nikāya, Khuddaka Nikāya | Vinaya Piṭaka | Milinda Pañha, Visuddhimagga, Vimuttimagga
