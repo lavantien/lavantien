@@ -1,7 +1,5 @@
 Finding peace.
 
-Remote Culture | Expected Salary: $169K
-
 In practice for 10 years - Specialization: Backend - English/Vietnamese: Bilingual - Typing Speed: 101 WPM Avg
 
 I've also mastered Google Search and AI Tools such as ChatGPT 
