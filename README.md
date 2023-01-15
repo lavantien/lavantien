@@ -5,7 +5,7 @@ In practice for 10 years - Specialization: Backend - English/Vietnamese: Bilingu
 I've also mastered Google Search and AI Tools such as ChatGPT 
 
 **Core**:  
-Go, JS/TS | Node, React | MongoDB, PostgreSQL, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
+Go, C/C++, JS/TS | Node, React | MongoDB, PostgreSQL, Redis | RESTful, GRPC, GraphQL | Docker, Git, CI/CD | Microservices
 
 **Secondary**:  
 Java, Rust, Dart, Python | Spring, Flutter | Firebase | NATS, Kafka | Kubernetes, Terraform | Linux, Cryptography, Edge, SRE
