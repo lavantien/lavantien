@@ -1,5 +1,7 @@
+Dotfiles Specialist
+
 ```bash
-sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && brew upgrade && rustup update
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && rustup update && brew upgrade
 
 docker rm $(docker ps -a -q --filter "ancestor=${IMG_ID}")
 
