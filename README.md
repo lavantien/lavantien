@@ -1,4 +1,4 @@
-Dotfiles Specialist
+Senior Dotfiles Engineer
 
 ```bash
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && rustup update && brew upgrade
