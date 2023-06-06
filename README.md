@@ -2,9 +2,13 @@ Senior Dotfiles Engineer
 
 ```bash
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && rustup update && brew upgrade
+```
 
+```bash
 docker rm $(docker ps -a -q --filter "ancestor=${IMG_ID}")
+```
 
+```bash
 gh repo list ${REPO_NAME} --limit 1000 | while read -r repo _; do
  gh repo clone "$repo" "$repo" -- -q 2>/dev/null || (
  cd "$repo" || exit
@@ -13,7 +17,9 @@ gh repo list ${REPO_NAME} --limit 1000 | while read -r repo _; do
  git pull -q
  )
 done
+```
 
+```vim
 :'<,'>norm! @a
 ```
 
