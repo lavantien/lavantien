@@ -23,4 +23,6 @@ done
 :'<,'>norm! @a
 ```
 
+Résumé: <https://github.com/lavantien/resume>
+
 ![](./profile-3d-contrib/profile-gitblock.svg)
