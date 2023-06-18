@@ -23,6 +23,8 @@ done
 :'<,'>norm! @a
 ```
 
-Résumé: <https://github.com/lavantien/resume>
+SumoBot: <https://github.com/lavantien/SumoBot>  
+Gist Snippets: <https://gist.github.com/lavantien>  
+Résumé: <https://github.com/lavantien/resume>  
 
 ![](./profile-3d-contrib/profile-gitblock.svg)
