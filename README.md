@@ -24,6 +24,7 @@ done
 ```
 
 SumoBot: <https://github.com/lavantien/SumoBot>  
+Genetic: <https://github.com/lavantien/genetic-cpp>  
 Gist Snippets: <https://gist.github.com/lavantien>  
 Résumé: <https://github.com/lavantien/resume>  
 
