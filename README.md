@@ -1,4 +1,9 @@
-Senior Dotfiles Engineer
+Senior Dotfiles Engineer  
+
+SumoBot: <https://github.com/lavantien/SumoBot>  
+Genetic: <https://github.com/lavantien/genetic-cpp>  
+Gist Snippets: <https://gist.github.com/lavantien>  
+Résumé: <https://github.com/lavantien/resume>  
 
 ```bash
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && rustup update && brew upgrade
@@ -22,10 +27,5 @@ done
 ```vim
 :'<,'>norm! @a
 ```
-
-SumoBot: <https://github.com/lavantien/SumoBot>  
-Genetic: <https://github.com/lavantien/genetic-cpp>  
-Gist Snippets: <https://gist.github.com/lavantien>  
-Résumé: <https://github.com/lavantien/resume>  
 
 ![](./profile-3d-contrib/profile-gitblock.svg)
