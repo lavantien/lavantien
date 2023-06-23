@@ -1,7 +1,8 @@
 Senior Dotfiles Engineer  
 
-SumoBot: <https://github.com/lavantien/SumoBot>  
 Genetic: <https://github.com/lavantien/genetic-cpp>  
+Sudoku CLI: <https://github.com/lavantien/sudoku-cli>  
+SumoBot: <https://github.com/lavantien/SumoBot>  
 Gist Snippets: <https://gist.github.com/lavantien>  
 Résumé: <https://github.com/lavantien/resume>  
 
