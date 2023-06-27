@@ -16,12 +16,12 @@ docker rm $(docker ps -a -q --filter "ancestor=${IMG_ID}")
 
 ```bash
 gh repo list ${REPO_NAME} --limit 1000 | while read -r repo _; do
- gh repo clone "$repo" "$repo" -- -q 2>/dev/null || (
- cd "$repo" || exit
- git checkout -q main 2>/dev/null || true
- git checkout -q master 2>/dev/null || true
- git pull -q
- )
+  gh repo clone "$repo" "$repo" -- -q 2>/dev/null || (
+    cd "$repo" || exit
+    git checkout -q main 2>/dev/null || true
+    git checkout -q master 2>/dev/null || true
+    git pull -q
+  )
 done
 ```
 
