@@ -1,4 +1,4 @@
-Senior Dotfiles Engineer  
+I'm just a random programmer who love code
 
 Genetic: <https://github.com/lavantien/genetic-cpp>  
 Sudoku CLI: <https://github.com/lavantien/sudoku-cli>  
