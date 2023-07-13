@@ -6,6 +6,9 @@ SumoBot: <https://github.com/lavantien/SumoBot>
 Gist Snippets: <https://gist.github.com/lavantien>  
 Résumé: <https://github.com/lavantien/resume>  
 
+<details>
+  <summary>show more</summary>
+
 ```bash
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && rustup update && brew upgrade
 ```
@@ -30,3 +33,7 @@ done
 ```
 
 ![](./profile-3d-contrib/profile-gitblock.svg)
+
+</details>
+
+
