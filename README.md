@@ -6,7 +6,6 @@ SumoBot: <https://github.com/lavantien/SumoBot>
 Gist Snippets: <https://gist.github.com/lavantien>  
 Professional Programming Resources: <https://gist.github.com/lavantien/5c2d8aa3103ca32c1c817c36fd8d0fb1>  
 Buddhism Research: <https://gist.github.com/lavantien/5789220c9f07c8b5e0b8728b4ac53df6>  
-Résumé: <https://github.com/lavantien/resume>  
 
 <details>
   <summary>show more</summary>
