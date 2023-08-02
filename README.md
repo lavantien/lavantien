@@ -3,8 +3,7 @@ I'm just a random programmer who love code
 Genetic: <https://github.com/lavantien/genetic-cpp>  
 Sudoku CLI: <https://github.com/lavantien/sudoku-cli>  
 SumoBot: <https://github.com/lavantien/SumoBot>  
-Gist Snippets: <https://gist.github.com/lavantien>  
-Professional Programming Resources: <https://gist.github.com/lavantien/5c2d8aa3103ca32c1c817c36fd8d0fb1>  
+Thorough Guide to Senior Software Engineering: <https://gist.github.com/lavantien/dc730dad7d7e8157000ddae845eddfd7>  
 Baseline Physical & Mental Health Maintenance Guide: <https://gist.github.com/lavantien/b158252fcdaa6ba114e61d014212f349>  
 Buddhism Research: <https://gist.github.com/lavantien/5789220c9f07c8b5e0b8728b4ac53df6>  
 
