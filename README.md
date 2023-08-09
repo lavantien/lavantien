@@ -1,5 +1,5 @@
-Guide to Modern Software Engineering: <https://gist.github.com/lavantien/dc730dad7d7e8157000ddae845eddfd7>  
-Physical & Mental Health Maintenance Guide: <https://gist.github.com/lavantien/b158252fcdaa6ba114e61d014212f349>  
+Modern Software Engineering Resources: <https://gist.github.com/lavantien/dc730dad7d7e8157000ddae845eddfd7>  
+Physical & Mental Health Maintenance: <https://gist.github.com/lavantien/b158252fcdaa6ba114e61d014212f349>  
 
 <div style="display: flex;">
   <img src="https://github-readme-stats.vercel.app/api?username=lavantien&show_icons=true&theme=transparent&rank_icon=percentile" alt="lavantien's GitHub stats" title="lavantien's GitHub stats" height="200" style="float: left" />
