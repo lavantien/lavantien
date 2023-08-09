@@ -4,3 +4,5 @@ Standard Java 20 Spring Boot REST API: <https://github.com/lavantien/springboot-
 Physical & Mental Health Maintenance Guide: <https://gist.github.com/lavantien/b158252fcdaa6ba114e61d014212f349>  
 
 <img src="./profile-3d-contrib/profile-gitblock.svg" alt="" title="" height="200" />
+
+![lavantien's GitHub stats](https://github-readme-stats.vercel.app/api?username=lavantien&show_icons=true&theme=transparent)
