@@ -6,4 +6,5 @@ Physical & Mental Health Maintenance: <https://gist.github.com/lavantien/b158252
   <img src="./profile-3d-contrib/profile-night-view.svg" alt="lavantien profile's gitblock" title="lavantien profile's gitblock" height="200" style="float: left" />
 </div>
 
-Sustain Development: <https://s3.amazonaws.com/sustainabledevelopment.report/2023/sustainable-development-report-2023.pdf>
+United Nation's Sustainable Development Goals: <https://sdgs.un.org/goals>  
+SDGs Report: <https://s3.amazonaws.com/sustainabledevelopment.report/2023/sustainable-development-report-2023.pdf>  
