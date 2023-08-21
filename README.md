@@ -1,8 +1,8 @@
 <div style="display: flex; flex-flow: row wrap;">
-  <div style="float: left; max-width: 400">
-    <img src="./profile-3d-contrib/profile-night-view.svg" alt="lavantien profile's gitblock" title="lavantien profile's gitblock" height="275" style="float: left" />
+  <div style="float: left; max-width: 405">
+    <img src="./profile-3d-contrib/profile-night-view.svg" alt="lavantien profile's gitblock" title="lavantien profile's gitblock" height="275" width="400" style="float: left" />
   </div>
-  <div style="float: left; max-width: 400">
+  <div style="float: left; max-width: 405">
       <img src="./assets/logo-go.png" alt="go" title="go" height="50" style="" />
       <img src="./assets/logo-rust.png" alt="rust" title="rust" height="50" style="" />
       <img src="./assets/logo-java.png" alt="java" title="java" height="50" style="" />
