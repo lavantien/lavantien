@@ -21,7 +21,7 @@
     <td><img src="./assets/logo-neovim.png" alt="neovim" title="neovim" width="72" /></td>
   </tr>
   <tr>
-    <td colspan="8" align="center"><p>&nbsp;&nbsp;UN's Sustainable Development Goals: <a href="https://sdgs.un.org/goals" target=”_blank”>sdgs.un.org/goals</a></p></td>
+    <td colspan="8" align="center"><p>&nbsp;&nbsp;United Nations' Sustainable Development Goals: <a href="https://sdgs.un.org/goals" target=”_blank”>sdgs.un.org/goals</a></p></td>
   </tr>
 </table>
 
