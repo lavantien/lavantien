@@ -21,7 +21,15 @@
     <td align="center"><img src="./assets/logo-neovim.png" alt="neovim" title="neovim" height="72" /></td>
   </tr>
   <tr>
-    <td colspan="8" align="center"><p>&nbsp;&nbsp;United Nations' Sustainable Development Goals: <a href="https://sdgs.un.org/goals" target=”_blank”>sdgs.un.org/goals</a></p></td>
+    <td colspan="8" align="center"><p>Proficient = [Go, Rust, Java, JavaScript, NextJS, Postgres, Mongo, Docker, REST, GRPC, Linux]</p></td>
+  </tr>
+  <tr>
+    <td colspan="8" align="center"><p>Domains = [Critical, Edge, Cryptography, Anthropology, Healthcare, Logistics, Infrastructure, Commerce]</p></td>
+  </tr>
+  <tr>
+    <td colspan="8" align="center"><p>Avoidances = [Gambling, Weapon, Beverages, Dating, Media, Property, Advertisement, Web3]</p></td>
   </tr>
 </table>
+
+
 
