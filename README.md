@@ -21,7 +21,7 @@
     <td align="center"><img src="./assets/logo-neovim.png" alt="neovim" title="neovim" height="72" /></td>
   </tr>
   <tr>
-    <td colspan="8" align="left"><p>Proficient = [Go, Rust, Java, JavaScript, NextJS, Postgres, Mongo, Docker, REST, GRPC, Linux]</p></td>
+    <td colspan="8" align="left"><p>Proficient = [Go, Rust, Lua, Java, JavaScript, NextJS, Postgres, Mongo, Docker, REST, GRPC, Linux, Vim]</p></td>
   </tr>
   <tr>
     <td colspan="8" align="left"><p>Domains = [Critical, Edge, Cryptography, Anthropology, Healthcare, Logistics, Infrastructure, Commerce]</p></td>
