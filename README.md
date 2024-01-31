@@ -20,15 +20,6 @@
     <td align="center"><img src="./assets/logo-linux.png" alt="linux" title="linux" width="72" /></td>
     <td align="center"><img src="./assets/logo-neovim.png" alt="neovim" title="neovim" height="72" /></td>
   </tr>
-  <tr>
-    <td colspan="8" align="left"><p>Proficient = [Go, Rust, Lua, Java, JavaScript, NextJS, Postgres, Mongo, Docker, REST, GRPC, Linux, Vim]</p></td>
-  </tr>
-  <tr>
-    <td colspan="8" align="left"><p>Domains = [Critical, Edge, Cryptography, Anthropology, Healthcare, Logistics, Infrastructure, Commerce]</p></td>
-  </tr>
-  <tr>
-    <td colspan="8" align="left"><p>Avoidances = [Gambling, Weapon, Beverages, Dating, Media, Property, Advertisement, Web3]</p></td>
-  </tr>
 </table>
 
 
