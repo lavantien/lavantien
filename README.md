@@ -22,5 +22,4 @@
   </tr>
 </table>
 
-
-
+<span><b><i>Knowledge should be open and free. Hierarchy must be destroyed.</i></b></span>
