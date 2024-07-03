@@ -23,7 +23,7 @@
 </table>
 
 <div align="center">
-  <span><b><i>Knowledge and Education should be open and free. Hierarchy and Exploitation must be abolished.</i></b></span>
+  <span><b><i>Knowledge and Education should forever be open and free. Hierarchy and Exploitation must permanently be abolished.</i></b></span>
   <br />
   <span><b><i>Governments are the biggest thieves, the worst criminals.</i></b></span>
 </div>
