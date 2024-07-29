@@ -25,7 +25,5 @@
 <div align="center">
   <span><b><i>Knowledge and Education should forever be open and free. Hierarchy and Exploitation must be abolished.</i></b></span>
   <br />
-  <span><b><i>Governments are the biggest thieves, the worst criminals.</i></b></span>
-  <br />
-  <span><b><i>Power absolutely corrupts. Hierarchical power structures will always seek any mean possible to perpetuate themselves, whether it's deception, coercion, or violent domination. The current world is a clear reflection of this. No matter what they call themselves, a minority of elites will always seeking to dominate and extract the rest.</i></b></span>
+  <span><i>Hierarchical power structures will always seek any mean possible to perpetuate themselves, whether it's deception, coercion, or violent domination. The current world is a clear reflection of this.</i></span>
 </div>
