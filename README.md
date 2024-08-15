@@ -23,7 +23,7 @@
 </table>
 
 <div align="center">
-  <span><b><i>Knowledge and Education should forever be open and free. Hierarchy and Exploitation must be abolished.</i></b></span>
+  <span><b><i>Knowledge, Education, and Instruction must always be open and free. Hierarchy must be abolished.</i></b></span>
   <br />
   <span><i>Hierarchical power structures will always seek any mean possible to perpetuate themselves, whether it's deception, coercion, or violent domination. The current world is a clear reflection of this.</i></span>
 </div>
