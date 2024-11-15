@@ -4,12 +4,12 @@
     	 <img src="./profile-3d-contrib/profile-night-view.svg" alt="lavantien profile's gitblock" title="lavantien profile's gitblock" width="400"/>
     </td>
     <td align="center"><img src="./assets/logo-go.png" alt="go" title="go" width="72" /></td>
+    <td align="center"><img src="./assets/logo-js.png" alt="js" title="js" width="72" /></td>
     <td align="center"><img src="./assets/logo-rust.png" alt="rust" title="rust" width="72" /></td>
     <td align="center"><img src="./assets/logo-java.png" alt="java" title="java" height="72" /></td>
-    <td align="center"><img src="./assets/logo-lua.png" alt="lua" title="lua" width="72" /></td>
   </tr>
   <tr>
-    <td align="center"><img src="./assets/logo-js.png" alt="js" title="js" width="72" /></td>
+    <td align="center"><img src="./assets/logo-lua.png" alt="lua" title="lua" width="72" /></td>
     <td align="center"><img src="./assets/logo-mongo.png" alt="mongo" title="mongo" width="72" /></td>
     <td align="center"><img src="./assets/logo-postgres.png" alt="postgres" title="postgres" height="72" /></td>
     <td align="center"><img src="./assets/logo-docker.png" alt="docker" title="docker" width="72" /></td>
