@@ -23,6 +23,6 @@
 </table>
 
 <div align="center">
-  <span><b><i>Information, Knowledge, Education, and Instruction must always be open and free.</i></b></span><br />
+  <span><i>Information, Knowledge, Education, and Instruction must always be open and free.</i></span><br />
   <span><b>Modern Software Engineer Archive:</b>&nbsp;<a href="https://github.com/lavantien/modern-swe-library">https://github.com/lavantien/modern-swe-library</a></span>
 </div>
