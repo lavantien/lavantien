@@ -5,7 +5,7 @@
     </td>
     <td align="center"><img src="./assets/logo-go.png" alt="go" title="go" width="72" /></td>
     <td align="center"><img src="./assets/logo-js.png" alt="js" title="js" width="72" /></td>
-    <td align="center"><img src="./assets/logo-rust.png" alt="rust" title="rust" width="72" /></td>
+    <td align="center"><img src="./assets/logo-c.png" alt="rust" title="rust" width="72" /></td>
     <td align="center"><img src="./assets/logo-java.png" alt="java" title="java" height="72" /></td>
   </tr>
   <tr>
