@@ -2,7 +2,7 @@
 
 Autonomy-first SWE · Go + distributed systems · LLM eval / RAG / agents · Freelance + mentoring  
 **Start here:** [`llm-tournament`](https://github.com/lavantien/llm-tournament) · [`order-demo`](https://github.com/lavantien/order-demo) · [`go-edge-mesh`](https://github.com/lavantien/go-edge-mesh)  
-**Open knowledge / archive:** [`modern-swe-library`](https://github.com/lavantien/modern-swe-library) · **Contact:** mailto:YOUR_EMAIL_HERE · https://YOUR_SITE_HERE · https://www.linkedin.com/in/lavantien/
+**Open knowledge / archive:** [`modern-swe-library`](https://github.com/lavantien/modern-swe-library) · **Contact:** mailto:cariyaputta@gmail.com · https://www.linkedin.com/in/lavantien/
 
 <details>
 <summary><b>Featured work (dense table)</b></summary>
