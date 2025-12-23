@@ -29,20 +29,6 @@ Autonomy-first SWE · Go + distributed systems · LLM eval / RAG / agents · Fre
 </details>
 
 <details>
-<summary><b>“Vibe engineering” (what I mean)</b></summary>
-
-Fast iteration **with guardrails**:
-- small milestones + visible progress
-- tight feedback loops (demos, PRs, benchmarks)
-- tests where it matters; metrics where it hurts
-- clear interfaces; fewer moving parts
-- docs that explain tradeoffs (“why”), not just steps (“how”)
-
-Minimal ceremony, not minimal rigor.
-
-</details>
-
-<details>
 <summary><b>Working agreements (how I operate)</b></summary>
 
 - Short kickoff → clarify constraints + success metrics
