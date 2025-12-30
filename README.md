@@ -1,57 +1,34 @@
-# lavantien (they/them)
+# лавантиен
 
-Autonomy-first SWE · Go + distributed systems · LLM eval / RAG / agents · Freelance + mentoring  
-**Start here:** [`llm-tournament`](https://github.com/lavantien/llm-tournament) · [`order-demo`](https://github.com/lavantien/order-demo) · [`go-edge-mesh`](https://github.com/lavantien/go-edge-mesh)  
-**Open knowledge / archive:** [`modern-swe-library`](https://github.com/lavantien/modern-swe-library) · **Contact:** mailto:cariyaputta@gmail.com · https://www.linkedin.com/in/lavantien/
+Traditional SWE · Agentic Engineering · Technical Consulting
 
-<details>
-<summary><b>Featured work (dense table)</b></summary>
+Building custom solutions & custom agents. [cariyaputta@gmail.com](mailto:cariyaputta@gmail.com)
 
-| Area | Repo | What it shows | Why it matters |
-|---|---|---|---|
-| LLM evaluation | [`llm-tournament`](https://github.com/lavantien/llm-tournament) | eval harness + benchmarking platform | reproducibility, cost/quality tradeoffs, real tooling |
-| Backend service | [`order-demo`](https://github.com/lavantien/order-demo) | production-style Go service demo | API design, auth, testing, deployability |
-| Systems / mesh | [`go-edge-mesh`](https://github.com/lavantien/go-edge-mesh) | distributed data processing system | systems thinking, integration + ops concerns |
-| Distributed systems | [`distributed-booking-microservices`](https://github.com/lavantien/distributed-booking-microservices) | gRPC + NGINX + OpenAPI | service boundaries, reliability patterns |
-| Enterprise full‑stack (OG stack) | [`spring-angular-ecom-architecture`](https://github.com/lavantien/spring-angular-ecom-architecture) | Spring Boot + Angular e‑commerce architecture *(multi‑module, hand‑wired build/CI patterns)* | “manual” enterprise engineering: wiring, modules, integration patterns (legacy but real-world) |
-| Dev environment | [`dotfiles`](https://github.com/lavantien/dotfiles) | Neovim/WezTerm workflow | craft + reproducible setup |
+---
 
-</details>
+## Featured
 
-<details>
-<summary><b>What I do (consulting / freelancing)</b></summary>
+| Project | Stars | Stack |
+|---------|-------|-------|
+| [dotfiles](https://github.com/lavantien/dotfiles) | ![stars](https://img.shields.io/github/stars/lavantien/dotfiles?style=flat) | Neovim, PowerShell, Git hooks |
+| [llm-tournament](https://github.com/lavantien/llm-tournament) | ![stars](https://img.shields.io/github/stars/lavantien/llm-tournament?style=flat) | Go, LLM eval harness |
+| [order-demo](https://github.com/lavantien/order-demo) | ![stars](https://img.shields.io/github/stars/lavantien/order-demo?style=flat) | Go, REST API, production-ready |
+| [distributed-booking-microservices](https://github.com/lavantien/distributed-booking-microservices) | ![stars](https://img.shields.io/github/stars/lavantien/distributed-booking-microservices?style=flat) | Go, gRPC, NGINX, OpenAPI |
+| [go-edge-mesh](https://github.com/lavantien/go-edge-mesh) | ![stars](https://img.shields.io/github/stars/lavantien/go-edge-mesh?style=flat) | Go, MQTT, InfluxDB, Grafana |
+| [caro-ai-pvp](https://github.com/lavantien/caro-ai-pvp) | ![stars](https://img.shields.io/github/stars/lavantien/caro-ai-pvp?style=flat) | .NET 10, SvelteKit 5, minimax AI |
 
-- **Backend & APIs:** Go, REST/gRPC, Postgres, performance, concurrency
-- **Distributed systems:** boundaries, observability, reliability patterns
-- **LLM engineering:** eval design, datasets/metrics, RAG/agent pipelines, cost control
-- **Mentoring:** architecture reviews, refactors, onboarding, “ship safely, ship often”
+---
 
-</details>
+## Expertise
 
-<details>
-<summary><b>Working agreements (how I operate)</b></summary>
+- **Backend & Systems** — Go, gRPC/REST, Postgres, distributed systems
+- **LLM Engineering** — eval design, RAG pipelines, agent architectures, cost control
+- **Technical Consulting** — architecture reviews, mentoring, custom tooling
 
-- Short kickoff → clarify constraints + success metrics
-- 1–2 page design note → align before building
-- Small PRs → easy to review, easy to stop/redirect
-- Weekly demo/check-in (or async updates) → no surprises
-- Respect access boundaries + security policies
-- No reusing client code/data across clients
+---
 
-</details>
+## Consulting
 
-<details>
-<summary><b>Values + boundaries (intentional filter)</b></summary>
+Open for contract work. Small engagements, clear deliverables.
 
-I’m explicitly pro–open knowledge and anti-gatekeeping.
-
-**Open-first (preferred):**
-- I love shipping in the open (OSS, public docs, reproducible builds).
-- If it must be closed-source, I still aim for: portability, open standards, low lock-in.
-
-**Hard no:**
-- spyware/surveillance, coercive monitoring
-- scams, plagiarism, piracy in client work
-- DRM / anti-user lock-in as the main product goal
-
-</details>
+[LinkedIn](https://linkedin.com/in/lavantien/) · [Email](mailto:cariyaputta@gmail.com)
