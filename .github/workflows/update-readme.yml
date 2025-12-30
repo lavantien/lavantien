@@ -1,0 +1,128 @@
+name: Update README
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update README with repos
+        run: |
+          python3 << 'EOF'
+          import subprocess
+          import json
+          from datetime import datetime
+
+          # Get repos
+          result = subprocess.run([
+              'gh', 'repo', 'list', '--limit', '300',
+              '--json', 'name,stargazerCount,primaryLanguage,isFork,isArchived'
+          ], capture_output=True, text=True)
+          repos = json.loads(result.stdout)
+          repos = [r for r in repos if not r['isFork'] and not r['isArchived'] and r['stargazerCount'] >= 3]
+
+          # Pinned and interesting
+          pinned = ['dotfiles', 'llm-tournament', 'caro-ai-pvp', 'spring-angular-ecom-architecture',
+                    'go-edge-mesh', 'distributed-booking-microservices']
+          interesting = ['order-demo', 'go-sudoku-solver', 'go-parallel-prime-seeker', 'takeout-to-pdf',
+                         'concurrent-scrapper-ftsearch', 'health-app', 'DotnetCoreAngularDemo', 'TwoWarriors',
+                         'SumoBot', 'oldschool-web', 'neovim', 'go-flutter-microservices-skeleton']
+
+          icons = {
+              'Go': '![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white)',
+              'Python': '![Py](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)',
+              'JavaScript': '![JS](https://img.shields.io/badge/JS-F7DF1E?logo=javascript&logoColor=white)',
+              'TypeScript': '![TS](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white)',
+              'HTML': '![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white)',
+              'Java': '![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white)',
+              'C#': '![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white)',
+              'C': '![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)',
+              'PowerShell': '![PS](https://img.shields.io/badge/PowerShell-5391FE?logo=powershell&logoColor=white)',
+              'Makefile': '![Make](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white)',
+              'Lua': '![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white)',
+              'Shell': '![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white)',
+          }
+
+          def icon(r):
+              lang = (r.get('primaryLanguage') or {}).get('name')
+              return icons.get(lang, lang or 'N/A')
+
+          def make_row(r):
+              n = r['name']
+              i = icon(r)
+              return f"| [{n}](https://github.com/lavantien/{n}) | ![stars](https://img.shields.io/github/stars/lavantien/{n}?style=flat) | {i} |"
+
+          seen = set()
+          rows = []
+
+          # Pinned first
+          for p in pinned:
+              r = next((x for x in repos if x['name'] == p), None)
+              if r:
+                  rows.append(make_row(r))
+                  seen.add(r['name'])
+
+          # Interesting
+          for i in interesting:
+              r = next((x for x in repos if x['name'] == i), None)
+              if r and r['name'] not in seen:
+                  rows.append(make_row(r))
+                  seen.add(r['name'])
+
+          # Rest
+          for r in repos:
+              if r['name'] != 'lavantien' and r['name'] not in seen:
+                  rows.append(make_row(r))
+                  seen.add(r['name'])
+
+          # Read README
+          with open('README.md', 'r') as f:
+              content = f.read()
+
+          # Replace table
+          table_text = "\n".join(rows)
+          new_table = f"| Project | Stars | Stack |\n|---------|-------|-------|\n{table_text}\n"
+
+          # Simple replacement
+          lines = content.split('\n')
+          new_lines = []
+          in_table = False
+          skipped = 0
+          for i, line in enumerate(lines):
+              if '| Project | Stars | Stack |' in line:
+                  in_table = True
+                  new_lines.extend(new_table.split('\n'))
+                  skipped = 3
+                  continue
+              if in_table:
+                  if line.strip() == '' and skipped > 0:
+                      skipped -= 1
+                      if skipped == 0:
+                          in_table = False
+                  continue
+              new_lines.append(line)
+
+          # Update date
+          import re
+          content = '\n'.join(new_lines)
+          content = re.sub(r'\*Last updated:.*\*', f'*Last updated: {datetime.utcnow().strftime("%Y-%m-%d")}*', content)
+
+          with open('README.md', 'w') as f:
+              f.write(content)
+          EOF
+
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit & Push
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add README.md
+          git diff --staged --quiet || git commit -m "chore: update featured repos"
+          git push
