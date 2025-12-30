@@ -10,13 +10,13 @@ I build systems, tools, and agents that ship.
 
 ## What I Do
 
-**Backend & Distributed Systems** — Go for production services, gRPC/REST APIs, Postgres, message queues. Comfortable with concurrency patterns, load balancing, and the reliability engineering that keeps systems running.
+**Backend & Distributed Systems**: Go for production services, gRPC/REST APIs, Postgres, message queues. Comfortable with concurrency patterns, load balancing, and the reliability engineering that keeps systems running.
 
-**LLM Engineering** — Eval harnesses ([`llm-tournament`](https://github.com/lavantien/llm-tournament)), RAG pipelines, agent architectures. Focused on reproducibility, cost control, and measuring what actually matters.
+**LLM Engineering**: Eval harnesses ([`llm-tournament`](https://github.com/lavantien/llm-tournament)), RAG pipelines, agent architectures. Focused on reproducibility, cost control, and measuring what actually matters.
 
-**Algorithms & Tools** — From competitive programming implementations (genetic algorithms, FFT, graph theory) to practical tooling (CLI scrapers, PDF archivers, developer automation).
+**Algorithms & Tools**: From competitive programming implementations (genetic algorithms, FFT, graph theory) to practical tooling (CLI scrapers, PDF archivers, developer automation).
 
-**Full-Stack When Needed** — React, Svelte, Angular, TypeScript. Not my primary focus, but I ship complete features end-to-end.
+**Full-Stack When Needed**: React, Svelte, Angular, TypeScript. Not my primary focus, but I ship complete features end-to-end.
 
 ---
 
