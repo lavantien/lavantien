@@ -4,8 +4,6 @@ Traditional SWE · Agentic Engineering · Technical Consulting
 
 [LinkedIn](https://linkedin.com/in/lavantien/)
 
----
-
 I build systems, tools, and agents that ship.
 
 <details>
@@ -20,8 +18,6 @@ I build systems, tools, and agents that ship.
 **Full-Stack When Needed**: React, Svelte, Angular, TypeScript. Not my primary focus, but I ship complete features end-to-end.
 
 </details>
-
----
 
 <details>
 <summary><b>Featured Work</b></summary>
@@ -65,7 +61,5 @@ I build systems, tools, and agents that ship.
 | 34 | [go-svelte-movies](https://github.com/lavantien/go-svelte-movies) | 4 | ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white&logoWidth=12) ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white&logoWidth=12) | Go API with CSV endpoints for Svelte UI |
 
 </details>
-
----
 
 *Last updated: 2025-12-31*
