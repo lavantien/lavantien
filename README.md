@@ -1,4 +1,4 @@
-Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/)
+Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/) · *Last updated: 2025-12-31*
 
 I build systems, tools, and agents that ship.
 
@@ -57,5 +57,3 @@ I build systems, tools, and agents that ship.
 | 34 | [go-svelte-movies](https://github.com/lavantien/go-svelte-movies) | 4 | ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white&logoWidth=12) ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white&logoWidth=12) | Go API with CSV endpoints for Svelte UI |
 
 </details>
-
-*Last updated: 2025-12-31*
