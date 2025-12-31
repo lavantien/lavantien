@@ -10,7 +10,7 @@ I build systems, tools, and agents that ship.
 
 ## What I Do
 
-**Backend & Distributed Systems**: Go, C\#, Scala, C++, Rust for production services, gRPC/REST APIs, Postgres, message queues. Comfortable with concurrency patterns, load balancing, and the reliability engineering that keeps systems running.
+**Backend & Distributed Systems**: Go/C\#/Scala/C++/Rust for production services, GRPC/REST APIs with OpenAPI spec generation, SQLite/Postgres/Mongo/Redis database/caching, NATS message queues. Comfortable with concurrency patterns, L7/L4 NGINX load balancing, Docker Compose, Grafana stack, and the reliability engineering that keeps systems running.
 
 **Agentic Engineering**: Eval harnesses ([`llm-tournament`](https://github.com/lavantien/llm-tournament)), RAG pipelines, agent architectures. Focused on reproducibility, cost control, and measuring what actually matters.
 
