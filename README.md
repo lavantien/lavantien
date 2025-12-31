@@ -12,7 +12,7 @@ I build systems, tools, and agents that ship.
 
 **Backend & Distributed Systems**: Go for production services, gRPC/REST APIs, Postgres, message queues. Comfortable with concurrency patterns, load balancing, and the reliability engineering that keeps systems running.
 
-**LLM Engineering**: Eval harnesses ([`llm-tournament`](https://github.com/lavantien/llm-tournament)), RAG pipelines, agent architectures. Focused on reproducibility, cost control, and measuring what actually matters.
+**Agentic Engineering**: Eval harnesses ([`llm-tournament`](https://github.com/lavantien/llm-tournament)), RAG pipelines, agent architectures. Focused on reproducibility, cost control, and measuring what actually matters.
 
 **Algorithms & Tools**: From competitive programming implementations (genetic algorithms, FFT, graph theory) to practical tooling (CLI scrapers, PDF archivers, developer automation).
 
