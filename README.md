@@ -10,7 +10,7 @@ I build systems, tools, and agents that ship.
 
 ## What I Do
 
-**Backend & Distributed Systems**: Go/C\#/Scala/C++/Rust for production services, GRPC (Protobuf, Avro)/REST APIs with OpenAPI spec generation, SQLite/Postgres/Mongo/Redis database/caching with SQLc/SQLx migration, NATS/RabbitMQ message queues. 99-100% code xoverage achievable with unit tests, integration tests, e2e tests, full hooks and linters. Comfortable with concurrency patterns, Docker Compose, Grafana stack, L7/L4 NGINX load balancing, and the reliability engineering that keeps systems running.
+**Backend & Distributed Systems**: Production experience with Go, C#, Scala, C++, and Rust. Expertise in gRPC (Protobuf, Avro) and REST APIs with OpenAPI generation. Proficient in SQLite, Postgres, Mongo, and Redis using SQLc/SQLx, along with NATS/RabbitMQ message queues. Focused on code quality: enforcing high coverage (99-100% coverage achievable) via unit, integration, and E2E tests with strict linting. Skilled in concurrency patterns, Docker Compose, the Grafana stack, NGINX load balancing, and SRE principles.
 
 **Agentic Engineering**: Eval harnesses ([`llm-tournament`](https://github.com/lavantien/llm-tournament)), RAG pipelines, agent architectures. Focused on reproducibility, cost control, and measuring what actually matters.
 
