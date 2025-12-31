@@ -77,6 +77,25 @@ jobs:
               i = get_icons(r['languages'])
               return f"| {idx} | [{n}](https://github.com/lavantien/{n}) | {s} | {i} | {d} |"
 
+          # Always include modern-swe-library as row 0
+          rows = []
+          modern_swe_lib = {
+              'name': 'modern-swe-library',
+              'stars': 0,  # Will fetch actual
+              'description': 'Open knowledge library: curated resources for modern software engineering',
+              'languages': []
+          }
+          # Fetch actual star count
+          try:
+              lib_result = subprocess.run([
+                  'gh', 'repo', 'view', 'lavantien/modern-swe-library',
+                  '--json', 'stargazerCount', '--jq', '.stargazerCount'
+              ], capture_output=True, text=True)
+              modern_swe_lib['stars'] = int(lib_result.stdout.strip()) if lib_result.stdout.strip().isdigit() else 0
+          except:
+              modern_swe_lib['stars'] = 9
+          rows.append(modern_swe_lib)
+
           # Pinned and interesting
           pinned = ['dotfiles', 'llm-tournament', 'caro-ai-pvp', 'spring-angular-ecom-architecture',
                     'go-edge-mesh', 'distributed-booking-microservices']
@@ -84,8 +103,7 @@ jobs:
                          'concurrent-scrapper-ftsearch', 'health-app', 'DotnetCoreAngularDemo', 'TwoWarriors',
                          'SumoBot', 'oldschool-web', 'neovim', 'go-flutter-microservices-skeleton']
 
-          seen = set()
-          rows = []
+          seen = {'modern-swe-library'}  # Track added repos to avoid duplicates
 
           # Pinned first
           for p in pinned:
@@ -111,23 +129,24 @@ jobs:
           with open('README.md', 'r') as f:
               content = f.read()
 
-          # Generate table with ranking
-          table_rows = [make_row(idx, r) for idx, r in enumerate(rows, 1)]
+          # Generate table with ranking (starts at 0 for modern-swe-library)
+          table_rows = [make_row(idx, r) for idx, r in enumerate(rows, 0)]
 
           # Find and replace table
           lines = content.split('\n')
           new_lines = []
-          skip_until_empty = False
+          skip = False
           for line in lines:
               if '| # | Project | Stars | Stack | Description |' in line:
                   new_lines.append(line)
                   new_lines.append('|---|---------|-------|-------|-------------|')
                   new_lines.extend(table_rows)
-                  skip_until_empty = True
+                  skip = True
                   continue
-              if skip_until_empty:
-                  if line.strip() == '':
-                      skip_until_empty = False
+              if skip:
+                  if line.startswith('---'):
+                      skip = False
+                      new_lines.append(line)
                   continue
               new_lines.append(line)
 
