@@ -1,8 +1,4 @@
-#лавантиен
-
-Traditional SWE · Agentic Engineering · Technical Consulting
-
-[LinkedIn](https://linkedin.com/in/lavantien/)
+Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/)
 
 I build systems, tools, and agents that ship.
 
