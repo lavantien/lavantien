@@ -8,7 +8,8 @@ Traditional SWE · Agentic Engineering · Technical Consulting
 
 I build systems, tools, and agents that ship.
 
-## What I Do
+<details>
+<summary><b>What I Do</b></summary>
 
 **Backend & Distributed Systems**: Production experience with Go, C#, Scala, C++, and Rust. Expertise in gRPC (Protobuf, Avro) and REST APIs with OpenAPI generation. Proficient in SQLite, Postgres, Mongo, and Redis using SQLc/SQLx, along with NATS/RabbitMQ message queues. Focused on code quality: enforcing high coverage (99-100% coverage achievable) via unit, integration, and E2E tests with strict linting. Skilled in concurrency patterns, Docker Compose, the Grafana stack, NGINX load balancing, and SRE principles.
 
@@ -18,9 +19,12 @@ I build systems, tools, and agents that ship.
 
 **Full-Stack When Needed**: React, Svelte, Angular, TypeScript. Not my primary focus, but I ship complete features end-to-end.
 
+</details>
+
 ---
 
-## Featured Work
+<details>
+<summary><b>Featured Work</b></summary>
 
 | # | Project | Stars | Stack | Description |
 |---|---------|-------|-------|-------------|
@@ -59,6 +63,8 @@ I build systems, tools, and agents that ship.
 | 32 | [dev](https://github.com/lavantien/dev) | 5 | ![Sh](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white&logoWidth=12) | A place to dump all |
 | 33 | [py-auto-dir](https://github.com/lavantien/py-auto-dir) | 4 | ![Py](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&logoWidth=12) ![Make](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white&logoWidth=12) | Watch folders and move files to appropriate directories |
 | 34 | [go-svelte-movies](https://github.com/lavantien/go-svelte-movies) | 4 | ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white&logoWidth=12) ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white&logoWidth=12) | Go API with CSV endpoints for Svelte UI |
+
+</details>
 
 ---
 

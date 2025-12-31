@@ -132,19 +132,24 @@ jobs:
           # Generate table with ranking (starts at 0 for modern-swe-library)
           table_rows = [make_row(idx, r) for idx, r in enumerate(rows, 0)]
 
-          # Find and replace table
+          # Find and replace table (preserve details tags)
           lines = content.split('\n')
           new_lines = []
           skip = False
+          found_details_open = False
           for line in lines:
-              if '| # | Project | Stars | Stack | Description |' in line:
+              if '<summary><b>Featured Work</b></summary>' in line:
+                  found_details_open = True
+                  new_lines.append(line)
+                  continue
+              if found_details_open and '| # | Project | Stars | Stack | Description |' in line:
                   new_lines.append(line)
                   new_lines.append('|---|---------|-------|-------|-------------|')
                   new_lines.extend(table_rows)
                   skip = True
                   continue
               if skip:
-                  if line.startswith('---'):
+                  if line.strip() == '</details>':
                       skip = False
                       new_lines.append(line)
                   continue
