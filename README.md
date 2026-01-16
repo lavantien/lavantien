@@ -1,4 +1,4 @@
-Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/) · *Last updated: 2026-01-15*
+Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/) · *Last updated: 2026-01-16*
 
 I build systems, tools, and agents that ship.
 
@@ -21,7 +21,7 @@ I build systems, tools, and agents that ship.
 | # | Project | Stars | Stack | Description |
 |---|---------|-------|-------|-------------|
 | 0 | [modern-swe-library](https://github.com/lavantien/modern-swe-library) | 9 | N/A | Open knowledge library: curated resources for mod... |
-| 1 | [dotfiles](https://github.com/lavantien/dotfiles) | 25 | ![Sh](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white&logoWidth=12) ![PS](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white&logoWidth=12) ![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white&logoWidth=12) | Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ... |
+| 1 | [dotfiles](https://github.com/lavantien/dotfiles) | 26 | ![Sh](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white&logoWidth=12) ![PS](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white&logoWidth=12) ![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white&logoWidth=12) | Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ... |
 | 2 | [llm-tournament](https://github.com/lavantien/llm-tournament) | 7 | ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white&logoWidth=12) ![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white&logoWidth=12) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white&logoWidth=12) | Simple and blazingly fast dynamic evaluation plat... |
 | 3 | [caro-ai-pvp](https://github.com/lavantien/caro-ai-pvp) | 3 | ![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white&logoWidth=12) ![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white&logoWidth=12) ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white&logoWidth=12) | Tournament-strength Caro (Gomoku variant) AI with... |
 | 4 | [spring-angular-ecom-architecture](https://github.com/lavantien/spring-angular-ecom-architecture) | 13 | ![TS](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white&logoWidth=12) ![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white&logoWidth=12) ![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white&logoWidth=12) | FlowerShop full features web app powered by Sprin... |
