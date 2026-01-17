@@ -1,4 +1,4 @@
-Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/) · *Last updated: 2026-01-16*
+Traditional SWE · Agentic Engineering · Technical Consulting · [LinkedIn](https://linkedin.com/in/lavantien/) · *Last updated: 2026-01-17*
 
 I build systems, tools, and agents that ship.
 
