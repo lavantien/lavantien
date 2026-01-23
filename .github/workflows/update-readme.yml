@@ -86,7 +86,7 @@ jobs:
               'Objective-C': '![ObjC](https://img.shields.io/badge/ObjC-4388D0?logo=objectivec&logoColor=white)',
           }
 
-          # Get top languages and categorize
+          # Get top languages and categorize (top 10 each)
           top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)
 
           prog_badges = []
@@ -94,18 +94,18 @@ jobs:
           for lang, size in top_langs:
               badge = icons.get(lang, f'![{lang}]')
               if lang in PROG_LANGS:
-                  if len(prog_badges) < 14:
+                  if len(prog_badges) < 10:
                       prog_badges.append(badge)
               else:
                   if len(rest_badges) < 10:
                       rest_badges.append(badge)
-              if len(prog_badges) >= 14 and len(rest_badges) >= 10:
+              if len(prog_badges) >= 10 and len(rest_badges) >= 10:
                   break
 
-          # Language badges as HTML table (2 columns, 1 row)
-          prog_cell = ' '.join(prog_badges)
-          rest_cell = ' '.join(rest_badges)
-          lang_table = f'<table><tr><td>{prog_cell}</td><td>{rest_cell}</td></tr></table>'
+          # Language badges as plain markdown (2 rows)
+          prog_row = ' '.join(prog_badges)
+          rest_row = ' '.join(rest_badges)
+          lang_badges = f'{prog_row}\n\n{rest_row}'
 
           def make_row(left, right=None):
               l_desc = left.get('description', '')
@@ -193,7 +193,8 @@ jobs:
               if 'Agentic Engineer' in line:
                   new_lines.append('Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.github.com/lavantien/c149d2f044b7ed12eb548c3792c736b1) (pic at bottom)')
                   new_lines.append('')
-                  new_lines.append(lang_table)
+                  for badge_line in lang_badges.split('\n'):
+                      new_lines.append(badge_line)
                   continue
 
               # Skip old "Featured Work"
