@@ -131,18 +131,22 @@ jobs:
           lines = content.split('\n')
           new_lines = []
           skip = False
-          replaced_lang_badges = False
+          replaced_headline = False
           added_table = False
 
           for line in lines:
-              # Skip old "Featured Work" title
-              if 'Featured Work' in line:
+              # Replace headline line with badges appended
+              if not replaced_headline and 'Agentic Engineer' in line and 'I build systems' in line:
+                  new_lines.append(f'Agentic Engineer, I build systems, tools, agents, and games · {lang_badges}')
+                  replaced_headline = True
                   continue
 
-              # Replace language badges line (after headline)
-              if not replaced_lang_badges and line.startswith('!['):
-                  new_lines.append(lang_badges)
-                  replaced_lang_badges = True
+              # Skip standalone badge lines (old format)
+              if line.startswith('!['):
+                  continue
+
+              # Skip old "Featured Work" title
+              if 'Featured Work' in line:
                   continue
 
               # Replace table content
