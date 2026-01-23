@@ -74,9 +74,9 @@ jobs:
               return desc if desc else ''
 
           def make_row(left, right=None):
-              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a></td><td>{shorten_desc(left["description"])}</td>'
+              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a> ({left["stars"]}⭐)</td><td>{shorten_desc(left["description"])}</td>'
               if right:
-                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a></td><td>{shorten_desc(right["description"])}</td>'
+                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a> ({right["stars"]}⭐)</td><td>{shorten_desc(right["description"])}</td>'
                   return f'<tr>\n{l_link}{r_link}\n</tr>'
               return f'<tr>\n{l_link}</tr>'
 
@@ -138,7 +138,7 @@ jobs:
           for line in lines:
               # Replace headline line with badges appended
               if not replaced_headline and 'Agentic Engineer' in line and 'I build' in line:
-                  new_lines.append(f'Agentic Engineer .. I build systems/tools/agents/games .. {lang_badges}')
+                  new_lines.append(f'Agentic Engineer .. systems/tools/agents/games .. {lang_badges}')
                   replaced_headline = True
                   continue
 
