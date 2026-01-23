@@ -73,10 +73,12 @@ jobs:
                   return desc[:52] + '...'
               return desc if desc else ''
 
-          def make_row(r):
-              n = r['name']
-              d = shorten_desc(r['description'])
-              return f'<a href="https://github.com/lavantien/{n}">{n}</a> - {d}'
+          def make_row(left, right=None):
+              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a></td><td>{shorten_desc(left["description"])}</td>'
+              if right:
+                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a></td><td>{shorten_desc(right["description"])}</td>'
+                  return f'<tr>\n{l_link}{r_link}\n</tr>'
+              return f'<tr>\n{l_link}</tr>'
 
           # Always include modern-swe-library first
           rows = []
@@ -117,15 +119,14 @@ jobs:
           with open('README.md', 'r') as f:
               content = f.read()
 
-          # Generate 2-column table rows
-          table_rows = []
+          # Generate HTML table rows
+          table_rows = ['<table>']
           for i in range(0, len(rows), 2):
-              left = make_row(rows[i])
               if i + 1 < len(rows):
-                  right = make_row(rows[i + 1])
-                  table_rows.append(f'{left} \\| {right}')
+                  table_rows.append(make_row(rows[i], rows[i + 1]))
               else:
-                  table_rows.append(left)
+                  table_rows.append(make_row(rows[i]))
+          table_rows.append('</table>')
 
           # Update README content
           lines = content.split('\n')
@@ -136,8 +137,8 @@ jobs:
 
           for line in lines:
               # Replace headline line with badges appended
-              if not replaced_headline and 'Agentic Engineer' in line and 'I build systems' in line:
-                  new_lines.append(f'Agentic Engineer, I build systems, tools, agents, and games · {lang_badges}')
+              if not replaced_headline and 'Agentic Engineer' in line and 'I build' in line:
+                  new_lines.append(f'Agentic Engineer .. I build systems/tools/agents/games .. {lang_badges}')
                   replaced_headline = True
                   continue
 
@@ -150,14 +151,14 @@ jobs:
                   continue
 
               # Replace table content
-              if not added_table and line.startswith('<a href='):
+              if not added_table and line.startswith('<table>'):
                   new_lines.extend(table_rows)
                   added_table = True
                   skip = True
                   continue
               if skip:
                   # Skip until empty line or end of file
-                  if line.strip() == '' or not line.startswith('<a href='):
+                  if line.strip() == '' or not line.startswith('<td>') and not line.startswith('<tr>'):
                       skip = False
                       new_lines.append(line)
                   continue
