@@ -86,25 +86,38 @@ jobs:
               'Objective-C': '![ObjC](https://img.shields.io/badge/ObjC-4388D0?logo=objectivec&logoColor=white)',
           }
 
-          # Get top languages and categorize (top 10 each)
+          # Format bytes nicely
+          def format_bytes(b):
+              if b >= 1_000_000:
+                  return f'{b/1_000_000:.1f}M'
+              elif b >= 1_000:
+                  return f'{b/1_000:.0f}K'
+              return str(b)
+
+          # Get top languages and categorize (top 10 each, track top 4 sizes)
           top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)
 
-          prog_badges = []
-          rest_badges = []
+          prog_data = []
+          rest_data = []
           for lang, size in top_langs:
               badge = icons.get(lang, f'![{lang}]')
               if lang in PROG_LANGS:
-                  if len(prog_badges) < 10:
-                      prog_badges.append(badge)
+                  if len(prog_data) < 10:
+                      prog_data.append((lang, badge, size))
               else:
-                  if len(rest_badges) < 10:
-                      rest_badges.append(badge)
-              if len(prog_badges) >= 10 and len(rest_badges) >= 10:
+                  if len(rest_data) < 10:
+                      rest_data.append((lang, badge, size))
+              if len(prog_data) >= 10 and len(rest_data) >= 10:
                   break
 
-          # Language badges as plain markdown (2 rows)
-          prog_row = ' '.join(prog_badges)
-          rest_row = ' '.join(rest_badges)
+          # Build stats string (top 4)
+          def build_stats(data):
+              top4 = data[:4]
+              parts = [f'{lang}: {format_bytes(size)}' for lang, _, size in top4]
+              return ' (' + ', '.join(parts) + ')'
+
+          prog_row = ' '.join(b for _, b, _ in prog_data) + build_stats(prog_data)
+          rest_row = ' '.join(b for _, b, _ in rest_data) + build_stats(rest_data)
           lang_badges = f'{prog_row}\n\n{rest_row}'
 
           def make_row(left, right=None):
