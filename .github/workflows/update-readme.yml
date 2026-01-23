@@ -43,7 +43,15 @@ jobs:
                           size = lang.get('size', 0)
                           lang_sizes[name] = lang_sizes.get(name, 0) + size
 
-          # Language icons for top 7
+          # Languages considered "programming languages"
+          PROG_LANGS = {
+              'Go', 'Dart', 'C#', 'TypeScript', 'Python', 'Java', 'JavaScript',
+              'C++', 'C', 'Rust', 'Swift', 'Kotlin', 'Ruby', 'PHP', 'Lua',
+              'Blade', 'Svelte', 'Objective-C', 'Hack', 'Clojure', 'Scala',
+              'Haskell', 'Elixir', 'Julia', 'R', 'MATLAB', 'Perl', 'F#',
+          }
+
+          # Language badge icons
           icons = {
               'Go': '![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white&logoWidth=12)',
               'Python': '![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&logoWidth=12)',
@@ -62,11 +70,39 @@ jobs:
               'Dart': '![Dart](https://img.shields.io/badge/Dart-0175C2?logo=dart&logoColor=white&logoWidth=12)',
               'Svelte': '![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white&logoWidth=12)',
               'C': '![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white&logoWidth=12)',
+              'SCSS': '![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white&logoWidth=12)',
+              'Typst': '![Typst](https://img.shields.io/badge/Typst-239DAD?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj5UPC90ZXh0Pjwvc3ZnPg==&logoColor=white&logoWidth=12)',
+              'Go Template': '![GoTemplate](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white&logoWidth=12)',
+              'PHP': '![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white&logoWidth=12)',
+              'Swift': '![Swift](https://img.shields.io/badge/Swift-F05138?logo=swift&logoColor=white&logoWidth=12)',
+              'Kotlin': '![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white&logoWidth=12)',
+              'Ruby': '![Ruby](https://img.shields.io/badge/Ruby-CC342D?logo=ruby&logoColor=white&logoWidth=12)',
+              'Blade': '![Blade](https://img.shields.io/badge/Blade-F55247?logo=laravel&logoColor=white&logoWidth=12)',
+              'Vue': '![Vue](https://img.shields.io/badge/Vue-4FC08D?logo=vuedotjs&logoColor=white&logoWidth=12)',
+              'Vim Script': '![Vim](https://img.shields.io/badge/Vim-019733?logo=vim&logoColor=white&logoWidth=12)',
+              'TeX': '![TeX](https://img.shields.io/badge/TeX-3D6117?logo=latex&logoColor=white&logoWidth=12)',
+              'CMake': '![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white&logoWidth=12)',
+              'Dockerfile': '![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&logoWidth=12)',
+              'Batchfile': '![Batch](https://img.shields.io/badge/Batch-4EAA25?logo=windows&logoColor=white&logoWidth=12)',
+              'Nix': '![Nix](https://img.shields.io/badge/Nix-5D7997?logo=nixos&logoColor=white&logoWidth=12)',
+              'TSQL': '![TSQL](https://img.shields.io/badge/TSQL-CC2927?logo=microsoftsqlserver&logoColor=white&logoWidth=12)',
+              'Objective-C': '![ObjC](https://img.shields.io/badge/ObjC-4388D0?logo=objectivec&logoColor=white&logoWidth=12)',
           }
 
-          # Get top 10 languages by total size
-          top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)[:10]
-          lang_badges = ' '.join([icons.get(lang, lang) for lang, _ in top_langs])
+          # Get top 32 languages by total size and categorize
+          top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)[:32]
+
+          prog_badges = []
+          rest_badges = []
+          for lang, size in top_langs:
+              badge = icons.get(lang, f'![{lang}]')
+              if lang in PROG_LANGS:
+                  prog_badges.append(badge)
+              else:
+                  rest_badges.append(badge)
+
+          # Two rows separated by blank line
+          lang_badges = f"{' '.join(prog_badges)}\n\n{' '.join(rest_badges)}"
 
           def shorten_desc(desc):
               if len(desc) > 55:
@@ -136,9 +172,9 @@ jobs:
           added_table = False
 
           for line in lines:
-              # Replace headline line with badges appended
-              if not replaced_headline and 'Agentic Engineer' in line and 'I build' in line:
-                  new_lines.append(f'Agentic Engineer .. systems/tools/agents/games .. {lang_badges}')
+              # Replace headline line with badges and resume link
+              if not replaced_headline and 'Agentic Engineer' in line and ('systems' in line or 'I build' in line):
+                  new_lines.append(f'Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.github.com/lavantien/c149d2f044b7ed12eb548c3792c736b1) (pic at bottom) .. {lang_badges}')
                   replaced_headline = True
                   continue
 
