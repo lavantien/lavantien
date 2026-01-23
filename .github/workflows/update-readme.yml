@@ -185,8 +185,8 @@ jobs:
                       skip_table = False
                   continue
 
-              # Skip orphaned tr tags
-              if line.strip().startswith('<tr>') or line.strip().startswith('</tr>'):
+              # Skip all table-related fragments (we generate our own)
+              if '<td>' in line or '</td>' in line or '<tr>' in line or '</tr>' in line:
                   continue
 
               # Replace headline
