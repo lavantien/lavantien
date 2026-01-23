@@ -123,7 +123,7 @@ jobs:
               left = make_row(rows[i])
               if i + 1 < len(rows):
                   right = make_row(rows[i + 1])
-                  table_rows.append(f'{left} | {right}')
+                  table_rows.append(f'{left} \\| {right}')
               else:
                   table_rows.append(left)
 
