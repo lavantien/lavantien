@@ -64,8 +64,8 @@ jobs:
               'C': '![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white&logoWidth=12)',
           }
 
-          # Get top 7 languages by total size
-          top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)[:7]
+          # Get top 10 languages by total size
+          top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)[:10]
           lang_badges = ' '.join([icons.get(lang, lang) for lang, _ in top_langs])
 
           def shorten_desc(desc):
@@ -131,23 +131,24 @@ jobs:
           lines = content.split('\n')
           new_lines = []
           skip = False
-          found_section = False
           replaced_lang_badges = False
+          added_table = False
 
-          for i, line in enumerate(lines):
+          for line in lines:
+              # Skip old "Featured Work" title
+              if 'Featured Work' in line:
+                  continue
+
               # Replace language badges line (after headline)
               if not replaced_lang_badges and line.startswith('!['):
                   new_lines.append(lang_badges)
                   replaced_lang_badges = True
                   continue
 
-              # Replace Featured Work table
-              if '### Featured Work' in line:
-                  found_section = True
-                  new_lines.append(line)
-                  continue
-              if found_section and not skip and line.startswith('<a href='):
+              # Replace table content
+              if not added_table and line.startswith('<a href='):
                   new_lines.extend(table_rows)
+                  added_table = True
                   skip = True
                   continue
               if skip:
