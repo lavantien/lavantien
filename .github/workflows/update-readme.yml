@@ -111,7 +111,7 @@ jobs:
                   break
 
           # Short names for stats display
-          short_names = {'PowerShell': 'Pwsh', 'Go Template': 'GoTpl'}
+          short_names = {'PowerShell': 'Pwsh', 'Shell': 'Sh', 'Go Template': 'GoTpl'}
 
           # Build stats string (top 4)
           def build_stats(data):
