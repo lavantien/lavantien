@@ -110,10 +110,13 @@ jobs:
               if len(prog_data) >= 10 and len(rest_data) >= 10:
                   break
 
+          # Short names for stats display
+          short_names = {'PowerShell': 'Pwsh', 'Go Template': 'GoTpl'}
+
           # Build stats string (top 4)
           def build_stats(data):
               top4 = data[:4]
-              parts = [f'{lang}: {format_bytes(size)}' for lang, _, size in top4]
+              parts = [f'{short_names.get(lang, lang)}: {format_bytes(size)}' for lang, _, size in top4]
               return ' (' + ', '.join(parts) + ')'
 
           prog_row = ' '.join(b for _, b, _ in prog_data) + build_stats(prog_data)
