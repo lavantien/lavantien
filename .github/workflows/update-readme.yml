@@ -186,7 +186,7 @@ jobs:
                   continue
 
               # Skip all table-related fragments (we generate our own)
-              if '<td>' in line or '</td>' in line or '<tr>' in line or '</tr>' in line:
+              if '<td>' in line or '</td>' in line or '<tr>' in line or '</tr>' in line or '</table>' in line:
                   continue
 
               # Replace headline
