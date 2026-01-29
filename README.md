@@ -50,9 +50,13 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 
 
+
+
+
+
 <table>
 <tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (9⭐)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (31⭐)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
-<tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (8⭐)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (3⭐)</td><td>Tournament-strength Caro (Gomoku variant) AI with 7 advanced parallel search optimizations (PVS, LMR, Quiescence, Enhanced Move Ordering, Transposition Table, History Heuristic, Aspiration Windows). Built with .NET 10 and SvelteKit 5.</td></tr>
+<tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (8⭐)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (3⭐)</td><td>Caro AI PvP - Tournament-Strength Caro (Gomoku variant) with 19x19 board, Lazy SMP parallel search, and grandmaster-level AI</td></tr>
 <tr><td><a href="https://github.com/lavantien/FlowerShop">FlowerShop</a> (13⭐)</td><td>FlowerShop full features web app powered by Spring Boot and Angular</td><td><a href="https://github.com/lavantien/order-demo">order-demo</a> (6⭐)</td><td>A production-ready simple order service demo</td></tr>
 <tr><td><a href="https://github.com/lavantien/go-flutter-microservices-skeleton">go-flutter-microservices-skeleton</a> (6⭐)</td><td>go-flutter-microservices-skeleton</td><td><a href="https://github.com/lavantien/distributed-booking-microservices">distributed-booking-microservices</a> (6⭐)</td><td>Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3</td></tr>
 <tr><td><a href="https://github.com/lavantien/SumoBot">SumoBot</a> (5⭐)</td><td>Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.</td><td><a href="https://github.com/lavantien/office-space-allocation">office-space-allocation</a> (5⭐)</td><td>A simple program to determine space allocation for a office renter</td></tr>
@@ -61,4 +65,4 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 <tr><td><a href="https://github.com/lavantien/dev">dev</a> (5⭐)</td><td>A place to dump all</td><td><a href="https://github.com/lavantien/chess-repertoire-database">chess-repertoire-database</a> (5⭐)</td><td>A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series</td></tr>
 </table>
 
-*Last updated: 2026-01-28*
+*Last updated: 2026-01-29*
