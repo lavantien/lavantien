@@ -58,6 +58,10 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 
 
+
+
+
+
 <table>
 <tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (9⭐)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (31⭐)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
 <tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (8⭐)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (4⭐)</td><td>Caro AI PvP - Tournament-Strength Caro (Gomoku variant) with 19x19 board, Lazy SMP parallel search, and grandmaster-level AI</td></tr>
@@ -69,4 +73,4 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 <tr><td><a href="https://github.com/lavantien/dev">dev</a> (5⭐)</td><td>A place to dump all</td><td><a href="https://github.com/lavantien/chess-repertoire-database">chess-repertoire-database</a> (5⭐)</td><td>A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series</td></tr>
 </table>
 
-*Last updated: 2026-01-30*
+*Last updated: 2026-01-31*
