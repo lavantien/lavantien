@@ -2,7 +2,11 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 ![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white) ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white) ![TypeScript](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white) ![JavaScript](https://img.shields.io/badge/JS-F7DF1E?logo=javascript&logoColor=white) ![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white) ![C++](https://img.shields.io/badge/C%2B%2B-00599C?logo=cpp&logoColor=white) ![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white) ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white) (**C#**:1.9M, **Go**:1.2M, **TypeScript**:144K, **Python**:133K)
 
-![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white) ![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white) ![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white) ![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white) ![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) (**HTML**:2.5M, **Sh**:311K, **Pwsh**:237K, **CSS**:144K)
+![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white) ![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white) ![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white) ![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white) ![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) (**HTML**:2.5M, **Sh**:311K, **Pwsh**:242K, **CSS**:144K)
+
+
+
+
 
 
 
@@ -113,4 +117,4 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 <tr><td><a href="https://github.com/lavantien/dev">dev</a> (5⭐)</td><td>A place to dump all</td><td><a href="https://github.com/lavantien/chess-repertoire-database">chess-repertoire-database</a> (5⭐)</td><td>A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series</td></tr>
 </table>
 
-*Last updated: 2026-02-10*
+*Last updated: 2026-02-11*
