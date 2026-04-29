@@ -22,7 +22,7 @@ jobs:
           # Get repos with languages and descriptions
           result = subprocess.run([
               'gh', 'repo', 'list', '--limit', '300',
-              '--json', 'name,stargazerCount,description,languages,isFork,isArchived'
+              '--json', 'name,stargazerCount,description,languages,isFork,isArchived,createdAt'
           ], capture_output=True, text=True)
 
           repos = []
@@ -34,6 +34,7 @@ jobs:
                       'name': item['name'],
                       'stars': item['stargazerCount'],
                       'description': item.get('description', ''),
+                      'year': int(item['createdAt'][:4]),
                   })
                   if item.get('languages'):
                       for lang in item['languages']:
@@ -125,10 +126,10 @@ jobs:
 
           def make_row(left, right=None):
               l_desc = left.get('description', '')
-              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a> ({left["stars"]}⭐)</td><td>{l_desc}</td>'
+              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a> ({left["year"]}) ({left["stars"]}⭐)</td><td>{l_desc}</td>'
               if right:
                   r_desc = right.get('description', '')
-                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a> ({right["stars"]}⭐)</td><td>{r_desc}</td>'
+                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a> ({right["year"]}) ({right["stars"]}⭐)</td><td>{r_desc}</td>'
                   return f'<tr>{l_link}{r_link}</tr>'
               return f'<tr>{l_link}</tr>'
 
@@ -137,14 +138,17 @@ jobs:
           modern_swe_lib = {
               'name': 'modern-swe-library',
               'stars': 0,
+              'year': 2024,
               'description': 'Open knowledge library: curated resources for modern software engineering',
           }
           try:
               lib_result = subprocess.run([
                   'gh', 'repo', 'view', 'lavantien/modern-swe-library',
-                  '--json', 'stargazerCount', '--jq', '.stargazerCount'
+                  '--json', 'stargazerCount,createdAt', '--jq', '{stars: .stargazerCount, year: (.createdAt[:4])}'
               ], capture_output=True, text=True)
-              modern_swe_lib['stars'] = int(lib_result.stdout.strip()) if lib_result.stdout.strip().isdigit() else 0
+              lib_data = json.loads(lib_result.stdout.strip())
+              modern_swe_lib['stars'] = lib_data.get('stars', 0)
+              modern_swe_lib['year'] = int(lib_data.get('year', '2024'))
           except:
               modern_swe_lib['stars'] = 9
           rows.append(modern_swe_lib)
