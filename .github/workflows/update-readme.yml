@@ -126,10 +126,10 @@ jobs:
 
           def make_row(left, right=None):
               l_desc = left.get('description', '')
-              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a> ({left["year"]}) ({left["stars"]}⭐)</td><td>{l_desc}</td>'
+              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a> (<i>{left["year"]}</i>) (<b>{left["stars"]}⭐</b>)</td><td>{l_desc}</td>'
               if right:
                   r_desc = right.get('description', '')
-                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a> ({right["year"]}) ({right["stars"]}⭐)</td><td>{r_desc}</td>'
+                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a> (<i>{right["year"]}</i>) (<b>{right["stars"]}⭐</b>)</td><td>{r_desc}</td>'
                   return f'<tr>{l_link}{r_link}</tr>'
               return f'<tr>{l_link}</tr>'
 
@@ -138,17 +138,15 @@ jobs:
           modern_swe_lib = {
               'name': 'modern-swe-library',
               'stars': 0,
-              'year': 2024,
+              'year': 2023,
               'description': 'Open knowledge library: curated resources for modern software engineering',
           }
           try:
               lib_result = subprocess.run([
                   'gh', 'repo', 'view', 'lavantien/modern-swe-library',
-                  '--json', 'stargazerCount,createdAt', '--jq', '{stars: .stargazerCount, year: (.createdAt[:4])}'
+                  '--json', 'stargazerCount', '--jq', '.stargazerCount'
               ], capture_output=True, text=True)
-              lib_data = json.loads(lib_result.stdout.strip())
-              modern_swe_lib['stars'] = lib_data.get('stars', 0)
-              modern_swe_lib['year'] = int(lib_data.get('year', '2024'))
+              modern_swe_lib['stars'] = int(lib_result.stdout.strip()) if lib_result.stdout.strip().isdigit() else 0
           except:
               modern_swe_lib['stars'] = 9
           rows.append(modern_swe_lib)
