@@ -160,8 +160,10 @@ jobs:
                   rows.append(r)
                   seen.add(r['name'])
 
-          remaining = [r for r in repos if r['name'] != 'lavantien' and r['name'] not in seen and r['stars'] >= 5]
-          remaining.sort(key=lambda x: x['stars'], reverse=True)
+          remaining = sorted(
+              [r for r in repos if r['name'] != 'lavantien' and r['name'] not in seen],
+              key=lambda x: x['stars'], reverse=True,
+          )[:20 - len(rows)]
           rows.extend(remaining)
 
           # Generate repos table
