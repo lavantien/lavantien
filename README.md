@@ -2,7 +2,11 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white) ![TypeScript](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![JavaScript](https://img.shields.io/badge/JS-F7DF1E?logo=javascript&logoColor=white) ![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white) ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white) ![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white) ![C++](https://img.shields.io/badge/C%2B%2B-00599C?logo=cpp&logoColor=white) ![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white) ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white) (**Go**:1.3M, **TypeScript**:134K, **Python**:115K, **JavaScript**:78K)
 
-![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white) ![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white) ![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white) ![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white) ![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) (**HTML**:587K, **Sh**:312K, **Pwsh**:226K, **CSS**:141K)
+![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white) ![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white) ![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white) ![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white) ![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) (**HTML**:587K, **Sh**:313K, **Pwsh**:226K, **CSS**:141K)
+
+
+
+
 
 
 
@@ -439,4 +443,4 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 <tr><td><a href="https://github.com/lavantien/wallet-tracker">wallet-tracker</a> (<i>2024</i>) (<b>4⭐</b>)</td><td>generates a history of all deposits and withdrawals for a specified month</td><td><a href="https://github.com/lavantien/TwoWarriors">TwoWarriors</a> (<i>2019</i>) (<b>4⭐</b>)</td><td>A show match between two great warriors.</td></tr>
 </table>
 
-*Last updated: 2026-04-29*
+*Last updated: 2026-04-30*
