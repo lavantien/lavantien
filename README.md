@@ -2,7 +2,11 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 ![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white) ![TypeScript](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white) ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white) ![JavaScript](https://img.shields.io/badge/JS-F7DF1E?logo=javascript&logoColor=white) ![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white) ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white) ![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white) ![C++](https://img.shields.io/badge/C%2B%2B-00599C?logo=cpp&logoColor=white) ![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white) ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white) (**Go**:1.4M, **TypeScript**:146K, **Python**:115K, **JavaScript**:80K)
 
-![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white) ![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white) ![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white) ![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white) ![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) (**HTML**:587K, **Sh**:313K, **Pwsh**:226K, **CSS**:141K)
+![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white) ![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white) ![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white) ![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white) ![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white) ![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white) (**HTML**:587K, **Sh**:313K, **Pwsh**:226K, **CSS**:140K)
+
+
+
+
 
 
 
@@ -483,7 +487,7 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 
 <table>
-<tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (<i>2023</i>) (<b>34⭐</b>)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
+<tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (<i>2023</i>) (<b>35⭐</b>)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
 <tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (<i>2025</i>) (<b>8⭐</b>)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (<i>2025</i>) (<b>4⭐</b>)</td><td>Full-strength Caro (Gomoku variant) AI with Lazy SMP parallel search, Go 1.26 backend, SvelteKit frontend. 5 difficulty levels, UCI protocol, WebSocket bridge.</td></tr>
 <tr><td><a href="https://github.com/lavantien/FlowerShop">FlowerShop</a> (<i>2019</i>) (<b>13⭐</b>)</td><td>FlowerShop full features web app powered by Spring Boot and Angular</td><td><a href="https://github.com/lavantien/order-demo">order-demo</a> (<i>2021</i>) (<b>6⭐</b>)</td><td>A production-ready simple order service demo</td></tr>
 <tr><td><a href="https://github.com/lavantien/go-flutter-microservices-skeleton">go-flutter-microservices-skeleton</a> (<i>2022</i>) (<b>6⭐</b>)</td><td>go-flutter-microservices-skeleton</td><td><a href="https://github.com/lavantien/distributed-booking-microservices">distributed-booking-microservices</a> (<i>2022</i>) (<b>6⭐</b>)</td><td>Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3</td></tr>
@@ -495,4 +499,4 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 <tr><td><a href="https://github.com/lavantien/wallet-tracker">wallet-tracker</a> (<i>2024</i>) (<b>4⭐</b>)</td><td>generates a history of all deposits and withdrawals for a specified month</td><td><a href="https://github.com/lavantien/TwoWarriors">TwoWarriors</a> (<i>2019</i>) (<b>4⭐</b>)</td><td>A show match between two great warriors.</td></tr>
 </table>
 
-*Last updated: 2026-05-13*
+*Last updated: 2026-05-14*
