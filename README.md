@@ -514,6 +514,10 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 
 
 
+
+
+
+
 <table>
 <tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (<i>2023</i>) (<b>35⭐</b>)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
 <tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (<i>2025</i>) (<b>8⭐</b>)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (<i>2025</i>) (<b>4⭐</b>)</td><td>Full-strength Caro (Gomoku variant) AI with Lazy SMP parallel search, Go 1.26 backend, SvelteKit frontend. 5 difficulty levels, UCI protocol, WebSocket bridge.</td></tr>
@@ -527,4 +531,4 @@ Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.gi
 <tr><td><a href="https://github.com/lavantien/wallet-tracker">wallet-tracker</a> (<i>2024</i>) (<b>4⭐</b>)</td><td>generates a history of all deposits and withdrawals for a specified month</td><td><a href="https://github.com/lavantien/TwoWarriors">TwoWarriors</a> (<i>2019</i>) (<b>4⭐</b>)</td><td>A show match between two great warriors.</td></tr>
 </table>
 
-*Last updated: 2026-05-21*
+*Last updated: 2026-05-22*
