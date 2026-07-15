@@ -13,10 +13,12 @@
 
 
 
+
+
 <table>
 <tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (<i>2023</i>) (<b>35⭐</b>)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
 <tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (<i>2025</i>) (<b>8⭐</b>)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (<i>2025</i>) (<b>4⭐</b>)</td><td>Full-strength Caro (Gomoku variant) AI with Lazy SMP parallel search, Go 1.26 backend, SvelteKit frontend. 5 difficulty levels, UCI protocol, WebSocket bridge.</td></tr>
-<tr><td><a href="https://github.com/lavantien/FlowerShop">FlowerShop</a> (<i>2019</i>) (<b>13⭐</b>)</td><td>FlowerShop full features web app powered by Spring Boot and Angular</td><td><a href="https://github.com/lavantien/SumoBot">SumoBot</a> (<i>2019</i>) (<b>6⭐</b>)</td><td>Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.</td></tr>
+<tr><td><a href="https://github.com/lavantien/FlowerShop">FlowerShop</a> (<i>2019</i>) (<b>14⭐</b>)</td><td>FlowerShop full features web app powered by Spring Boot and Angular</td><td><a href="https://github.com/lavantien/SumoBot">SumoBot</a> (<i>2019</i>) (<b>6⭐</b>)</td><td>Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.</td></tr>
 <tr><td><a href="https://github.com/lavantien/order-demo">order-demo</a> (<i>2021</i>) (<b>6⭐</b>)</td><td>A production-ready simple order service demo</td><td><a href="https://github.com/lavantien/go-flutter-microservices-skeleton">go-flutter-microservices-skeleton</a> (<i>2022</i>) (<b>6⭐</b>)</td><td>go-flutter-microservices-skeleton</td></tr>
 <tr><td><a href="https://github.com/lavantien/distributed-booking-microservices">distributed-booking-microservices</a> (<i>2022</i>) (<b>6⭐</b>)</td><td>Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3</td><td><a href="https://github.com/lavantien/chess-repertoire-database">chess-repertoire-database</a> (<i>2023</i>) (<b>6⭐</b>)</td><td>A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series</td></tr>
 <tr><td><a href="https://github.com/lavantien/office-space-allocation">office-space-allocation</a> (<i>2022</i>) (<b>5⭐</b>)</td><td>A simple program to determine space allocation for a office renter</td><td><a href="https://github.com/lavantien/neovim">neovim</a> (<i>2025</i>) (<b>5⭐</b>)</td><td>giga minimal neovim config for programmers</td></tr>
@@ -26,4 +28,4 @@
 <tr><td><a href="https://github.com/lavantien/wallet-tracker">wallet-tracker</a> (<i>2024</i>) (<b>4⭐</b>)</td><td>generates a history of all deposits and withdrawals for a specified month</td><td><a href="https://github.com/lavantien/TwoWarriors">TwoWarriors</a> (<i>2019</i>) (<b>4⭐</b>)</td><td>A show match between two great warriors.</td></tr>
 </table>
 
-*Last updated: 2026-07-14*
+*Last updated: 2026-07-15*
