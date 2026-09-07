@@ -28,13 +28,16 @@ jobs:
           repos = []
           lang_sizes = {}
 
+          # GitHub createdAt differs from actual project year for re-uploaded repos
+          year_overrides = {'SumoBot': 2017, 'FlowerShop': 2018}
+
           for item in json.loads(result.stdout):
               if not item['isFork'] and not item['isArchived']:
                   repos.append({
                       'name': item['name'],
                       'stars': item['stargazerCount'],
                       'description': item.get('description', ''),
-                      'year': int(item['createdAt'][:4]),
+                      'year': year_overrides.get(item['name'], int(item['createdAt'][:4])),
                   })
                   if item.get('languages'):
                       for lang in item['languages']:
