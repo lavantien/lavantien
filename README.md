@@ -123,6 +123,8 @@
 
 
 
+
+
 <table>
 <tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (<i>2023</i>) (<b>35⭐</b>)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
 <tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (<i>2025</i>) (<b>8⭐</b>)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (<i>2025</i>) (<b>4⭐</b>)</td><td>Full-strength Caro (Gomoku variant) AI with Lazy SMP parallel search, VCF solver, C# 14/.NET 10 backend, SvelteKit frontend. Hot-seat PvP, PvAI and AIvAI modes, 5 difficulty levels, UCI protocol, WebSocket bridge.</td></tr>
@@ -136,4 +138,4 @@
 <tr><td><a href="https://github.com/lavantien/wallet-tracker">wallet-tracker</a> (<i>2024</i>) (<b>4⭐</b>)</td><td>generates a history of all deposits and withdrawals for a specified month</td><td><a href="https://github.com/lavantien/TwoWarriors">TwoWarriors</a> (<i>2019</i>) (<b>4⭐</b>)</td><td>A show match between two great warriors.</td></tr>
 </table>
 
-*Last updated: 2026-09-07*
+*Last updated: 2026-09-08*
