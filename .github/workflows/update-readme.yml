@@ -166,7 +166,7 @@ jobs:
           remaining = sorted(
               [r for r in repos if r['name'] != 'lavantien' and r['name'] not in seen],
               key=lambda x: x['stars'], reverse=True,
-          )[:20 - len(rows)]
+          )[:10 - len(rows)]
           rows.extend(remaining)
 
           # Generate repos table
