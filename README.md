@@ -175,6 +175,8 @@
 
 
 
+
+
 <table>
 <tr><td><a href="https://github.com/lavantien/modern-swe-library">modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)</td><td>Open knowledge library: curated resources for modern software engineering</td><td><a href="https://github.com/lavantien/dotfiles">dotfiles</a> (<i>2023</i>) (<b>35⭐</b>)</td><td>Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included</td></tr>
 <tr><td><a href="https://github.com/lavantien/llm-tournament">llm-tournament</a> (<i>2025</i>) (<b>8⭐</b>)</td><td>Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models</td><td><a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a> (<i>2025</i>) (<b>5⭐</b>)</td><td>16x16 gomoku/caro variant engine and PvP arena: exact-five bitboard rules, zero-alloc PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, mutation-gated Go 1.27+, SQLite/DuckDB, mobile-first HTMX 4+</td></tr>
@@ -183,4 +185,4 @@
 <tr><td><a href="https://github.com/lavantien/distributed-booking-microservices">distributed-booking-microservices</a> (<i>2022</i>) (<b>6⭐</b>)</td><td>Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3</td><td><a href="https://github.com/lavantien/chess-repertoire-database">chess-repertoire-database</a> (<i>2023</i>) (<b>6⭐</b>)</td><td>A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series</td></tr>
 </table>
 
-*Last updated: 2026-10-03*
+*Last updated: 2026-10-04*
