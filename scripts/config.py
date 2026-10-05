@@ -25,13 +25,27 @@ PAD_X = 7
 LABEL_GAP = 4
 ENTRY_GAP = 14
 FONT_SIZE = 13
-CHAR_WIDTH = 7.0
+# per-character width classes for the label estimate: no font metrics on
+# the generate path, so classes track Segoe UI/Arial at font-size 13 and
+# the margin plus entry gap absorb the residual error
+XWIDE_CHARS = frozenset("mwMW")
+NARROW_CHARS = frozenset(" \tiljtfr.,:;!'|")
+CHAR_WIDTH_XWIDE = 9.6
+CHAR_WIDTH_WIDE = 8.2
+CHAR_WIDTH_NARROW = 3.8
+CHAR_WIDTH_DEFAULT = 7.0
+WIDTH_MARGIN = 8
+# icon fills that vanish on the github dark theme; recolored to the
+# language's LANG_COLORS entry at embed time
+RECOLOR_FILLS = frozenset({"#000", "#000000", "#000080", "black"})
 FONT_FAMILY = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 EMPTY_LABEL = "No language data"
 
 # markers and readme text
 MARKER_START = "<!-- languages:start -->"
 MARKER_END = "<!-- languages:end -->"
+MARKER_REPOS_START = "<!-- repos:start -->"
+MARKER_REPOS_END = "<!-- repos:end -->"
 README_ALT_TEXT = "Top languages by code volume"
 README_IMG_SRC = "assets/languages.svg"
 UPDATED_PREFIX = "*Last updated: "
@@ -58,6 +72,7 @@ GH_OWNER = "lavantien"
 REPO_URL_BASE = f"https://github.com/{GH_OWNER}"
 GH_JSON_FIELDS = "name,stargazerCount,description,languages,isFork,isArchived,createdAt"
 GH_REPO_LIMIT = 300
+GH_TIMEOUT_SECONDS = 60
 
 # language colors: shields.io hexes ported from the workflow, then brand hexes
 LANG_COLORS = {

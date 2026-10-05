@@ -41,9 +41,18 @@ class TestLiteralPins(unittest.TestCase):
         self.assertEqual(config.PAD_X, 7)
         self.assertEqual(config.LABEL_GAP, 4)
         self.assertEqual(config.ENTRY_GAP, 14)
-        self.assertEqual(config.CHAR_WIDTH, 7.0)
+        self.assertEqual(config.CHAR_WIDTH_XWIDE, 9.6)
+        self.assertEqual(config.CHAR_WIDTH_WIDE, 8.2)
+        self.assertEqual(config.CHAR_WIDTH_NARROW, 3.8)
+        self.assertEqual(config.CHAR_WIDTH_DEFAULT, 7.0)
+        self.assertEqual(config.WIDTH_MARGIN, 8)
         self.assertEqual(config.FONT_SIZE, 13)
         self.assertEqual(config.TEXT_MAIN, "#6e7781")
+        self.assertEqual(config.GH_TIMEOUT_SECONDS, 60)
+        self.assertEqual(
+            config.RECOLOR_FILLS,
+            frozenset({"#000", "#000000", "#000080", "black"}),
+        )
 
 
 if __name__ == "__main__":

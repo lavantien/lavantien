@@ -11,6 +11,7 @@ import subprocess
 from scripts import config
 
 _EXCERPT_LEN = 200
+_STAR_ATTEMPTS = 2
 
 
 class GhError(RuntimeError):
@@ -22,7 +23,12 @@ def _excerpt(text: str) -> str:
 
 
 def _run(gh_exec: str, args: list[str]) -> subprocess.CompletedProcess:
-    return subprocess.run([gh_exec, *args], capture_output=True, text=True)
+    return subprocess.run(
+        [gh_exec, *args],
+        capture_output=True,
+        text=True,
+        timeout=config.GH_TIMEOUT_SECONDS,
+    )
 
 
 def fetch_repos(gh_exec: str = "gh") -> list[dict]:
@@ -33,6 +39,10 @@ def fetch_repos(gh_exec: str = "gh") -> list[dict]:
         ])
     except OSError as exc:
         raise GhError(f"cannot run gh repo list via {gh_exec!r}: {exc}") from exc
+    except subprocess.TimeoutExpired as exc:
+        raise GhError(
+            f"gh repo list timed out after {config.GH_TIMEOUT_SECONDS}s"
+        ) from exc
     if proc.returncode != 0:
         detail = _excerpt(proc.stderr) or _excerpt(proc.stdout)
         raise GhError(f"gh repo list exited {proc.returncode}: {detail}")
@@ -51,14 +61,17 @@ def load_repos_json(path) -> list[dict]:
 
 
 def fetch_star_count(full_name: str, gh_exec: str = "gh") -> int:
-    try:
-        proc = _run(gh_exec, [
-            "repo", "view", full_name,
-            "--json", "stargazerCount", "--jq", ".stargazerCount",
-        ])
-    except OSError:
-        return 0
-    if proc.returncode != 0:
-        return 0
-    count = proc.stdout.strip()
-    return int(count) if count.isdigit() else 0
+    # one retry: a transient gh failure must not zero the fixed repo's
+    # stars for a day (the readme commits whatever we return)
+    for _ in range(_STAR_ATTEMPTS):
+        try:
+            proc = _run(gh_exec, [
+                "repo", "view", full_name,
+                "--json", "stargazerCount", "--jq", ".stargazerCount",
+            ])
+        except (OSError, subprocess.TimeoutExpired):
+            continue
+        if proc.returncode == 0:
+            count = proc.stdout.strip()
+            return int(count) if count.isdigit() else 0
+    return 0

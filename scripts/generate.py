@@ -89,7 +89,6 @@ def main(argv: list[str] | None = None) -> int:
         github_client.fetch_star_count if args.live else _fixture_star_fetch(items)
     )
     strip = svg_strip.render_strip(top_languages(agg.lang_sizes))
-    svg_changed = _write_if_changed(args.svg, strip)
     updated_line = (
         f"{config.UPDATED_PREFIX}"
         f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
@@ -102,6 +101,7 @@ def main(argv: list[str] | None = None) -> int:
         ),
         updated_line=updated_line,
     )
+    svg_changed = _write_if_changed(args.svg, strip)
     readme_changed = _write_if_changed(args.readme, readme_content)
     for path, changed in ((args.svg, svg_changed), (args.readme, readme_changed)):
         print(f"{'changed' if changed else 'unchanged'}: {path}")
