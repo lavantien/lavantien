@@ -1,0 +1,156 @@
+[
+  {
+    "createdAt": "2016-03-01T00:00:00Z",
+    "description": "profile readme",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "lavantien",
+    "stargazerCount": 77
+  },
+  {
+    "createdAt": "2015-05-05T00:00:00Z",
+    "description": "archived college coursework, must be ignored everywhere",
+    "isArchived": true,
+    "isFork": false,
+    "languages": [
+      {"size": 800000, "node": {"name": "Python"}},
+      {"size": 400000, "node": {"name": "C++"}}
+    ],
+    "name": "legacy-college-projects",
+    "stargazerCount": 50
+  },
+  {
+    "createdAt": "2023-08-14T09:30:00Z",
+    "description": "Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 50000, "node": {"name": "Lua"}},
+      {"size": 30000, "node": {"name": "Shell"}},
+      {"size": 13000, "node": {"name": "F#"}},
+      {"size": 12000, "node": {"name": "Vim Script"}}
+    ],
+    "name": "dotfiles",
+    "stargazerCount": 42
+  },
+  {
+    "createdAt": "2025-03-10T11:22:33Z",
+    "description": "Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 210000, "node": {"name": "Go"}},
+      {"size": 95000, "node": {"name": "TypeScript"}}
+    ],
+    "name": "llm-tournament",
+    "stargazerCount": 18
+  },
+  {
+    "createdAt": "2025-12-28T10:01:24Z",
+    "description": "16x16 gomoku/caro variant engine and PvP arena: exact-five bitboard rules, zero-alloc PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, mutation-gated Go 1.27+, SQLite/DuckDB, mobile-first HTMX 4+",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 1451713, "node": {"name": "Go"}},
+      {"size": 18384, "node": {"name": "JavaScript"}},
+      {"size": 8749, "node": {"name": "Makefile"}},
+      {"size": 8199, "node": {"name": "CSS"}},
+      {"size": 8198, "node": {"name": "Go Template"}}
+    ],
+    "name": "caro-ai-pvp",
+    "stargazerCount": 15
+  },
+  {
+    "createdAt": "2020-06-15T00:00:00Z",
+    "description": "FlowerShop full features web app powered by Spring Boot and Angular",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 480000, "node": {"name": "Java"}},
+      {"size": 150000, "node": {"name": "JavaScript"}},
+      {"size": 90000, "node": {"name": "HTML"}},
+      {"size": 60000, "node": {"name": "CSS"}}
+    ],
+    "name": "FlowerShop",
+    "stargazerCount": 14
+  },
+  {
+    "createdAt": "2023-11-11T00:00:00Z",
+    "description": "http service with server-rendered templates, half of the Go byte-sum pair",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 300000, "node": {"name": "Go"}},
+      {"size": 40000, "node": {"name": "HTML"}}
+    ],
+    "name": "go-web-service",
+    "stargazerCount": 9
+  },
+  {
+    "createdAt": "2024-07-07T00:00:00Z",
+    "description": "background jobs in Go with python ops tooling, other half of the Go byte-sum pair",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 260000, "node": {"name": "Go"}},
+      {"size": 140000, "node": {"name": "Python"}}
+    ],
+    "name": "go-worker-pool",
+    "stargazerCount": 7
+  },
+  {
+    "createdAt": "2019-04-01T00:00:00Z",
+    "description": "Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 120000, "node": {"name": "C"}},
+      {"size": 5000, "node": {"name": "Assembly"}}
+    ],
+    "name": "SumoBot",
+    "stargazerCount": 6
+  },
+  {
+    "createdAt": "2022-03-23T00:00:00Z",
+    "description": "data migration scripts, Ruby half of the byte tie with Kotlin plus a tiny Perl share",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 75000, "node": {"name": "Ruby"}},
+      {"size": 13000, "node": {"name": "Perl"}}
+    ],
+    "name": "ruby-perl-migrator",
+    "stargazerCount": 5
+  },
+  {
+    "createdAt": "2022-02-22T00:00:00Z",
+    "description": "android playground, Kotlin half of the byte tie with Ruby",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 75000, "node": {"name": "Kotlin"}}
+    ],
+    "name": "kotlin-android-lab",
+    "stargazerCount": 4
+  },
+  {
+    "createdAt": "2024-01-20T00:00:00Z",
+    "description": "fork of a rust-based editor, huge Rust byte count must be ignored",
+    "isArchived": false,
+    "isFork": true,
+    "languages": [
+      {"size": 999999, "node": {"name": "Rust"}}
+    ],
+    "name": "forked-vim-config",
+    "stargazerCount": 3
+  },
+  {
+    "createdAt": "2024-02-02T00:00:00Z",
+    "description": "scratch notes with no languages key at all",
+    "isArchived": false,
+    "isFork": false,
+    "name": "sandbox-notes",
+    "stargazerCount": 2
+  }
+]
