@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: help test lint generate update record icons clean
+.PHONY: help test mutate lint generate update record icons clean
 
 help: ## list available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-10s %s\n", $$1, $$2}'
@@ -8,6 +8,9 @@ help: ## list available targets
 # golden regen: UPDATE_GOLDEN=1 make test
 test: ## run unit tests
 	$(PYTHON) -m unittest discover -s tests -v
+
+mutate: ## mutation-test scripts/ against the suite (requires clean tree)
+	$(PYTHON) scripts/mutate.py
 
 lint: ## byte-compile scripts and tests
 	$(PYTHON) -m compileall -q scripts tests
