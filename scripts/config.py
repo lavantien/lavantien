@@ -26,6 +26,7 @@ PAD_X = 7
 FONT_SIZE = 13
 CHAR_WIDTH = 7.0
 MIN_SEGMENT_WIDTH = 36
+LABEL_GAP = 4
 CORNER_RADIUS = 8
 FONT_FAMILY = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 EMPTY_LABEL = "No language data"
@@ -56,6 +57,8 @@ FIXED_FIRST_REPO = {
 TABLE_ROW_LIMIT = 10
 EXCLUDED_REPO_NAMES = frozenset({"lavantien"})
 
+GH_OWNER = "lavantien"
+REPO_URL_BASE = f"https://github.com/{GH_OWNER}"
 GH_JSON_FIELDS = "name,stargazerCount,description,languages,isFork,isArchived,createdAt"
 GH_REPO_LIMIT = 300
 

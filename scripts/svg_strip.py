@@ -1,8 +1,8 @@
 """Render the top-languages strip as a self-contained SVG document.
 
 Everything render-affecting comes from scripts.config; the only local
-values are the renderer's own layout micro-constants fixed by the
-strip spec (label gap and the icon viewBox fallback).
+values are the renderer's own structural constants (namespace, icon
+viewBox fallback, clip id, aria prefix).
 """
 
 import math
@@ -12,7 +12,6 @@ from collections.abc import Sequence
 from scripts import config
 
 SVG_NS = "http://www.w3.org/2000/svg"
-LABEL_GAP = 4
 FALLBACK_VIEWBOX = "0 0 128 128"
 CLIP_ID = "strip-corners"
 ARIA_PREFIX = "Top languages: "
@@ -207,11 +206,11 @@ def render_strip(langs: Sequence[tuple[str, int]]) -> str:
             )
         label = f"{name} {format_bytes(size)}"
         needed = (
-            2 * config.PAD_X + config.ICON_SIZE + LABEL_GAP + estimate_text_width(label)
+            2 * config.PAD_X + config.ICON_SIZE + config.LABEL_GAP + estimate_text_width(label)
         )
         if width >= needed:
             lines.append(
-                f'    <text x="{x + config.PAD_X + config.ICON_SIZE + LABEL_GAP}" '
+                f'    <text x="{x + config.PAD_X + config.ICON_SIZE + config.LABEL_GAP}" '
                 f'y="{height // 2}" dominant-baseline="central" '
                 f'font-family="{font}" font-size="{config.FONT_SIZE}" '
                 f'fill="{pick_text_color(fill)}">{escape_xml(label)}</text>'
