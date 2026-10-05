@@ -258,7 +258,7 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(label.get("font-family"), config.FONT_FAMILY)
         self.assertEqual(label.get("dominant-baseline"), "central")
         self.assertEqual(label.get("y"), str(config.STRIP_HEIGHT // 2))
-        icon_right = config.PAD_X + config.ICON_SIZE + svg_strip.LABEL_GAP
+        icon_right = config.PAD_X + config.ICON_SIZE + config.LABEL_GAP
         self.assertEqual(label.get("x"), str(icon_right))
         self.assertEqual(
             label.get("fill"), svg_strip.pick_text_color(config.LANG_COLORS["Go"])

@@ -11,9 +11,6 @@ from typing import Protocol, Sequence
 
 from scripts import config
 
-# hoist into scripts/config.py when that file is editable in this effort
-REPO_URL_BASE = "https://github.com/lavantien"
-
 _TABLE_RE = re.compile(r"<table>.*?</table>", re.DOTALL)
 _STRAY_MARKERS = frozenset((config.MARKER_START, config.MARKER_END))
 
@@ -45,7 +42,7 @@ def render_repo_table(rows: Sequence[RepoLike]) -> str:
 
 def _repo_cell(row: RepoLike) -> str:
     link = (
-        f'<td><a href="{REPO_URL_BASE}/{row.name}">{row.name}</a>'
+        f'<td><a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a>'
         f" (<i>{row.year}</i>) (<b>{row.stars}⭐</b>)</td>"
     )
     return f"{link}<td>{row.description}</td>"

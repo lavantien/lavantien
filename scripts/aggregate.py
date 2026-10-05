@@ -63,7 +63,7 @@ def select_rows(
     fixed = config.FIXED_FIRST_REPO
     rows = [Repo(
         name=fixed["name"],
-        stars=star_fetch(f"lavantien/{fixed['name']}") or 0,
+        stars=star_fetch(f"{config.GH_OWNER}/{fixed['name']}") or 0,
         description=fixed["description"],
         year=fixed["year"],
     )]
