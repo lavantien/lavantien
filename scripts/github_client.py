@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 
 from scripts import config
 
@@ -75,3 +76,22 @@ def fetch_star_count(full_name: str, gh_exec: str = "gh") -> int:
             count = proc.stdout.strip()
             return int(count) if count.isdigit() else 0
     return 0
+
+
+def _record_main() -> int:
+    # `make record` entry: print the public, non-fork, non-archived repo
+    # items as json so the committed fixture never carries private
+    # repo metadata, whatever credential records it
+    items = [
+        item
+        for item in fetch_repos()
+        if not item["isFork"]
+        and not item["isArchived"]
+        and str(item.get("visibility", "")).upper() == "PUBLIC"
+    ]
+    sys.stdout.write(json.dumps(items, indent=2) + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(_record_main())

@@ -6,7 +6,8 @@
     "isFork": false,
     "languages": [],
     "name": "lavantien",
-    "stargazerCount": 77
+    "stargazerCount": 77,
+    "visibility": "public"
   },
   {
     "createdAt": "2015-05-05T00:00:00Z",
@@ -18,7 +19,8 @@
       {"size": 400000, "node": {"name": "C++"}}
     ],
     "name": "legacy-college-projects",
-    "stargazerCount": 50
+    "stargazerCount": 50,
+    "visibility": "public"
   },
   {
     "createdAt": "2023-08-14T09:30:00Z",
@@ -32,7 +34,8 @@
       {"size": 12000, "node": {"name": "Vim Script"}}
     ],
     "name": "dotfiles",
-    "stargazerCount": 42
+    "stargazerCount": 42,
+    "visibility": "public"
   },
   {
     "createdAt": "2025-03-10T11:22:33Z",
@@ -44,7 +47,8 @@
       {"size": 95000, "node": {"name": "TypeScript"}}
     ],
     "name": "llm-tournament",
-    "stargazerCount": 18
+    "stargazerCount": 18,
+    "visibility": "public"
   },
   {
     "createdAt": "2025-12-28T10:01:24Z",
@@ -59,7 +63,8 @@
       {"size": 8198, "node": {"name": "Go Template"}}
     ],
     "name": "caro-ai-pvp",
-    "stargazerCount": 15
+    "stargazerCount": 15,
+    "visibility": "public"
   },
   {
     "createdAt": "2020-06-15T00:00:00Z",
@@ -73,7 +78,8 @@
       {"size": 60000, "node": {"name": "CSS"}}
     ],
     "name": "FlowerShop",
-    "stargazerCount": 14
+    "stargazerCount": 14,
+    "visibility": "public"
   },
   {
     "createdAt": "2023-11-11T00:00:00Z",
@@ -85,7 +91,8 @@
       {"size": 40000, "node": {"name": "HTML"}}
     ],
     "name": "go-web-service",
-    "stargazerCount": 9
+    "stargazerCount": 9,
+    "visibility": "PUBLIC"
   },
   {
     "createdAt": "2024-07-07T00:00:00Z",
@@ -97,7 +104,8 @@
       {"size": 140000, "node": {"name": "Python"}}
     ],
     "name": "go-worker-pool",
-    "stargazerCount": 7
+    "stargazerCount": 7,
+    "visibility": "public"
   },
   {
     "createdAt": "2019-04-01T00:00:00Z",
@@ -109,7 +117,8 @@
       {"size": 5000, "node": {"name": "Assembly"}}
     ],
     "name": "SumoBot",
-    "stargazerCount": 6
+    "stargazerCount": 6,
+    "visibility": "public"
   },
   {
     "createdAt": "2022-03-23T00:00:00Z",
@@ -121,7 +130,8 @@
       {"size": 13000, "node": {"name": "Perl"}}
     ],
     "name": "ruby-perl-migrator",
-    "stargazerCount": 5
+    "stargazerCount": 5,
+    "visibility": "public"
   },
   {
     "createdAt": "2022-02-22T00:00:00Z",
@@ -132,7 +142,8 @@
       {"size": 75000, "node": {"name": "Kotlin"}}
     ],
     "name": "kotlin-android-lab",
-    "stargazerCount": 4
+    "stargazerCount": 4,
+    "visibility": "public"
   },
   {
     "createdAt": "2024-01-20T00:00:00Z",
@@ -143,7 +154,31 @@
       {"size": 999999, "node": {"name": "Rust"}}
     ],
     "name": "forked-vim-config",
-    "stargazerCount": 3
+    "stargazerCount": 3,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2021-01-15T00:00:00Z",
+    "description": "private experiments, must never count toward the public profile stats",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 5000000, "node": {"name": "Go"}}
+    ],
+    "name": "secret-go-lab",
+    "stargazerCount": 0,
+    "visibility": "private"
+  },
+  {
+    "createdAt": "2021-06-06T00:00:00Z",
+    "description": "visibility field absent, strict filter must drop it",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {"size": 400000, "node": {"name": "JavaScript"}}
+    ],
+    "name": "mystery-visibility",
+    "stargazerCount": 1
   },
   {
     "createdAt": "2024-02-02T00:00:00Z",
@@ -151,6 +186,7 @@
     "isArchived": false,
     "isFork": false,
     "name": "sandbox-notes",
-    "stargazerCount": 2
+    "stargazerCount": 2,
+    "visibility": "public"
   }
 ]

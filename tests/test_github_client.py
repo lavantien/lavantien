@@ -1,3 +1,4 @@
+import io
 import json
 import pathlib
 import subprocess
@@ -5,7 +6,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-from scripts import config
+from scripts import config, github_client
 from scripts.github_client import GhError, fetch_repos, fetch_star_count, load_repos_json
 
 
@@ -169,6 +170,33 @@ class TestTimeouts(unittest.TestCase):
     def test_star_count_timeout_returns_zero(self, run):
         run.side_effect = subprocess.TimeoutExpired(cmd="gh", timeout=60)
         self.assertEqual(fetch_star_count("x/y"), 0)
+
+
+class TestRecordMain(unittest.TestCase):
+    # `make record` entry: the committed fixture must never carry
+    # private repo metadata, whatever credential records it
+    @mock.patch("scripts.github_client.fetch_repos")
+    def test_records_public_unarchived_unforked_only(self, fetch):
+        fetch.return_value = [
+            {"name": "open", "isFork": False, "isArchived": False,
+             "visibility": "PUBLIC"},
+            {"name": "secret", "isFork": False, "isArchived": False,
+             "visibility": "PRIVATE"},
+            {"name": "forked", "isFork": True, "isArchived": False,
+             "visibility": "PUBLIC"},
+            {"name": "old", "isFork": False, "isArchived": True,
+             "visibility": "PUBLIC"},
+            {"name": "lowercase-ok", "isFork": False, "isArchived": False,
+             "visibility": "public"},
+            {"name": "unknown", "isFork": False, "isArchived": False},
+        ]
+        out = io.StringIO()
+        with mock.patch("sys.stdout", out):
+            github_client._record_main()
+        self.assertEqual(
+            json.loads(out.getvalue()),
+            [fetch.return_value[0], fetch.return_value[4]],
+        )
 
 
 if __name__ == "__main__":

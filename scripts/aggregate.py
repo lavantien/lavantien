@@ -29,7 +29,12 @@ def aggregate(items: Iterable[dict]) -> Aggregation:
     repos: list[Repo] = []
     lang_sizes: dict[str, int] = {}
     for item in items:
+        # profile stats cover public work only; gh reports the GraphQL
+        # enum ("PUBLIC"), a missing visibility is treated as private so
+        # a shape change can never leak it
         if item["isFork"] or item["isArchived"]:
+            continue
+        if str(item.get("visibility", "")).upper() != "PUBLIC":
             continue
         repos.append(Repo(
             name=item["name"],

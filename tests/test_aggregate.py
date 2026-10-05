@@ -6,7 +6,7 @@ from scripts.aggregate import Aggregation, aggregate, select_rows, top_languages
 
 
 def item(name, stars=0, langs=(), created="2024-01-01T00:00:00Z",
-         description="", fork=False, archived=False):
+         description="", fork=False, archived=False, visibility="public"):
     return {
         "name": name,
         "stargazerCount": stars,
@@ -14,6 +14,7 @@ def item(name, stars=0, langs=(), created="2024-01-01T00:00:00Z",
         "createdAt": created,
         "isFork": fork,
         "isArchived": archived,
+        "visibility": visibility,
         "languages": [{"size": size, "node": {"name": lang}} for lang, size in langs],
     }
 
@@ -30,6 +31,20 @@ class TestAggregate(unittest.TestCase):
         ])
         self.assertEqual([r.name for r in agg.repos], ["kept"])
         self.assertEqual(agg.lang_sizes, {"Go": 10})
+
+    def test_private_repositories_excluded(self):
+        # profile stats cover public work only: private bytes must vanish
+        agg = aggregate([
+            item("secret", stars=9, langs=[("Go", 5000000)], visibility="private"),
+            item("open", stars=1, langs=[("Go", 10)]),
+        ])
+        self.assertEqual([r.name for r in agg.repos], ["open"])
+        self.assertEqual(agg.lang_sizes, {"Go": 10})
+
+    def test_missing_visibility_treated_as_private(self):
+        unknown = item("mystery", langs=[("JavaScript", 400000)])
+        del unknown["visibility"]
+        self.assertEqual(aggregate([unknown]), Aggregation(repos=[], lang_sizes={}))
 
     def test_sums_bytes_across_repos(self):
         agg = aggregate([

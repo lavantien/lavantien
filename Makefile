@@ -21,8 +21,8 @@ generate: ## regenerate svg and readme from the recorded fixture
 update: ## regenerate svg and readme from live gh data
 	$(PYTHON) scripts/generate.py --live
 
-record: ## refresh the recorded gh repo-list fixture
-	gh repo list --limit 300 --json name,stargazerCount,description,languages,isFork,isArchived,createdAt > fixtures/repos.recorded.json
+record: ## refresh the recorded fixture (public repos only, no private metadata)
+	$(PYTHON) -m scripts.github_client > fixtures/repos.recorded.json
 
 icons: ## vendor devicon svgs into assets/devicons
 	$(PYTHON) scripts/vendor_icons.py

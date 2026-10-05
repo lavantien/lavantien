@@ -70,7 +70,10 @@ EXCLUDED_REPO_NAMES = frozenset({"lavantien"})
 
 GH_OWNER = "lavantien"
 REPO_URL_BASE = f"https://github.com/{GH_OWNER}"
-GH_JSON_FIELDS = "name,stargazerCount,description,languages,isFork,isArchived,createdAt"
+GH_JSON_FIELDS = (
+    "name,stargazerCount,description,languages,isFork,isArchived,"
+    "createdAt,visibility"
+)
 GH_REPO_LIMIT = 300
 GH_TIMEOUT_SECONDS = 60
 
