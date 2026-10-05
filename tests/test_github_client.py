@@ -192,11 +192,13 @@ class TestRecordMain(unittest.TestCase):
         ]
         out = io.StringIO()
         with mock.patch("sys.stdout", out):
-            github_client._record_main()
+            rc = github_client._record_main()
+        self.assertEqual(rc, 0)
+        expected = [fetch.return_value[0], fetch.return_value[4]]
         self.assertEqual(
-            json.loads(out.getvalue()),
-            [fetch.return_value[0], fetch.return_value[4]],
+            out.getvalue(), json.dumps(expected, indent=2) + "\n"
         )
+        self.assertEqual(json.loads(out.getvalue()), expected)
 
 
 if __name__ == "__main__":
