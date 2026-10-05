@@ -46,6 +46,8 @@ class TestFormatBytes(unittest.TestCase):
         self.assertEqual(svg_strip.format_bytes(0), "0")
         self.assertEqual(svg_strip.format_bytes(999), "999")
         self.assertEqual(svg_strip.format_bytes(1000), "1K")
+        self.assertEqual(svg_strip.format_bytes(1_499), "1K")
+        self.assertEqual(svg_strip.format_bytes(1_500), "2K")
         self.assertEqual(svg_strip.format_bytes(999_499), "999K")
         self.assertEqual(svg_strip.format_bytes(999_500), "1.0M")
         self.assertEqual(svg_strip.format_bytes(1_000_000), "1.0M")
