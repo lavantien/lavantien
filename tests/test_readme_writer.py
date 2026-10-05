@@ -332,6 +332,27 @@ class TestRepoTableMarkers(unittest.TestCase):
         self.assertIn(config.MARKER_REPOS_START, result)
         self.assertEqual(self.rewrite(result), result)
 
+    def test_tables_after_updated_replace_last(self):
+        # no owned table before the updated line: the last table is the
+        # generator's, an earlier one is left alone
+        table_a = "<table>\n<tr><td>first</td></tr>\n</table>"
+        table_b = "<table>\n<tr><td>second</td></tr>\n</table>"
+        content = "*Last updated: 2026-01-01*\n\n" + table_a + "\n\n" + table_b + "\n"
+        result = self.rewrite(content)
+        self.assertIn(table_a, result)
+        self.assertNotIn(table_b, result)
+        self.assertEqual(self.rewrite(result), result)
+
+    def test_two_tables_no_updated_replaces_last(self):
+        table_a = "<table>\n<tr><td>first</td></tr>\n</table>"
+        table_b = "<table>\n<tr><td>second</td></tr>\n</table>"
+        content = table_a + "\n\n" + table_b + "\n"
+        result = self.rewrite(content)
+        self.assertIn(table_a, result)
+        self.assertNotIn(table_b, result)
+        self.assertIn(UPDATED_NEW, result)
+        self.assertEqual(self.rewrite(result), result)
+
 
 if __name__ == "__main__":
     unittest.main()
