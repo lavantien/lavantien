@@ -1,6 +1,9 @@
 import os
+import tempfile
 import unittest
 import xml.etree.ElementTree as ET
+from pathlib import Path
+from unittest import mock
 
 from scripts import config, svg_strip
 
@@ -57,6 +60,112 @@ class TestEstimateTextWidth(unittest.TestCase):
         self.assertEqual(svg_strip.estimate_text_width("Go"), 14)
         self.assertEqual(svg_strip.estimate_text_width("No language data"), 112)
         self.assertEqual(svg_strip.estimate_text_width("Go 2.2M"), 49)
+
+
+class TestEscapeXml(unittest.TestCase):
+    def test_all_specials(self):
+        self.assertEqual(
+            svg_strip.escape_xml('a<b>&"c\''),
+            "a&lt;b&gt;&amp;&quot;c&apos;",
+        )
+
+    def test_plain_passthrough(self):
+        self.assertEqual(svg_strip.escape_xml("Go 2.2M"), "Go 2.2M")
+
+
+class TestLoadIcon(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        patcher = mock.patch.object(config, "DEVICON_DIR", self.dir)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.addCleanup(self._tmp.cleanup)
+
+    def write(self, name, content):
+        (self.dir / name).write_text(content, encoding="utf-8")
+
+    def test_known_icon_loads_with_viewbox(self):
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            '<path d="M0 0h1v1z"/></svg>',
+        )
+        inner, view_box = svg_strip.load_icon("Go")
+        self.assertEqual(view_box, "0 0 128 128")
+        self.assertIn("<path", inner)
+        # nested markup must re-parse under the strip namespace
+        ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{inner}</svg>')
+
+    def test_viewbox_synthesized_from_width_height(self):
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">'
+            '<rect width="24" height="24"/></svg>',
+        )
+        _, view_box = svg_strip.load_icon("Go")
+        self.assertEqual(view_box, "0 0 24 24")
+
+    def test_viewbox_fallback_when_neither(self):
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>',
+        )
+        _, view_box = svg_strip.load_icon("Go")
+        self.assertEqual(view_box, "0 0 128 128")
+
+    def test_viewbox_fallback_when_only_one_dimension(self):
+        # width without height (and vice versa) cannot synthesize a viewBox
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" width="24"><rect/></svg>',
+        )
+        self.assertEqual(svg_strip.load_icon("Go")[1], "0 0 128 128")
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" height="24"><rect/></svg>',
+        )
+        self.assertEqual(svg_strip.load_icon("Go")[1], "0 0 128 128")
+
+    def test_missing_file_returns_none(self):
+        self.assertIsNone(svg_strip.load_icon("Go"))
+
+    def test_unknown_language_returns_none(self):
+        self.assertIsNone(svg_strip.load_icon("Solidity"))
+
+    def test_parse_error_returns_none(self):
+        self.write("go-plain.svg", "<svg><path")
+        self.assertIsNone(svg_strip.load_icon("Go"))
+
+    def test_wrong_root_tag_returns_none(self):
+        self.write("go-plain.svg", '<g xmlns="http://www.w3.org/2000/svg"/>')
+        self.assertIsNone(svg_strip.load_icon("Go"))
+
+    def test_script_element_returns_none(self):
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            "<script>alert(1)</script></svg>",
+        )
+        self.assertIsNone(svg_strip.load_icon("Go"))
+
+    def test_http_attribute_returns_none(self):
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            '<image href="http://evil.example/x.png"/></svg>',
+        )
+        self.assertIsNone(svg_strip.load_icon("Go"))
+
+    def test_namespaced_children_are_stripped(self):
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            '<ns:path xmlns:ns="http://example.com/ns" d="M0 0"/></svg>',
+        )
+        inner, _ = svg_strip.load_icon("Go")
+        self.assertIn("<path", inner)
+        self.assertNotIn("ns:", inner)
 
 
 class TestRenderStrip(unittest.TestCase):
@@ -133,6 +242,27 @@ class TestRenderStrip(unittest.TestCase):
         icons = nested_icons(root)
         self.assertEqual(icons, [])
 
+    def test_letter_tile_document_exact_bytes(self):
+        # full literal pin of the fallback path: tile centered in the icon
+        # slot at 7 + 16//2 = 15, label at 27, entry width 7+16+4+84+7 = 118
+        font = (
+            "ui-sans-serif, system-ui, -apple-system, &apos;Segoe UI&apos;, "
+            "Helvetica, Arial, sans-serif"
+        )
+        expected = (
+            '<svg xmlns="http://www.w3.org/2000/svg" width="118" height="28" '
+            'viewBox="0 0 118 28" role="img" aria-label="Top languages: Solidity 42K">\n'
+            "  <title>Top languages: Solidity 42K</title>\n"
+            f'  <text x="15" y="14" text-anchor="middle" '
+            f'dominant-baseline="central" font-family="{font}" '
+            f'font-size="16" fill="#8b949e">S</text>\n'
+            f'  <text x="27" y="14" dominant-baseline="central" '
+            f'font-family="{font}" font-size="13" '
+            f'fill="#6e7781">Solidity 42K</text>\n'
+            "</svg>\n"
+        )
+        self.assertEqual(svg_strip.render_strip([("Solidity", 42000)]), expected)
+
     def test_deterministic(self):
         self.assertEqual(svg_strip.render_strip(SAMPLE), svg_strip.render_strip(SAMPLE))
 
@@ -145,6 +275,36 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(text.text, config.EMPTY_LABEL)
         self.assertEqual(text.get("text-anchor"), "middle")
         self.assertEqual(int(text.get("x")), 126 // 2)
+
+    def test_empty_document_exact_bytes(self):
+        # full literal pin: kills attribute/format mutants in the shared
+        # document-open and empty-render paths
+        expected = (
+            '<svg xmlns="http://www.w3.org/2000/svg" width="126" height="28" '
+            'viewBox="0 0 126 28" role="img" aria-label="No language data">\n'
+            "  <title>No language data</title>\n"
+            '  <text x="63" y="14" text-anchor="middle" '
+            'dominant-baseline="central" font-family="ui-sans-serif, system-ui, '
+            "-apple-system, &apos;Segoe UI&apos;, Helvetica, Arial, sans-serif\" "
+            'font-size="13" fill="#6e7781">No language data</text>\n'
+            "</svg>\n"
+        )
+        self.assertEqual(svg_strip.render_strip([]), expected)
+
+    def test_aria_and_label_escape_specials(self):
+        svg = svg_strip.render_strip([('A"B&Co', 5)])
+        self.assertIn(
+            'aria-label="Top languages: A&quot;B&amp;Co 5"', svg
+        )
+        root = parse(svg)
+        self.assertEqual(root.get("aria-label"), 'Top languages: A"B&Co 5')
+        texts = [
+            (t.text, t.get("fill")) for t in iter_all(root) if strip_ns(t.tag) == "text"
+        ]
+        self.assertEqual(
+            texts,
+            [("A", config.DEFAULT_COLOR), ('A"B&Co 5', config.TEXT_MAIN)],
+        )
 
     def test_matches_golden_svg(self):
         svg = svg_strip.render_strip(SAMPLE)
