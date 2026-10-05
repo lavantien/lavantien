@@ -236,6 +236,20 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn("0 changed", second.getvalue())
         self.assertIn("unchanged", second.getvalue())
 
+    def test_final_summary_line_is_exact(self):
+        # byte-exact last line, both on the fresh run and the idempotent
+        # rerun, so wording or count changes in the summary cannot survive
+        with silence() as first:
+            self.assertEqual(generate.main(self.args), 0)
+        with silence() as second:
+            self.assertEqual(generate.main(self.args), 0)
+        self.assertEqual(
+            first.getvalue().splitlines()[-1], "done: 2 changed, 0 unchanged"
+        )
+        self.assertEqual(
+            second.getvalue().splitlines()[-1], "done: 0 changed, 2 unchanged"
+        )
+
     @mock.patch("scripts.github_client.fetch_star_count",
                 side_effect=AssertionError("network star fetch in --from-json mode"))
     def test_from_json_mode_uses_stub_not_the_network(self, _star_fetch):
