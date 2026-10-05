@@ -1,1 +1,3 @@
 .claude/tdd-guard/data
+__pycache__/
+*.pyc
