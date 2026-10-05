@@ -14,6 +14,29 @@ from scripts import config, generate, svg_strip
 from scripts.aggregate import aggregate, top_languages
 from scripts.github_client import GhError
 
+
+class TestWriteOrdering(unittest.TestCase):
+    def test_no_svg_written_when_readme_render_fails(self):
+        # both artifacts render fully before the first byte hits disk
+        with tempfile.TemporaryDirectory() as tmp:
+            readme = pathlib.Path(tmp) / "README.md"
+            svg = pathlib.Path(tmp) / "s.svg"
+            readme.write_text("seed", encoding="utf-8")
+            with mock.patch(
+                "scripts.readme_writer.rewrite_readme",
+                side_effect=RuntimeError("boom"),
+            ):
+                with self.assertRaises(RuntimeError):
+                    generate.main(
+                        [
+                            "--from-json", str(config.FIXTURE_SAMPLE),
+                            "--readme", str(readme),
+                            "--svg", str(svg),
+                        ]
+                    )
+            self.assertFalse(svg.exists())
+            self.assertEqual(readme.read_text(encoding="utf-8"), "seed")
+
 SVG_NS = "http://www.w3.org/2000/svg"
 SENTINEL_README = "sentinel readme\n"
 SENTINEL_SVG = "sentinel svg\n"

@@ -46,7 +46,8 @@ class TestFormatBytes(unittest.TestCase):
         self.assertEqual(svg_strip.format_bytes(0), "0")
         self.assertEqual(svg_strip.format_bytes(999), "999")
         self.assertEqual(svg_strip.format_bytes(1000), "1K")
-        self.assertEqual(svg_strip.format_bytes(999_999), "1000K")
+        self.assertEqual(svg_strip.format_bytes(999_499), "999K")
+        self.assertEqual(svg_strip.format_bytes(999_500), "1.0M")
         self.assertEqual(svg_strip.format_bytes(1_000_000), "1.0M")
         self.assertEqual(svg_strip.format_bytes(1_050_000), "1.1M")
         self.assertEqual(svg_strip.format_bytes(480_000), "480K")
@@ -55,11 +56,13 @@ class TestFormatBytes(unittest.TestCase):
 
 class TestEstimateTextWidth(unittest.TestCase):
     def test_literals(self):
-        # CHAR_WIDTH is 7.0: expectations are literal so a config mutant fails
+        # per-class widths (xwide 9.6, wide 8.2, narrow 3.8, default 7.0):
+        # expectations are literal so a config mutant fails
         self.assertEqual(svg_strip.estimate_text_width(""), 0)
-        self.assertEqual(svg_strip.estimate_text_width("Go"), 14)
-        self.assertEqual(svg_strip.estimate_text_width("No language data"), 112)
+        self.assertEqual(svg_strip.estimate_text_width("Go"), 16)
+        self.assertEqual(svg_strip.estimate_text_width("No language data"), 101)
         self.assertEqual(svg_strip.estimate_text_width("Go 2.2M"), 49)
+        self.assertEqual(svg_strip.estimate_text_width("MATLAB 1000K"), 96)
 
 
 class TestEscapeXml(unittest.TestCase):
@@ -96,6 +99,54 @@ class TestLoadIcon(unittest.TestCase):
         self.assertIn("<path", inner)
         # nested markup must re-parse under the strip namespace
         ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{inner}</svg>')
+
+    def test_fill_less_shapes_get_language_color(self):
+        # black-on-dark invisibility fix: unshaped default fill and explicit
+        # dark fills are recolored to the language's brand color at embed
+        self.write(
+            "go-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            '<path d="M0 0h1v1z"/><path d="M1 1h1v1z" fill="#000000"/>'
+            '<path d="M2 2h1v1z" fill="black"/></svg>',
+        )
+        inner, _ = svg_strip.load_icon("Go")
+        root = ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{inner}</svg>')
+        fills = [p.get("fill") for p in root.iter("{http://www.w3.org/2000/svg}path")]
+        self.assertEqual(fills, ["#00ADD8", "#00ADD8", "#00ADD8"])
+
+    def test_navy_fill_recolored_for_lua(self):
+        self.write(
+            "lua-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            '<path d="M0 0h1v1z" fill="#000080"/></svg>',
+        )
+        inner, _ = svg_strip.load_icon("Lua")
+        self.assertIn('fill="#5D7FA3"', inner)
+
+    def test_brand_fills_are_kept(self):
+        self.write(
+            "javascript-plain.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+            '<rect width="128" height="128" fill="#F7DF1E"/>'
+            '<path d="M0 0h1v1z" fill="none"/></svg>',
+        )
+        inner, _ = svg_strip.load_icon("JavaScript")
+        self.assertIn('fill="#F7DF1E"', inner)
+        self.assertIn('fill="none"', inner)
+
+    def test_unmapped_language_uses_default_color(self):
+        # DEVICON_MAP hit but LANG_COLORS miss is impossible today; the
+        # transform's fallback is still pinned via a patched map entry
+        with mock.patch.object(
+            config, "DEVICON_MAP", {"Xtend": ("go", "plain")}
+        ), mock.patch.object(config, "LANG_COLORS", {}):
+            self.write(
+                "go-plain.svg",
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+                '<path d="M0 0h1v1z"/></svg>',
+            )
+            inner, _ = svg_strip.load_icon("Xtend")
+        self.assertIn('fill="#8b949e"', inner)
 
     def test_viewbox_synthesized_from_width_height(self):
         self.write(
@@ -203,12 +254,12 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(len(texts), len(SAMPLE))
 
     def test_layout_literals(self):
-        # PAD_X=7, ICON_SIZE=16, LABEL_GAP=4, ENTRY_GAP=14: literal expectations
+        # PAD_X=7, ICON_SIZE=16, LABEL_GAP=4, WIDTH_MARGIN=8: literal expectations
         svg = svg_strip.render_strip([("Go", 2221713)])
         root = parse(svg)
-        self.assertEqual(root.get("width"), "83")  # 7 + 16 + 4 + 49 + 7
+        self.assertEqual(root.get("width"), "91")  # 7 + 16 + 4 + 49 + 7 + 8
         self.assertEqual(root.get("height"), "28")
-        self.assertEqual(root.get("viewBox"), "0 0 83 28")
+        self.assertEqual(root.get("viewBox"), "0 0 91 28")
         icon = nested_icons(root)[0]
         self.assertEqual(icon.get("x"), "7")
         label = next(e for e in iter_all(root) if strip_ns(e.tag) == "text")
@@ -244,14 +295,14 @@ class TestRenderStrip(unittest.TestCase):
 
     def test_letter_tile_document_exact_bytes(self):
         # full literal pin of the fallback path: tile centered in the icon
-        # slot at 7 + 16//2 = 15, label at 27, entry width 7+16+4+84+7 = 118
+        # slot at 7 + 16//2 = 15, label at 27, entry width 7+16+4+73+7+8 = 115
         font = (
             "ui-sans-serif, system-ui, -apple-system, &apos;Segoe UI&apos;, "
             "Helvetica, Arial, sans-serif"
         )
         expected = (
-            '<svg xmlns="http://www.w3.org/2000/svg" width="118" height="28" '
-            'viewBox="0 0 118 28" role="img" aria-label="Top languages: Solidity 42K">\n'
+            '<svg xmlns="http://www.w3.org/2000/svg" width="115" height="28" '
+            'viewBox="0 0 115 28" role="img" aria-label="Top languages: Solidity 42K">\n'
             "  <title>Top languages: Solidity 42K</title>\n"
             f'  <text x="15" y="14" text-anchor="middle" '
             f'dominant-baseline="central" font-family="{font}" '
@@ -269,21 +320,21 @@ class TestRenderStrip(unittest.TestCase):
     def test_empty_renders_placeholder(self):
         svg = svg_strip.render_strip([])
         root = parse(svg)
-        self.assertEqual(root.get("width"), "126")  # 7 + 112 + 7
+        self.assertEqual(root.get("width"), "123")  # 7 + 101 + 7 + 8
         self.assertEqual(root.get("height"), "28")
         text = next(e for e in iter_all(root) if strip_ns(e.tag) == "text")
         self.assertEqual(text.text, config.EMPTY_LABEL)
         self.assertEqual(text.get("text-anchor"), "middle")
-        self.assertEqual(int(text.get("x")), 126 // 2)
+        self.assertEqual(int(text.get("x")), 123 // 2)
 
     def test_empty_document_exact_bytes(self):
         # full literal pin: kills attribute/format mutants in the shared
         # document-open and empty-render paths
         expected = (
-            '<svg xmlns="http://www.w3.org/2000/svg" width="126" height="28" '
-            'viewBox="0 0 126 28" role="img" aria-label="No language data">\n'
+            '<svg xmlns="http://www.w3.org/2000/svg" width="123" height="28" '
+            'viewBox="0 0 123 28" role="img" aria-label="No language data">\n'
             "  <title>No language data</title>\n"
-            '  <text x="63" y="14" text-anchor="middle" '
+            '  <text x="61" y="14" text-anchor="middle" '
             'dominant-baseline="central" font-family="ui-sans-serif, system-ui, '
             "-apple-system, &apos;Segoe UI&apos;, Helvetica, Arial, sans-serif\" "
             'font-size="13" fill="#6e7781">No language data</text>\n'

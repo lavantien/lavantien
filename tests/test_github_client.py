@@ -50,7 +50,7 @@ class TestFetchRepos(unittest.TestCase):
         run.assert_called_once_with(
             ["gh", "repo", "list", "--limit", str(config.GH_REPO_LIMIT),
              "--json", config.GH_JSON_FIELDS],
-            capture_output=True, text=True,
+            capture_output=True, text=True, timeout=60,
         )
 
     @mock.patch("scripts.github_client.subprocess.run")
@@ -117,7 +117,7 @@ class TestFetchStarCount(unittest.TestCase):
         run.assert_called_once_with(
             ["gh", "repo", "view", "lavantien/modern-swe-library",
              "--json", "stargazerCount", "--jq", ".stargazerCount"],
-            capture_output=True, text=True,
+            capture_output=True, text=True, timeout=60,
         )
 
     @mock.patch("scripts.github_client.subprocess.run")
@@ -138,6 +138,36 @@ class TestFetchStarCount(unittest.TestCase):
     @mock.patch("scripts.github_client.subprocess.run")
     def test_subprocess_failure_returns_zero(self, run):
         run.side_effect = OSError("no gh")
+        self.assertEqual(fetch_star_count("x/y"), 0)
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_retries_once_and_recovers(self, run):
+        # transient gh failure must not zero out the fixed repo's stars
+        run.side_effect = [
+            gh_result(stderr="boom", returncode=1),
+            gh_result(stdout="7\n"),
+        ]
+        self.assertEqual(fetch_star_count("x/y"), 7)
+        self.assertEqual(run.call_count, 2)
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_both_attempts_failing_returns_zero(self, run):
+        run.side_effect = [gh_result(returncode=1), gh_result(returncode=1)]
+        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertEqual(run.call_count, 2)
+
+
+class TestTimeouts(unittest.TestCase):
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_repo_list_timeout_raises_gherror(self, run):
+        run.side_effect = subprocess.TimeoutExpired(cmd="gh", timeout=60)
+        with self.assertRaises(GhError) as ctx:
+            fetch_repos()
+        self.assertEqual(str(ctx.exception), "gh repo list timed out after 60s")
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_star_count_timeout_returns_zero(self, run):
+        run.side_effect = subprocess.TimeoutExpired(cmd="gh", timeout=60)
         self.assertEqual(fetch_star_count("x/y"), 0)
 
 

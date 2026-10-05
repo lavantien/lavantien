@@ -173,7 +173,8 @@ class TestRewriteReadme(unittest.TestCase):
         self.assertEqual(lines[1], EXPECTED_IMG)
         self.assertEqual(lines[2], config.MARKER_END)
         self.assertEqual(lines[3], "")
-        self.assertEqual(lines[4], "<table>")
+        self.assertEqual(lines[4], config.MARKER_REPOS_START)
+        self.assertEqual(lines[5], "<table>")
 
     def test_idempotent_on_messy_and_clean(self):
         kwargs = rewrite_kwargs()
@@ -245,8 +246,9 @@ class TestRewriteReadme(unittest.TestCase):
         i_updated = next(
             i for i, ln in enumerate(lines) if ln.startswith(config.UPDATED_PREFIX)
         )
-        self.assertEqual(i_updated, i_close + 2)
-        self.assertEqual(lines[i_close + 1], "")
+        self.assertEqual(lines[i_close + 1], config.MARKER_REPOS_END)
+        self.assertEqual(lines[i_close + 2], "")
+        self.assertEqual(i_updated, i_close + 3)
         self.assertEqual(lines[i_updated], UPDATED_NEW)
 
     def test_table_and_updated_appended_when_both_absent(self):
@@ -257,7 +259,9 @@ class TestRewriteReadme(unittest.TestCase):
         i_updated = next(
             i for i, ln in enumerate(lines) if ln.startswith(config.UPDATED_PREFIX)
         )
-        self.assertEqual(i_updated, i_close + 2)
+        self.assertEqual(lines[i_close + 1], config.MARKER_REPOS_END)
+        self.assertEqual(lines[i_close + 2], "")
+        self.assertEqual(i_updated, i_close + 3)
         self.assertEqual(lines[i_updated], UPDATED_NEW)
         self.assertEqual(lines[-1], "")
 
@@ -266,12 +270,67 @@ class TestRewriteReadme(unittest.TestCase):
         expected = (
             kwargs["languages_block"]
             + "\n\n"
+            + config.MARKER_REPOS_START
+            + "\n"
             + kwargs["repo_table"]
+            + "\n"
+            + config.MARKER_REPOS_END
             + "\n\n"
             + UPDATED_NEW
             + "\n"
         )
         self.assertEqual(rewrite_readme("", **kwargs), expected)
+
+
+class TestRepoTableMarkers(unittest.TestCase):
+    LANGS_BLOCK = "\n".join((config.MARKER_START, EXPECTED_IMG, config.MARKER_END))
+    USER_TABLE = "<table>\n<tr><td>mine</td></tr>\n</table>"
+    OLD_GEN_TABLE = "<table>\n<tr><td>old gen</td></tr>\n</table>"
+    GEN_TABLE = "<table>\n<tr><td>gen</td></tr>\n</table>"
+
+    def rewrite(self, content):
+        return rewrite_readme(
+            content,
+            languages_block=self.LANGS_BLOCK,
+            repo_table=self.GEN_TABLE,
+            updated_line=UPDATED_NEW,
+        )
+
+    def test_user_table_before_markers_survives(self):
+        marked = "\n".join(
+            (config.MARKER_REPOS_START, self.GEN_TABLE, config.MARKER_REPOS_END)
+        )
+        content = "\n\n".join(
+            (self.USER_TABLE, marked, "*Last updated: 2026-01-01*")
+        ) + "\n"
+        result = self.rewrite(content)
+        self.assertIn(self.USER_TABLE, result)
+        self.assertEqual(result.count("<table>"), 2)
+        self.assertEqual(result.count(config.MARKER_REPOS_START), 1)
+        self.assertIn(config.MARKER_REPOS_START + "\n" + self.GEN_TABLE, result)
+        self.assertEqual(self.rewrite(result), result)
+
+    def test_adoption_targets_table_adjacent_to_updated_line(self):
+        # no markers yet: the generator-owned table is the one sitting right
+        # before the updated line; a user table above must survive
+        content = "\n\n".join(
+            (self.USER_TABLE, self.OLD_GEN_TABLE, "*Last updated: 2026-01-01*")
+        ) + "\n"
+        result = self.rewrite(content)
+        self.assertIn(self.USER_TABLE, result)
+        self.assertNotIn(self.OLD_GEN_TABLE, result)
+        self.assertIn(config.MARKER_REPOS_START + "\n" + self.GEN_TABLE, result)
+        self.assertEqual(result.count("<table>"), 2)
+        self.assertEqual(self.rewrite(result), result)
+
+    def test_stray_repos_marker_dropped(self):
+        content = "\n".join(
+            (config.MARKER_REPOS_END, "*Last updated: 2026-01-01*")
+        ) + "\n"
+        result = self.rewrite(content)
+        self.assertNotIn(config.MARKER_REPOS_END + "\n", result[: result.find("<table>")])
+        self.assertIn(config.MARKER_REPOS_START, result)
+        self.assertEqual(self.rewrite(result), result)
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
 """Render the top-languages line as a self-contained SVG document.
 
-Plain text row: one devicon and a `Name SLOC` label per language, laid
-out left to right at natural width. No segment backgrounds, no
-proportional widths. Everything render-affecting comes from
-scripts.config; local values are structural constants only.
+Plain text row: one devicon and a `Name <byte-count>` label per
+language, laid out left to right at natural width. No segment
+backgrounds, no proportional widths. Everything render-affecting comes
+from scripts.config; local values are structural constants only.
 """
 
 import math
@@ -15,11 +15,16 @@ from scripts import config
 SVG_NS = "http://www.w3.org/2000/svg"
 FALLBACK_VIEWBOX = "0 0 128 128"
 ARIA_PREFIX = "Top languages: "
+# element tags whose fill is recolored when it would vanish on dark
+_RECOLOR_TAGS = frozenset(
+    {"path", "polygon", "circle", "rect", "ellipse", "line", "polyline", "g"}
+)
 
 
 def format_bytes(b):
-    # ported verbatim from .github/workflows/update-readme.yml
-    if b >= 1_000_000:
+    # ported from .github/workflows/update-readme.yml, with the K->M
+    # boundary fixed: a K count that rounds up to 1000 promotes to M
+    if b >= 999_500:
         return f"{b / 1_000_000:.1f}M"
     if b >= 1_000:
         return f"{b / 1_000:.0f}K"
@@ -37,7 +42,17 @@ def escape_xml(s):
 
 
 def estimate_text_width(text):
-    return math.ceil(len(text) * config.CHAR_WIDTH)
+    total = 0.0
+    for ch in text:
+        if ch in config.XWIDE_CHARS:
+            total += config.CHAR_WIDTH_XWIDE
+        elif ch in config.NARROW_CHARS:
+            total += config.CHAR_WIDTH_NARROW
+        elif ch.isupper() or ch.isdigit():
+            total += config.CHAR_WIDTH_WIDE
+        else:
+            total += config.CHAR_WIDTH_DEFAULT
+    return math.ceil(total)
 
 
 def _strip_ns(tag):
@@ -72,6 +87,15 @@ def load_icon(name):
     for elem in elements:
         elem.tag = _strip_ns(elem.tag)
         elem.attrib = {_strip_ns(key): value for key, value in elem.attrib.items()}
+    # recolor fills that vanish on the github dark theme (default black,
+    # explicit black, lua navy) to the language's brand color
+    color = config.LANG_COLORS.get(name, config.DEFAULT_COLOR)
+    for elem in elements:
+        if _strip_ns(elem.tag) not in _RECOLOR_TAGS:
+            continue
+        fill = elem.get("fill")
+        if fill is None or fill.strip().lower() in config.RECOLOR_FILLS:
+            elem.set("fill", color)
     inner = "".join(ET.tostring(child, encoding="unicode") for child in root)
     try:
         ET.fromstring(f'<svg xmlns="{SVG_NS}">{inner}</svg>')
@@ -91,7 +115,7 @@ def _document_open(aria, width, height):
 
 def _render_empty():
     label = config.EMPTY_LABEL
-    width = 2 * config.PAD_X + estimate_text_width(label)
+    width = 2 * config.PAD_X + estimate_text_width(label) + config.WIDTH_MARGIN
     height = config.STRIP_HEIGHT
     font = escape_xml(config.FONT_FAMILY)
     lines = _document_open(label, width, height)
@@ -124,7 +148,7 @@ def render_strip(langs: Sequence[tuple[str, int]]) -> str:
         advance = config.ICON_SIZE + config.LABEL_GAP + estimate_text_width(label)
         entries.append((name, label, x, x + config.ICON_SIZE + config.LABEL_GAP))
         x += advance + config.ENTRY_GAP
-    width = x - config.ENTRY_GAP + config.PAD_X
+    width = x - config.ENTRY_GAP + config.PAD_X + config.WIDTH_MARGIN
     lines = _document_open(aria, width, height)
     for name, label, icon_x, text_x in entries:
         icon = load_icon(name)
