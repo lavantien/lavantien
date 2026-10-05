@@ -5,241 +5,21 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+concurrency:
+  group: update-readme
+  cancel-in-progress: true
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Update README with repos
-        run: |
-          python3 << 'EOF'
-          import subprocess
-          import json
-          import re
-          from datetime import datetime
+      - name: Tests
+        run: make test
 
-          # Get repos with languages and descriptions
-          result = subprocess.run([
-              'gh', 'repo', 'list', '--limit', '300',
-              '--json', 'name,stargazerCount,description,languages,isFork,isArchived,createdAt'
-          ], capture_output=True, text=True)
-
-          repos = []
-          lang_sizes = {}
-
-          # GitHub createdAt differs from actual project year for re-uploaded repos
-          year_overrides = {'SumoBot': 2017, 'FlowerShop': 2018}
-
-          for item in json.loads(result.stdout):
-              if not item['isFork'] and not item['isArchived']:
-                  repos.append({
-                      'name': item['name'],
-                      'stars': item['stargazerCount'],
-                      'description': item.get('description', ''),
-                      'year': year_overrides.get(item['name'], int(item['createdAt'][:4])),
-                  })
-                  if item.get('languages'):
-                      for lang in item['languages']:
-                          name = lang['node']['name']
-                          size = lang.get('size', 0)
-                          lang_sizes[name] = lang_sizes.get(name, 0) + size
-
-          # Languages considered "programming languages"
-          PROG_LANGS = {
-              'Go', 'Dart', 'C#', 'TypeScript', 'Python', 'Java', 'JavaScript',
-              'C++', 'C', 'Rust', 'Swift', 'Kotlin', 'Ruby', 'PHP', 'Lua',
-              'Blade', 'Svelte', 'Objective-C', 'Hack', 'Clojure', 'Scala',
-              'Haskell', 'Elixir', 'Julia', 'R', 'MATLAB', 'Perl', 'F#',
-          }
-
-          icons = {
-              'Go': '![Go](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=white)',
-              'Python': '![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)',
-              'TypeScript': '![TypeScript](https://img.shields.io/badge/TS-3178C6?logo=typescript&logoColor=white)',
-              'C#': '![C#](https://img.shields.io/badge/C%23-239120?logo=csharp&logoColor=white)',
-              'Rust': '![Rust](https://img.shields.io/badge/Rust-000000?logo=rust&logoColor=white)',
-              'C++': '![C++](https://img.shields.io/badge/C%2B%2B-00599C?logo=cpp&logoColor=white)',
-              'Java': '![Java](https://img.shields.io/badge/Java-007396?logo=openjdk&logoColor=white)',
-              'JavaScript': '![JavaScript](https://img.shields.io/badge/JS-F7DF1E?logo=javascript&logoColor=white)',
-              'HTML': '![HTML](https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white)',
-              'CSS': '![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=white)',
-              'Shell': '![Shell](https://img.shields.io/badge/Shell-4EAA25?logo=gnu-bash&logoColor=white)',
-              'PowerShell': '![PowerShell](https://img.shields.io/badge/PS-5391FE?logo=powershell&logoColor=white)',
-              'Makefile': '![Makefile](https://img.shields.io/badge/Make-427819?logo=gnu-make&logoColor=white)',
-              'Lua': '![Lua](https://img.shields.io/badge/Lua-000080?logo=lua&logoColor=white)',
-              'Dart': '![Dart](https://img.shields.io/badge/Dart-0175C2?logo=dart&logoColor=white)',
-              'Svelte': '![Svelte](https://img.shields.io/badge/Svelte-FF3E00?logo=svelte&logoColor=white)',
-              'C': '![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)',
-              'SCSS': '![SCSS](https://img.shields.io/badge/SCSS-CC6699?logo=sass&logoColor=white)',
-              'Typst': '![Typst](https://img.shields.io/badge/Typst-239DAD?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj5UPC90ZXh0Pjwvc3ZnPg==&logoColor=white)',
-              'Go Template': '![GoTpl](https://img.shields.io/badge/GoTpl-00ADD8?logo=go&logoColor=white)',
-              'PHP': '![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white)',
-              'Swift': '![Swift](https://img.shields.io/badge/Swift-F05138?logo=swift&logoColor=white)',
-              'Kotlin': '![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)',
-              'Ruby': '![Ruby](https://img.shields.io/badge/Ruby-CC342D?logo=ruby&logoColor=white)',
-              'Blade': '![Blade](https://img.shields.io/badge/Blade-F55247?logo=laravel&logoColor=white)',
-              'Vue': '![Vue](https://img.shields.io/badge/Vue-4FC08D?logo=vuedotjs&logoColor=white)',
-              'Vim Script': '![Vim](https://img.shields.io/badge/Vim-019733?logo=vim&logoColor=white)',
-              'TeX': '![TeX](https://img.shields.io/badge/TeX-3D6117?logo=latex&logoColor=white)',
-              'CMake': '![CMake](https://img.shields.io/badge/CMake-064F8C?logo=cmake&logoColor=white)',
-              'Dockerfile': '![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)',
-              'Batchfile': '![Batch](https://img.shields.io/badge/Batch-4EAA25?logo=windows&logoColor=white)',
-              'Nix': '![Nix](https://img.shields.io/badge/Nix-5D7997?logo=nixos&logoColor=white)',
-              'TSQL': '![TSQL](https://img.shields.io/badge/TSQL-CC2927?logo=microsoftsqlserver&logoColor=white)',
-              'Objective-C': '![ObjC](https://img.shields.io/badge/ObjC-4388D0?logo=objectivec&logoColor=white)',
-          }
-
-          # Format bytes nicely
-          def format_bytes(b):
-              if b >= 1_000_000:
-                  return f'{b/1_000_000:.1f}M'
-              elif b >= 1_000:
-                  return f'{b/1_000:.0f}K'
-              return str(b)
-
-          # Get top languages and categorize (top 10 each, track top 4 sizes)
-          top_langs = sorted(lang_sizes.items(), key=lambda x: x[1], reverse=True)
-
-          prog_data = []
-          rest_data = []
-          for lang, size in top_langs:
-              badge = icons.get(lang, f'![{lang}]')
-              if lang in PROG_LANGS:
-                  if len(prog_data) < 10:
-                      prog_data.append((lang, badge, size))
-              else:
-                  if len(rest_data) < 10:
-                      rest_data.append((lang, badge, size))
-              if len(prog_data) >= 10 and len(rest_data) >= 10:
-                  break
-
-          # Short names for stats display
-          short_names = {'PowerShell': 'Pwsh', 'Shell': 'Sh', 'Go Template': 'GoTpl'}
-
-          # Build stats string (top 4)
-          def build_stats(data):
-              top4 = data[:4]
-              parts = [f'**{short_names.get(lang, lang)}**:{format_bytes(size)}' for lang, _, size in top4]
-              return ' (' + ', '.join(parts) + ')'
-
-          prog_row = ' '.join(b for _, b, _ in prog_data) + build_stats(prog_data)
-          rest_row = ' '.join(b for _, b, _ in rest_data) + build_stats(rest_data)
-          lang_badges = f'{prog_row}\n\n{rest_row}'
-
-          def make_row(left, right=None):
-              l_desc = left.get('description', '')
-              l_link = f'<td><a href="https://github.com/lavantien/{left["name"]}">{left["name"]}</a> (<i>{left["year"]}</i>) (<b>{left["stars"]}⭐</b>)</td><td>{l_desc}</td>'
-              if right:
-                  r_desc = right.get('description', '')
-                  r_link = f'<td><a href="https://github.com/lavantien/{right["name"]}">{right["name"]}</a> (<i>{right["year"]}</i>) (<b>{right["stars"]}⭐</b>)</td><td>{r_desc}</td>'
-                  return f'<tr>{l_link}{r_link}</tr>'
-              return f'<tr>{l_link}</tr>'
-
-          # Always include modern-swe-library first
-          rows = []
-          modern_swe_lib = {
-              'name': 'modern-swe-library',
-              'stars': 0,
-              'year': 2023,
-              'description': 'Open knowledge library: curated resources for modern software engineering',
-          }
-          try:
-              lib_result = subprocess.run([
-                  'gh', 'repo', 'view', 'lavantien/modern-swe-library',
-                  '--json', 'stargazerCount', '--jq', '.stargazerCount'
-              ], capture_output=True, text=True)
-              modern_swe_lib['stars'] = int(lib_result.stdout.strip()) if lib_result.stdout.strip().isdigit() else 0
-          except:
-              modern_swe_lib['stars'] = 9
-          rows.append(modern_swe_lib)
-
-          pinned = ['dotfiles', 'llm-tournament', 'caro-ai-pvp']
-          seen = {'modern-swe-library'}
-
-          for p in pinned:
-              r = next((x for x in repos if x['name'] == p), None)
-              if r:
-                  rows.append(r)
-                  seen.add(r['name'])
-
-          remaining = sorted(
-              [r for r in repos if r['name'] != 'lavantien' and r['name'] not in seen],
-              key=lambda x: x['stars'], reverse=True,
-          )[:10 - len(rows)]
-          rows.extend(remaining)
-
-          # Generate repos table
-          repo_table_parts = ['<table>']
-          for i in range(0, len(rows), 2):
-              if i + 1 < len(rows):
-                  repo_table_parts.append(make_row(rows[i], rows[i + 1]))
-              else:
-                  repo_table_parts.append(make_row(rows[i]))
-          repo_table_parts.append('</table>')
-          repo_table = '\n'.join(repo_table_parts)
-
-          # Read README
-          with open('README.md', 'r') as f:
-              content = f.read()
-
-          # Remove all existing tables and badge lines
-          lines = content.split('\n')
-          new_lines = []
-          skip_table = False
-          table_depth = 0
-
-          for line in lines:
-              # Skip badge lines
-              if line.strip().startswith('!['):
-                  continue
-
-              # Handle table removal with proper depth tracking
-              if '<table>' in line:
-                  skip_table = True
-                  table_depth = 1
-                  continue
-              if skip_table:
-                  if '<table>' in line:
-                      table_depth += 1
-                  if '</table>' in line:
-                      table_depth -= 1
-                  if table_depth <= 0:
-                      skip_table = False
-                  continue
-
-              # Skip all table-related fragments (we generate our own)
-              if '<td>' in line or '</td>' in line or '<tr>' in line or '</tr>' in line or '</table>' in line:
-                  continue
-
-              # Replace headline
-              if 'Agentic Engineer' in line:
-                  new_lines.append('Agentic Engineer .. systems/tools/agents/games .. [Typst Resume](https://gist.github.com/lavantien/c149d2f044b7ed12eb548c3792c736b1) (pic at bottom)')
-                  new_lines.append('')
-                  for badge_line in lang_badges.split('\n'):
-                      new_lines.append(badge_line)
-                  continue
-
-              # Skip old "Featured Work"
-              if 'Featured Work' in line:
-                  continue
-
-              # Skip "Last updated"
-              if 'Last updated:' in line:
-                  continue
-
-              new_lines.append(line)
-
-          # Add repos table and timestamp
-          new_lines.append('')
-          new_lines.append(repo_table)
-          new_lines.append('')
-          new_lines.append(f'*Last updated: {datetime.utcnow().strftime("%Y-%m-%d")}*')
-
-          with open('README.md', 'w') as f:
-              f.write('\n'.join(new_lines))
-          EOF
-
+      - name: Update README with repo stats
+        run: make update
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
 
@@ -247,6 +27,6 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add README.md
-          git diff --staged --quiet || git commit -m "chore: update featured repos"
+          git add README.md assets/languages.svg
+          git diff --staged --quiet || git commit -m "chore: update readme stats"
           git push
