@@ -25,8 +25,7 @@ class RepoLike(Protocol):
 def build_languages_block() -> str:
     img = (
         f'<p align="center"><img src="{config.README_IMG_SRC}"'
-        f' alt="{config.README_ALT_TEXT}"'
-        f' width="{config.README_IMG_WIDTH}"></p>'
+        f' alt="{config.README_ALT_TEXT}"></p>'
     )
     return "\n".join((config.MARKER_START, img, config.MARKER_END))
 

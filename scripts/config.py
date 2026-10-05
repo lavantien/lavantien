@@ -17,17 +17,15 @@ FIXTURE_SAMPLE = REPO_ROOT / "fixtures" / "repos.sample.json"
 FIXTURE_README_MESSY = REPO_ROOT / "fixtures" / "readme.messy.md"
 GOLDEN_SVG = REPO_ROOT / "fixtures" / "languages.golden.svg"
 
-# strip geometry
+# strip geometry: plain text row, natural widths, no backgrounds
 TOP_N = 10
-TOTAL_WIDTH = 900
-STRIP_HEIGHT = 40
+STRIP_HEIGHT = 28
 ICON_SIZE = 16
 PAD_X = 7
+LABEL_GAP = 4
+ENTRY_GAP = 14
 FONT_SIZE = 13
 CHAR_WIDTH = 7.0
-MIN_SEGMENT_WIDTH = 36
-LABEL_GAP = 4
-CORNER_RADIUS = 8
 FONT_FAMILY = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 EMPTY_LABEL = "No language data"
 
@@ -36,7 +34,6 @@ MARKER_START = "<!-- languages:start -->"
 MARKER_END = "<!-- languages:end -->"
 README_ALT_TEXT = "Top languages by code volume"
 README_IMG_SRC = "assets/languages.svg"
-README_IMG_WIDTH = 900
 UPDATED_PREFIX = "*Last updated: "
 
 # ported from .github/workflows/update-readme.yml
@@ -99,8 +96,8 @@ LANG_COLORS = {
     "F#": "#378BBA",
 }
 DEFAULT_COLOR = "#8b949e"
-TEXT_DARK = "#1b1f23"
-TEXT_LIGHT = "#ffffff"
+# mid gray readable on both github light (#ffffff) and dark (#0d1117)
+TEXT_MAIN = "#6e7781"
 
 # devicon slug and variant per language, verified against the
 # icons/ tree of https://github.com/devicons/devicon at PINNED_DEVICON_REF
