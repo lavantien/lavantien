@@ -26,14 +26,20 @@ class TestLoadReposJson(unittest.TestCase):
             bad.write_text("{not json", encoding="utf-8")
             with self.assertRaises(GhError) as ctx:
                 load_repos_json(bad)
-            self.assertIn(str(bad), str(ctx.exception))
+            self.assertTrue(
+                str(ctx.exception).startswith(f"cannot load repos json from {bad}: "),
+                str(ctx.exception),
+            )
 
     def test_missing_file_raises_with_path(self):
         with tempfile.TemporaryDirectory() as tmp:
             missing = pathlib.Path(tmp) / "missing.json"
             with self.assertRaises(GhError) as ctx:
                 load_repos_json(missing)
-            self.assertIn(str(missing), str(ctx.exception))
+            self.assertTrue(
+                str(ctx.exception).startswith(f"cannot load repos json from {missing}: "),
+                str(ctx.exception),
+            )
 
 
 class TestFetchRepos(unittest.TestCase):
@@ -58,20 +64,49 @@ class TestFetchRepos(unittest.TestCase):
         run.return_value = gh_result(stderr="gh: auth failure", returncode=1)
         with self.assertRaises(GhError) as ctx:
             fetch_repos()
-        self.assertIn("gh: auth failure", str(ctx.exception))
+        self.assertEqual(
+            str(ctx.exception), "gh repo list exited 1: gh: auth failure"
+        )
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_nonzero_exit_excerpt_is_exactly_200_chars(self, run):
+        # 205 chars of stderr: the excerpt must keep exactly 200, so an
+        # off-by-one on the cap cannot slip the 201st char into the message
+        run.return_value = gh_result(stderr="A" * 205, returncode=1)
+        with self.assertRaises(GhError) as ctx:
+            fetch_repos()
+        self.assertEqual(
+            str(ctx.exception), "gh repo list exited 1: " + "A" * 200
+        )
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_nonzero_exit_falls_back_to_stdout_excerpt(self, run):
+        run.return_value = gh_result(stdout="out detail", returncode=1)
+        with self.assertRaises(GhError) as ctx:
+            fetch_repos()
+        self.assertEqual(
+            str(ctx.exception), "gh repo list exited 1: out detail"
+        )
 
     @mock.patch("scripts.github_client.subprocess.run")
     def test_invalid_json_raises_with_stdout_excerpt(self, run):
         run.return_value = gh_result(stdout="<html>502</html>")
         with self.assertRaises(GhError) as ctx:
             fetch_repos()
-        self.assertIn("<html>502</html>", str(ctx.exception))
+        self.assertEqual(
+            str(ctx.exception),
+            "gh repo list returned invalid json: <html>502</html>",
+        )
 
     @mock.patch("scripts.github_client.subprocess.run")
     def test_missing_executable_raises(self, run):
         run.side_effect = FileNotFoundError("no gh")
-        with self.assertRaises(GhError):
-            fetch_repos()
+        with self.assertRaises(GhError) as ctx:
+            fetch_repos(gh_exec="stub")
+        self.assertEqual(
+            str(ctx.exception),
+            "cannot run gh repo list via 'stub': no gh",
+        )
 
 
 class TestFetchStarCount(unittest.TestCase):

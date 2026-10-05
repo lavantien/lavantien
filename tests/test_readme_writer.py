@@ -144,6 +144,22 @@ class TestReplaceBetween(unittest.TestCase):
             "END only",
         )
 
+    def test_unchanged_when_start_absent_and_end_beyond_offset(self):
+        # end marker present but past the offset a missing start marker
+        # would search from: the span lookup must bail out, not replace
+        content = "x" * 30 + config.MARKER_END
+        self.assertIs(
+            replace_between(content, config.MARKER_START, config.MARKER_END, "NEW"),
+            content,
+        )
+
+    def test_replaces_when_start_marker_leads_content(self):
+        content = config.MARKER_START + "\nold\n" + config.MARKER_END
+        self.assertEqual(
+            replace_between(content, config.MARKER_START, config.MARKER_END, "NEW"),
+            "NEW",
+        )
+
 
 class TestRewriteReadme(unittest.TestCase):
     def test_messy_readme_gets_block_at_top(self):

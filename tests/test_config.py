@@ -29,5 +29,22 @@ class TestConfig(unittest.TestCase):
         self.assertTrue(config.FIXTURE_README_MESSY.exists())
 
 
+class TestLiteralPins(unittest.TestCase):
+    # deliberate literal pins for mutation coverage: these values are the
+    # public contract of the config hub, and asserts elsewhere that derive
+    # expectations from config would mutate in lockstep and pass silently
+    def test_pinned_constants(self):
+        self.assertEqual(config.GH_REPO_LIMIT, 300)
+        self.assertEqual(config.TOP_N, 10)
+        self.assertEqual(config.STRIP_HEIGHT, 28)
+        self.assertEqual(config.ICON_SIZE, 16)
+        self.assertEqual(config.PAD_X, 7)
+        self.assertEqual(config.LABEL_GAP, 4)
+        self.assertEqual(config.ENTRY_GAP, 14)
+        self.assertEqual(config.CHAR_WIDTH, 7.0)
+        self.assertEqual(config.FONT_SIZE, 13)
+        self.assertEqual(config.TEXT_MAIN, "#6e7781")
+
+
 if __name__ == "__main__":
     unittest.main()

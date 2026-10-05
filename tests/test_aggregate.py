@@ -58,6 +58,11 @@ class TestAggregate(unittest.TestCase):
         self.assertEqual(agg.lang_sizes, {})
         self.assertEqual(len(agg.repos), 2)
 
+    def test_missing_size_key_contributes_zero_bytes(self):
+        one = item("svc")
+        one["languages"] = [{"node": {"name": "Go"}}]
+        self.assertEqual(aggregate([one]).lang_sizes, {"Go": 0})
+
     def test_missing_required_keys_raise(self):
         no_created = item("x")
         del no_created["createdAt"]
@@ -89,6 +94,12 @@ class TestTopLanguages(unittest.TestCase):
 
     def test_custom_allow(self):
         self.assertEqual(top_languages({"HTML": 5}, allow={"HTML"}), [("HTML", 5)])
+
+    def test_single_byte_language_kept(self):
+        self.assertEqual(top_languages({"Go": 1}), [("Go", 1)])
+
+    def test_zero_size_language_excluded(self):
+        self.assertEqual(top_languages({"Go": 0}), [])
 
     def test_empty(self):
         self.assertEqual(top_languages({}), [])
