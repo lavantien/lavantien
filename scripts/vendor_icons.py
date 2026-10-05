@@ -1,0 +1,165 @@
+"""Vendor devicon SVGs from the pinned devicons/devicon ref into assets/devicons.
+
+Each icon named by config.DEVICON_MAP is downloaded, validated as inert SVG
+(parses, svg root, no scripts, no external URL attributes), and written under
+its slug-variant filename, so languages sharing an icon dedupe to one file.
+Existing files that still validate are skipped, keeping `make icons` cheap
+and usable offline once the assets are vendored. ATTRIBUTION.md embeds the
+LICENSE fetched from the same pinned ref verbatim.
+"""
+
+import argparse
+import datetime
+import pathlib
+import sys
+import urllib.error
+import urllib.request
+import xml.etree.ElementTree as ET
+
+# make `python3 scripts/vendor_icons.py` importable regardless of cwd
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+
+from scripts import config
+
+TIMEOUT_SECONDS = 30
+USER_AGENT = "lavantien-profile-icons/1.0"
+MAX_SVG_BYTES = 100 * 1024
+SVG_ROOT_TAGS = ("svg", "{http://www.w3.org/2000/svg}svg")
+RAW_BASE = (
+    "https://raw.githubusercontent.com/devicons/devicon/"
+    + config.PINNED_DEVICON_REF
+)
+ATTRIBUTION_NAME = "ATTRIBUTION.md"
+
+
+def icon_url(slug, variant):
+    return f"{RAW_BASE}/icons/{slug}/{slug}-{variant}.svg"
+
+
+def fetch(url):
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+        return response.read()
+
+
+def validate_svg(data, language):
+    if not data:
+        raise ValueError(f"{language}: empty file")
+    if len(data) >= MAX_SVG_BYTES:
+        raise ValueError(f"{language}: {len(data)} bytes is not under {MAX_SVG_BYTES}")
+    try:
+        root = ET.fromstring(data)
+    except ET.ParseError as exc:
+        raise ValueError(f"{language}: not valid XML ({exc})") from exc
+    if root.tag not in SVG_ROOT_TAGS:
+        raise ValueError(f"{language}: root element is {root.tag}, not svg")
+    for element in root.iter():
+        tag = element.tag.rsplit("}", 1)[-1]
+        if tag == "script":
+            raise ValueError(f"{language}: contains a script element")
+        for value in element.attrib.values():
+            if value.startswith("http"):
+                raise ValueError(
+                    f"{language}: attribute value {value!r} references an external URL"
+                )
+
+
+def fetch_or_skip(path, url, language, force):
+    if path.exists() and not force:
+        try:
+            validate_svg(path.read_bytes(), language)
+            return "skipped"
+        except ValueError:
+            pass  # stale or corrupt copy: redownload it
+    try:
+        data = fetch(url)
+    except urllib.error.HTTPError as exc:
+        raise ValueError(f"{language}: HTTP {exc.code} fetching {url}") from exc
+    except urllib.error.URLError as exc:
+        raise ValueError(f"{language}: cannot fetch {url} ({exc.reason})") from exc
+    validate_svg(data, language)
+    path.write_bytes(data)
+    return "fetched"
+
+
+def write_attribution(filenames, force, downloaded_any):
+    path = config.DEVICON_DIR / ATTRIBUTION_NAME
+    if path.exists() and not force and not downloaded_any:
+        print(f"skipped {ATTRIBUTION_NAME}")
+        return
+    url = f"{RAW_BASE}/LICENSE"
+    try:
+        license_text = fetch(url).decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        raise ValueError(f"{ATTRIBUTION_NAME}: HTTP {exc.code} fetching {url}") from exc
+    except urllib.error.URLError as exc:
+        raise ValueError(f"{ATTRIBUTION_NAME}: cannot fetch {url} ({exc.reason})") from exc
+    if not license_text.strip():
+        raise ValueError(f"{ATTRIBUTION_NAME}: LICENSE fetched from {url} is empty")
+    lines = [
+        "# Vendored devicon icons",
+        "",
+        "Source: https://github.com/devicons/devicon",
+        f"Pinned ref: {config.PINNED_DEVICON_REF}",
+        f"Vendored: {datetime.date.today().isoformat()}",
+        "",
+        "Files:",
+        "",
+    ]
+    lines.extend(f"- {name}" for name in filenames)
+    lines.extend(
+        [
+            "",
+            "These SVGs are vendored from the devicon repository at the pinned",
+            "ref above so the languages strip in the profile README is",
+            "self-contained and needs no external service at render time.",
+            "Re-vendor with `make icons`; add `--force` (or edit the Makefile",
+            "target's invocation) to redownload.",
+            "",
+            "## LICENSE",
+            "",
+            license_text,
+            "",
+        ]
+    )
+    path.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+    print(f"fetched {ATTRIBUTION_NAME}")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Vendor devicon SVGs into assets/devicons."
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="redownload files that already exist and validate",
+    )
+    args = parser.parse_args(argv)
+    config.DEVICON_DIR.mkdir(parents=True, exist_ok=True)
+
+    targets = {}
+    for language, (slug, variant) in config.DEVICON_MAP.items():
+        targets.setdefault((slug, variant), language)
+    filenames = sorted(f"{slug}-{variant}.svg" for slug, variant in targets)
+
+    downloaded_any = False
+    for (slug, variant), language in sorted(targets.items()):
+        filename = f"{slug}-{variant}.svg"
+        try:
+            status = fetch_or_skip(
+                config.DEVICON_DIR / filename, icon_url(slug, variant), language, args.force
+            )
+        except ValueError as exc:
+            print(f"rejected {filename}: {exc}")
+            raise
+        if status == "fetched":
+            downloaded_any = True
+        print(f"{status} {filename}")
+
+    write_attribution(filenames, args.force, downloaded_any)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
