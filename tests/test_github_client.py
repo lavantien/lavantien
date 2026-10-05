@@ -176,7 +176,7 @@ class TestRecordMain(unittest.TestCase):
     # `make record` entry: the committed fixture must never carry
     # private repo metadata, whatever credential records it
     @mock.patch("scripts.github_client.fetch_repos")
-    def test_records_public_unarchived_unforked_only(self, fetch):
+    def test_records_public_unforked_only_archived_kept(self, fetch):
         fetch.return_value = [
             {"name": "open", "isFork": False, "isArchived": False,
              "visibility": "PUBLIC"},
@@ -184,7 +184,7 @@ class TestRecordMain(unittest.TestCase):
              "visibility": "PRIVATE"},
             {"name": "forked", "isFork": True, "isArchived": False,
              "visibility": "PUBLIC"},
-            {"name": "old", "isFork": False, "isArchived": True,
+            {"name": "old-but-public", "isFork": False, "isArchived": True,
              "visibility": "PUBLIC"},
             {"name": "lowercase-ok", "isFork": False, "isArchived": False,
              "visibility": "public"},
@@ -194,7 +194,8 @@ class TestRecordMain(unittest.TestCase):
         with mock.patch("sys.stdout", out):
             rc = github_client._record_main()
         self.assertEqual(rc, 0)
-        expected = [fetch.return_value[0], fetch.return_value[4]]
+        expected = [fetch.return_value[0], fetch.return_value[3],
+                    fetch.return_value[4]]
         self.assertEqual(
             out.getvalue(), json.dumps(expected, indent=2) + "\n"
         )

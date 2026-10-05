@@ -79,14 +79,14 @@ def fetch_star_count(full_name: str, gh_exec: str = "gh") -> int:
 
 
 def _record_main() -> int:
-    # `make record` entry: print the public, non-fork, non-archived repo
-    # items as json so the committed fixture never carries private
-    # repo metadata, whatever credential records it
+    # `make record` entry: print the public, non-fork repo items as json
+    # so the committed fixture never carries private repo metadata,
+    # whatever credential records it. Archived public repos stay: the
+    # offline star stub needs them (the fixed first repo is archived).
     items = [
         item
         for item in fetch_repos()
         if not item["isFork"]
-        and not item["isArchived"]
         and str(item.get("visibility", "")).upper() == "PUBLIC"
     ]
     sys.stdout.write(json.dumps(items, indent=2) + "\n")

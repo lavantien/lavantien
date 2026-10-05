@@ -1146,5 +1146,32 @@
     "name": "chess-repertoire-database",
     "stargazerCount": 6,
     "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2025-01-01T14:21:49Z",
+    "description": "",
+    "isArchived": true,
+    "isFork": false,
+    "languages": [],
+    "name": "modern-swe-library",
+    "stargazerCount": 9,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2023-05-19T19:45:59Z",
+    "description": "My Neovim Configs",
+    "isArchived": true,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 18004,
+        "node": {
+          "name": "Lua"
+        }
+      }
+    ],
+    "name": "nvim",
+    "stargazerCount": 4,
+    "visibility": "PUBLIC"
   }
 ]
