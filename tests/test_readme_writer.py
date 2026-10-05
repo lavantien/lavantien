@@ -13,7 +13,7 @@ from scripts.readme_writer import (
 
 EXPECTED_IMG = (
     '<p align="center"><img src="assets/languages.svg"'
-    ' alt="Top languages by code volume" width="900"></p>'
+    ' alt="Top languages by code volume"></p>'
 )
 UPDATED_NEW = config.UPDATED_PREFIX + "2026-10-06*"
 

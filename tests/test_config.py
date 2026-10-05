@@ -14,7 +14,7 @@ class TestConfig(unittest.TestCase):
     def test_colors_are_hex(self):
         for lang, color in config.LANG_COLORS.items():
             self.assertRegex(color, HEX_RE, lang)
-        for value in (config.DEFAULT_COLOR, config.TEXT_DARK, config.TEXT_LIGHT):
+        for value in (config.DEFAULT_COLOR, config.TEXT_MAIN):
             self.assertRegex(value, HEX_RE)
 
     def test_devicon_pairs_shape(self):
