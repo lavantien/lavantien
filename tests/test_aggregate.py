@@ -1,5 +1,6 @@
 import json
 import unittest
+from unittest import mock
 
 from scripts import config
 from scripts.aggregate import Aggregation, aggregate, select_rows, top_languages
@@ -154,6 +155,19 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(rows[0].name, config.FIXED_FIRST_REPO["name"])
         self.assertEqual(rows[0].stars, 0)
         self.assertEqual([r.name for r in rows[1:]], ["only"])
+
+    def test_pinned_saturation_appends_no_remaining_rows(self):
+        pinned = [f"pinned-{i}" for i in range(10)]
+        repos = aggregate(
+            [item(name, stars=i) for i, name in enumerate(pinned)]
+            + [item("leftover", stars=99)]
+        ).repos
+        with mock.patch.object(config, "PINNED_REPOS", pinned):
+            rows = select_rows(repos, star_fetch=lambda full_name: 1)
+        self.assertEqual(
+            [r.name for r in rows],
+            [config.FIXED_FIRST_REPO["name"], *pinned],
+        )
 
     def test_no_pinned_matches_leaves_short_list(self):
         rows = select_rows([], star_fetch=lambda full_name: 7)

@@ -15,15 +15,12 @@ from scripts import config
 SVG_NS = "http://www.w3.org/2000/svg"
 FALLBACK_VIEWBOX = "0 0 128 128"
 ARIA_PREFIX = "Top languages: "
-# element tags whose fill is recolored when it would vanish on dark
 _RECOLOR_TAGS = frozenset(
     {"path", "polygon", "circle", "rect", "ellipse", "line", "polyline", "g"}
 )
 
 
 def format_bytes(b):
-    # ported from .github/workflows/update-readme.yml, with the K->M
-    # boundary fixed: a K count that rounds up to 1000 promotes to M
     if b >= 999_500:
         return f"{b / 1_000_000:.1f}M"
     if b >= 1_000:
@@ -56,7 +53,7 @@ def estimate_text_width(text):
 
 
 def _strip_ns(tag):
-    return tag.rsplit("}", 1)[-1]
+    return tag.rpartition("}")[-1]
 
 
 def load_icon(name):
@@ -83,12 +80,9 @@ def load_icon(name):
     if not view_box:
         icon_w, icon_h = root.get("width"), root.get("height")
         view_box = f"0 0 {icon_w} {icon_h}" if icon_w and icon_h else FALLBACK_VIEWBOX
-    # strip namespaces so the markup nests under the strip's own xmlns
     for elem in elements:
         elem.tag = _strip_ns(elem.tag)
         elem.attrib = {_strip_ns(key): value for key, value in elem.attrib.items()}
-    # recolor fills that vanish on the github dark theme (default black,
-    # explicit black, lua navy) to the language's brand color
     color = config.LANG_COLORS.get(name, config.DEFAULT_COLOR)
     for elem in elements:
         if _strip_ns(elem.tag) not in _RECOLOR_TAGS:
@@ -98,7 +92,7 @@ def load_icon(name):
             elem.set("fill", color)
     inner = "".join(ET.tostring(child, encoding="unicode") for child in root)
     try:
-        ET.fromstring(f'<svg xmlns="{SVG_NS}">{inner}</svg>')
+        ET.fromstring("<g>" + inner + "</g>")
     except ET.ParseError:
         return None
     return inner, view_box
@@ -140,7 +134,6 @@ def render_strip(langs: Sequence[tuple[str, int]]) -> str:
     aria = ARIA_PREFIX + ", ".join(
         f"{name} {format_bytes(size)}" for name, size in langs
     )
-    # measure first, then emit: the width depends on the content
     entries = []
     x = config.PAD_X
     for name, size in langs:

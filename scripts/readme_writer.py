@@ -113,9 +113,6 @@ def _apply_table(content: str, repo_table: str) -> str:
         return replace_between(
             content, config.MARKER_REPOS_START, config.MARKER_REPOS_END, marked
         )
-    # adoption path, markers absent: drop strays, then replace only the
-    # table the generator owns (the one adjacent to the updated line) so
-    # user-authored tables elsewhere survive the first marked run
     content = "\n".join(
         ln for ln in content.split("\n") if ln.strip() not in _STRAY_REPOS_MARKERS
     )
@@ -124,7 +121,7 @@ def _apply_table(content: str, repo_table: str) -> str:
     matches = list(_TABLE_RE.finditer(content))
     if matches:
         if updated:
-            owned = [m for m in matches if m.end() <= updated.start()]
+            owned = [m for m in matches if m.end() in range(updated.start())]
             target = owned[-1] if owned else matches[-1]
         else:
             target = matches[-1]

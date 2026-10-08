@@ -484,6 +484,28 @@ class TestMain(unittest.TestCase):
         self.assertFalse((self.dir / "php-plain.svg").exists())
         self.assertFalse((self.dir / "ATTRIBUTION.md").exists())
 
+    def test_bootstrap_outranks_shadowing_scripts_package(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            decoy = pathlib.Path(tmp)
+            (decoy / "scripts").mkdir()
+            (decoy / "scripts" / "__init__.py").write_text(
+                "raise AssertionError('decoy scripts package imported')\n",
+                encoding="utf-8",
+            )
+            script = str(config.REPO_ROOT / "scripts" / "vendor_icons.py")
+            runner = (
+                "import sys, runpy\n"
+                f"sys.path.insert(0, {str(decoy)!r})\n"
+                "sys.argv = ['vendor_icons.py', '--help']\n"
+                f"runpy.run_path({script!r}, run_name='__main__')\n"
+            )
+            proc = subprocess.run(
+                [sys.executable, "-c", runner],
+                capture_output=True, text=True, cwd=str(decoy),
+            )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertNotIn("decoy scripts package imported", proc.stderr)
+
     def test_script_entry_direct_execution(self):
         proc = subprocess.run(
             [sys.executable,

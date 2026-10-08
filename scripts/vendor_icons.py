@@ -66,7 +66,7 @@ def validate_svg(data, language):
     if root.tag not in SVG_ROOT_TAGS:
         raise ValueError(f"{language}: root element is {root.tag}, not svg")
     for element in root.iter():
-        tag = element.tag.rsplit("}", 1)[-1]
+        tag = element.tag.rpartition("}")[-1]
         if tag == "script":
             raise ValueError(f"{language}: contains a script element")
         for value in element.attrib.values():
