@@ -250,7 +250,7 @@ class TestWriteAttribution(unittest.TestCase):
             for name in sources
         )
         lines.extend(["", "Files:", ""])
-        lines.extend(f"- {filename} ({source})" for filename, source in files)
+        lines.extend(f"- {filename} ({source})" for filename, source in sorted(files))
         lines.extend([
             "",
             "Icons are vendored from each source repository at the pinned",

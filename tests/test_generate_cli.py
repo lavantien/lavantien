@@ -50,7 +50,7 @@ EXPECTED_LANGS = [
 
 
 def item(name="svc", stars=5, langs=(("Go", 100),), created="2024-01-01T00:00:00Z",
-         description="d", fork=False, archived=False):
+         description="d", fork=False, archived=False, visibility="public"):
     return {
         "name": name,
         "stargazerCount": stars,
@@ -58,6 +58,7 @@ def item(name="svc", stars=5, langs=(("Go", 100),), created="2024-01-01T00:00:00
         "createdAt": created,
         "isFork": fork,
         "isArchived": archived,
+        "visibility": visibility,
         "languages": [{"size": size, "node": {"name": lang}} for lang, size in langs],
     }
 

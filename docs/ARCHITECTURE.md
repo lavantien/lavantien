@@ -28,3 +28,4 @@ Color sources: shields.io ported hexes for the original workflow set, MathWorks 
 - Every mapped slug resolves to a configured icon source and its `icon_path` template formats into an `icons/` path.
 - The golden SVG pins the exact rendered bytes of the sample top 10, which transitively pins the vendored icon files themselves.
 - `make mutate` swaps token-level mutants into `scripts/` against the suite and requires a clean `scripts/` tree so restores stay verifiable.
+- Two expressions avoid comparison operators because the equality boundary they would need is unreachable, which leaves any `<=`/`<` form with a structurally equivalent mutant: `tag.rpartition("}")[-1]` for namespace stripping and `m.end() in range(updated.start())` for the owned-table bound in `readme_writer`.

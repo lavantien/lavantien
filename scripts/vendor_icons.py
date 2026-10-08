@@ -131,7 +131,7 @@ def write_attribution(files, force, downloaded_any):
         for name in sources
     )
     lines.extend(["", "Files:", ""])
-    lines.extend(f"- {filename} ({source})" for filename, source in files)
+    lines.extend(f"- {filename} ({source})" for filename, source in sorted(files))
     lines.extend([
         "",
         "Icons are vendored from each source repository at the pinned",
