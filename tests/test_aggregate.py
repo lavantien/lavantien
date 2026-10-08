@@ -33,7 +33,6 @@ class TestAggregate(unittest.TestCase):
         self.assertEqual(agg.lang_sizes, {"Go": 10})
 
     def test_private_repositories_excluded(self):
-        # profile stats cover public work only: private bytes must vanish
         agg = aggregate([
             item("secret", stars=9, langs=[("Go", 5000000)], visibility="private"),
             item("open", stars=1, langs=[("Go", 10)]),
@@ -164,13 +163,11 @@ class TestSelectRows(unittest.TestCase):
 
 
 class TestFixtureIntegration(unittest.TestCase):
-    # position 10 is F#, not Perl: at equal 13000 bytes the alphabetical
-    # tie-break orders F# before Perl, so Perl is the entry cut at n=10.
-    # All byte totals verified against the fixture by hand before encoding.
     EXPECTED = [
-        ("Go", 2221713), ("Java", 480000), ("JavaScript", 168384),
-        ("Python", 140000), ("C", 120000), ("TypeScript", 95000),
-        ("Kotlin", 75000), ("Ruby", 75000), ("Lua", 50000), ("F#", 13000),
+        ("Typst", 10304702), ("Go", 2221713), ("Java", 480000),
+        ("JavaScript", 168384), ("Python", 140000), ("C", 120000),
+        ("TypeScript", 95000), ("Kotlin", 75000), ("Ruby", 75000),
+        ("Lua", 50000),
     ]
 
     def test_sample_fixture_top_languages(self):

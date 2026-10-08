@@ -17,7 +17,6 @@ from scripts.github_client import GhError
 
 class TestWriteOrdering(unittest.TestCase):
     def test_no_svg_written_when_readme_render_fails(self):
-        # both artifacts render fully before the first byte hits disk
         with tempfile.TemporaryDirectory() as tmp:
             readme = pathlib.Path(tmp) / "README.md"
             svg = pathlib.Path(tmp) / "s.svg"
@@ -40,14 +39,13 @@ class TestWriteOrdering(unittest.TestCase):
 SVG_NS = "http://www.w3.org/2000/svg"
 SENTINEL_README = "sentinel readme\n"
 SENTINEL_SVG = "sentinel svg\n"
-# what counts as a clean data failure: raised by load or aggregate before
-# the first write, never a hang or an interpreter-level crash
 CLEAN_FAILURES = (GhError, KeyError, TypeError, ValueError, AttributeError, IndexError)
 
 EXPECTED_LANGS = [
-    ("Go", 2221713), ("Java", 480000), ("JavaScript", 168384),
-    ("Python", 140000), ("C", 120000), ("TypeScript", 95000),
-    ("Kotlin", 75000), ("Ruby", 75000), ("Lua", 50000), ("F#", 13000),
+    ("Typst", 10304702), ("Go", 2221713), ("Java", 480000),
+    ("JavaScript", 168384), ("Python", 140000), ("C", 120000),
+    ("TypeScript", 95000), ("Kotlin", 75000), ("Ruby", 75000),
+    ("Lua", 50000),
 ]
 
 
@@ -155,8 +153,6 @@ class TestSourceFailures(unittest.TestCase):
 
 
 class TestMalformedPayloadFuzz(unittest.TestCase):
-    # invariant per variant: main() either completes and leaves well-formed
-    # artifacts, or raises a clean data error with both artifacts untouched
     def test_variants_never_partially_write(self):
         for label, payload in FUZZ_VARIANTS:
             with self.subTest(variant=label):
@@ -222,7 +218,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertEqual(root.get("aria-label"), expected_aria)
         self.assertEqual(root.find(f"{{{SVG_NS}}}title").text, expected_aria)
-        self.assertTrue(expected_aria.startswith("Top languages: Go 2.2M"))
+        self.assertTrue(expected_aria.startswith("Top languages: Typst 10.3M"))
 
         content = self.readme.read_text(encoding="utf-8")
         self.assertTrue(content.startswith(config.MARKER_START))
@@ -233,8 +229,6 @@ class TestEndToEndFromFixture(unittest.TestCase):
         updated = [ln for ln in content.split("\n")
                    if ln.startswith(config.UPDATED_PREFIX)]
         self.assertEqual(updated, [f"{config.UPDATED_PREFIX}{today}"])
-        # stub star wiring: the fixed repo is absent from the fixture so its
-        # lookup falls back to 0, fixture repos carry their own counts
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a> (<i>2023</i>) (<b>0⭐</b>)",
@@ -260,8 +254,6 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn("unchanged", second.getvalue())
 
     def test_final_summary_line_is_exact(self):
-        # byte-exact last line, both on the fresh run and the idempotent
-        # rerun, so wording or count changes in the summary cannot survive
         with silence() as first:
             self.assertEqual(generate.main(self.args), 0)
         with silence() as second:
@@ -283,10 +275,6 @@ class TestEndToEndFromFixture(unittest.TestCase):
     @mock.patch("scripts.github_client.fetch_star_count",
                 side_effect=AssertionError("network star fetch in --from-json mode"))
     def test_stub_returns_own_stars_for_fixed_repo_in_items(self, _star_fetch):
-        # select_rows consults star_fetch only for the fixed first repo;
-        # its recorded item is archived, so the aggregate filters it out
-        # and the stub must still resolve its stargazerCount from the raw
-        # loaded items instead of falling back to 0 or the network
         src_items = [
             dict(item(name="modern-swe-library", stars=17, langs=()), archived=True),
             item(name="other", stars=3, langs=()),
@@ -301,8 +289,6 @@ class TestEndToEndFromFixture(unittest.TestCase):
                                     "--readme", str(readme), "--svg", str(svg)])
             content = readme.read_text(encoding="utf-8")
         self.assertEqual(rc, 0)
-        # the fixed row keeps its config-pinned year and description; only
-        # the stars come from the loaded items via the stub
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a> (<i>2023</i>) (<b>17⭐</b>)",
@@ -330,8 +316,6 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
 
     def test_script_entry_direct_execution(self):
-        # the Makefile invokes the file by path, not via -m scripts.generate;
-        # direct execution must bootstrap the repo root itself
         with tempfile.TemporaryDirectory() as tmp:
             readme = pathlib.Path(tmp) / "README.md"
             svg = pathlib.Path(tmp) / "languages.svg"

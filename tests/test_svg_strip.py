@@ -8,6 +8,7 @@ from unittest import mock
 from scripts import config, svg_strip
 
 SAMPLE = [
+    ("Typst", 10304702),
     ("Go", 2221713),
     ("Java", 480000),
     ("JavaScript", 168384),
@@ -17,7 +18,6 @@ SAMPLE = [
     ("Kotlin", 75000),
     ("Ruby", 75000),
     ("Lua", 50000),
-    ("F#", 13000),
 ]
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
@@ -36,13 +36,11 @@ def iter_all(root):
 
 
 def nested_icons(root):
-    # root itself is an <svg>; icons are the nested ones
     return [e for e in root.iter() if strip_ns(e.tag) == "svg" and e is not root]
 
 
 class TestFormatBytes(unittest.TestCase):
     def test_boundaries(self):
-        # literals, not config-derived, so constant mutants cannot hide
         self.assertEqual(svg_strip.format_bytes(0), "0")
         self.assertEqual(svg_strip.format_bytes(999), "999")
         self.assertEqual(svg_strip.format_bytes(1000), "1K")
@@ -54,17 +52,17 @@ class TestFormatBytes(unittest.TestCase):
         self.assertEqual(svg_strip.format_bytes(1_050_000), "1.1M")
         self.assertEqual(svg_strip.format_bytes(480_000), "480K")
         self.assertEqual(svg_strip.format_bytes(2_221_713), "2.2M")
+        self.assertEqual(svg_strip.format_bytes(10_304_702), "10.3M")
 
 
 class TestEstimateTextWidth(unittest.TestCase):
     def test_literals(self):
-        # per-class widths (xwide 9.6, wide 8.2, narrow 3.8, default 7.0):
-        # expectations are literal so a config mutant fails
         self.assertEqual(svg_strip.estimate_text_width(""), 0)
         self.assertEqual(svg_strip.estimate_text_width("Go"), 16)
         self.assertEqual(svg_strip.estimate_text_width("No language data"), 101)
         self.assertEqual(svg_strip.estimate_text_width("Go 2.2M"), 49)
         self.assertEqual(svg_strip.estimate_text_width("MATLAB 1000K"), 96)
+        self.assertEqual(svg_strip.estimate_text_width("Typst 10.3M"), 75)
 
 
 class TestEscapeXml(unittest.TestCase):
@@ -99,12 +97,9 @@ class TestLoadIcon(unittest.TestCase):
         inner, view_box = svg_strip.load_icon("Go")
         self.assertEqual(view_box, "0 0 128 128")
         self.assertIn("<path", inner)
-        # nested markup must re-parse under the strip namespace
         ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{inner}</svg>')
 
     def test_fill_less_shapes_get_language_color(self):
-        # black-on-dark invisibility fix: unshaped default fill and explicit
-        # dark fills are recolored to the language's brand color at embed
         self.write(
             "go-plain.svg",
             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
@@ -125,6 +120,21 @@ class TestLoadIcon(unittest.TestCase):
         inner, _ = svg_strip.load_icon("Lua")
         self.assertIn('fill="#5D7FA3"', inner)
 
+    def test_typst_fill_less_path_gets_brand_color(self):
+        self.write(
+            "typst-original.svg",
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
+            '<title>Typst</title><path d="M0 0h1v1z"/></svg>',
+        )
+        inner, view_box = svg_strip.load_icon("Typst")
+        self.assertEqual(view_box, "0 0 24 24")
+        root = ET.fromstring(f'<svg xmlns="http://www.w3.org/2000/svg">{inner}</svg>')
+        paths = root.findall("{http://www.w3.org/2000/svg}path")
+        self.assertEqual(len(paths), 1)
+        self.assertEqual(paths[0].get("fill"), "#239dad")
+        title = root.find("{http://www.w3.org/2000/svg}title")
+        self.assertEqual(title.text, "Typst")
+
     def test_brand_fills_are_kept(self):
         self.write(
             "javascript-plain.svg",
@@ -137,8 +147,6 @@ class TestLoadIcon(unittest.TestCase):
         self.assertIn('fill="none"', inner)
 
     def test_unmapped_language_uses_default_color(self):
-        # DEVICON_MAP hit but LANG_COLORS miss is impossible today; the
-        # transform's fallback is still pinned via a patched map entry
         with mock.patch.object(
             config, "DEVICON_MAP", {"Xtend": ("go", "plain")}
         ), mock.patch.object(config, "LANG_COLORS", {}):
@@ -168,7 +176,6 @@ class TestLoadIcon(unittest.TestCase):
         self.assertEqual(view_box, "0 0 128 128")
 
     def test_viewbox_fallback_when_only_one_dimension(self):
-        # width without height (and vice versa) cannot synthesize a viewBox
         self.write(
             "go-plain.svg",
             '<svg xmlns="http://www.w3.org/2000/svg" width="24"><rect/></svg>',
@@ -239,7 +246,6 @@ class TestRenderStrip(unittest.TestCase):
             self.assertNotEqual(strip_ns(elem.tag), "script")
 
     def test_no_background_shapes(self):
-        # plain text row: no segment rects, no clip paths, no defs
         root = parse(svg_strip.render_strip(SAMPLE))
         tags = {strip_ns(elem.tag) for elem in iter_all(root)}
         self.assertNotIn("rect", tags)
@@ -256,10 +262,9 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(len(texts), len(SAMPLE))
 
     def test_layout_literals(self):
-        # PAD_X=7, ICON_SIZE=16, LABEL_GAP=4, WIDTH_MARGIN=8: literal expectations
         svg = svg_strip.render_strip([("Go", 2221713)])
         root = parse(svg)
-        self.assertEqual(root.get("width"), "91")  # 7 + 16 + 4 + 49 + 7 + 8
+        self.assertEqual(root.get("width"), "91")
         self.assertEqual(root.get("height"), "28")
         self.assertEqual(root.get("viewBox"), "0 0 91 28")
         icon = nested_icons(root)[0]
@@ -270,7 +275,6 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(label.get("fill"), config.TEXT_MAIN)
 
     def test_second_entry_offset(self):
-        # entry 1 advance is 69, then ENTRY_GAP 14: icon 2 lands at x=90
         root = parse(svg_strip.render_strip([("Go", 2221713), ("C", 120000)]))
         icons = nested_icons(root)
         self.assertEqual(icons[1].get("x"), "90")
@@ -296,8 +300,6 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(icons, [])
 
     def test_letter_tile_document_exact_bytes(self):
-        # full literal pin of the fallback path: tile centered in the icon
-        # slot at 7 + 16//2 = 15, label at 27, entry width 7+16+4+73+7+8 = 115
         font = (
             "ui-sans-serif, system-ui, -apple-system, &apos;Segoe UI&apos;, "
             "Helvetica, Arial, sans-serif"
@@ -322,7 +324,7 @@ class TestRenderStrip(unittest.TestCase):
     def test_empty_renders_placeholder(self):
         svg = svg_strip.render_strip([])
         root = parse(svg)
-        self.assertEqual(root.get("width"), "123")  # 7 + 101 + 7 + 8
+        self.assertEqual(root.get("width"), "123")
         self.assertEqual(root.get("height"), "28")
         text = next(e for e in iter_all(root) if strip_ns(e.tag) == "text")
         self.assertEqual(text.text, config.EMPTY_LABEL)
@@ -330,8 +332,6 @@ class TestRenderStrip(unittest.TestCase):
         self.assertEqual(int(text.get("x")), 123 // 2)
 
     def test_empty_document_exact_bytes(self):
-        # full literal pin: kills attribute/format mutants in the shared
-        # document-open and empty-render paths
         expected = (
             '<svg xmlns="http://www.w3.org/2000/svg" width="123" height="28" '
             'viewBox="0 0 123 28" role="img" aria-label="No language data">\n'

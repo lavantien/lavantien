@@ -1,11 +1,13 @@
-"""Vendor devicon SVGs from the pinned devicons/devicon ref into assets/devicons.
+"""Vendor icon SVGs from pinned upstream refs into assets/devicons.
 
-Each icon named by config.DEVICON_MAP is downloaded, validated as inert SVG
-(parses, svg root, no scripts, no external URL attributes), and written under
-its slug-variant filename, so languages sharing an icon dedupe to one file.
-Existing files that still validate are skipped, keeping `make icons` cheap
-and usable offline once the assets are vendored. ATTRIBUTION.md embeds the
-LICENSE fetched from the same pinned ref verbatim.
+Each icon named by config.DEVICON_MAP is resolved through
+config.ICON_SOURCES, downloaded from its pinned upstream ref,
+validated as inert SVG (parses, svg root, no scripts, no external URL
+attributes), and written under its slug-variant filename, so languages
+sharing an icon dedupe to one file. Existing files that still validate
+are skipped, keeping `make icons` cheap and usable offline once the
+assets are vendored. ATTRIBUTION.md embeds every source repository,
+pinned ref, and license fetched from the same refs verbatim.
 """
 
 import argparse
@@ -16,7 +18,6 @@ import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 
-# make `python3 scripts/vendor_icons.py` importable regardless of cwd
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
 from scripts import config
@@ -25,15 +26,26 @@ TIMEOUT_SECONDS = 30
 USER_AGENT = "lavantien-profile-icons/1.0"
 MAX_SVG_BYTES = 100 * 1024
 SVG_ROOT_TAGS = ("svg", "{http://www.w3.org/2000/svg}svg")
-RAW_BASE = (
-    "https://raw.githubusercontent.com/devicons/devicon/"
-    + config.PINNED_DEVICON_REF
-)
 ATTRIBUTION_NAME = "ATTRIBUTION.md"
 
 
+def resolve_source(slug):
+    return config.ICON_SOURCE_OVERRIDES.get(slug, config.DEFAULT_ICON_SOURCE)
+
+
+def _source_url(source_name, path):
+    source = config.ICON_SOURCES[source_name]
+    return f"{source['raw_base']}/{source['pinned_ref']}/{path}"
+
+
 def icon_url(slug, variant):
-    return f"{RAW_BASE}/icons/{slug}/{slug}-{variant}.svg"
+    source_name = resolve_source(slug)
+    template = config.ICON_SOURCES[source_name]["icon_path"]
+    return _source_url(source_name, template.format(slug=slug, variant=variant))
+
+
+def license_url(source_name):
+    return _source_url(source_name, config.ICON_SOURCES[source_name]["license_path"])
 
 
 def fetch(url):
@@ -70,7 +82,7 @@ def fetch_or_skip(path, url, language, force):
             validate_svg(path.read_bytes(), language)
             return "skipped"
         except ValueError:
-            pass  # stale or corrupt copy: redownload it
+            pass
     try:
         data = fetch(url)
     except urllib.error.HTTPError as exc:
@@ -82,53 +94,61 @@ def fetch_or_skip(path, url, language, force):
     return "fetched"
 
 
-def write_attribution(filenames, force, downloaded_any):
-    path = config.DEVICON_DIR / ATTRIBUTION_NAME
-    if path.exists() and not force and not downloaded_any:
-        print(f"skipped {ATTRIBUTION_NAME}")
-        return
-    url = f"{RAW_BASE}/LICENSE"
+def _fetch_license(source_name):
+    url = license_url(source_name)
     try:
         license_text = fetch(url).decode("utf-8")
     except urllib.error.HTTPError as exc:
         raise ValueError(f"{ATTRIBUTION_NAME}: HTTP {exc.code} fetching {url}") from exc
     except urllib.error.URLError as exc:
-        raise ValueError(f"{ATTRIBUTION_NAME}: cannot fetch {url} ({exc.reason})") from exc
+        raise ValueError(
+            f"{ATTRIBUTION_NAME}: cannot fetch {url} ({exc.reason})"
+        ) from exc
     if not license_text.strip():
-        raise ValueError(f"{ATTRIBUTION_NAME}: LICENSE fetched from {url} is empty")
+        raise ValueError(
+            f"{ATTRIBUTION_NAME}: {source_name} license fetched from {url} is empty"
+        )
+    return license_text
+
+
+def write_attribution(files, force, downloaded_any):
+    path = config.DEVICON_DIR / ATTRIBUTION_NAME
+    if path.exists() and not force and not downloaded_any:
+        print(f"skipped {ATTRIBUTION_NAME}")
+        return
+    sources = sorted({source_name for _, source_name in files})
     lines = [
-        "# Vendored devicon icons",
+        "# Vendored icons",
         "",
-        "Source: https://github.com/devicons/devicon",
-        f"Pinned ref: {config.PINNED_DEVICON_REF}",
         f"Vendored: {datetime.date.today().isoformat()}",
         "",
-        "Files:",
+        "Sources:",
         "",
     ]
-    lines.extend(f"- {name}" for name in filenames)
     lines.extend(
-        [
-            "",
-            "These SVGs are vendored from the devicon repository at the pinned",
-            "ref above so the languages strip in the profile README is",
-            "self-contained and needs no external service at render time.",
-            "Re-vendor with `make icons`; add `--force` (or edit the Makefile",
-            "target's invocation) to redownload.",
-            "",
-            "## LICENSE",
-            "",
-            license_text,
-            "",
-        ]
+        f"- {name}: {config.ICON_SOURCES[name]['repo']} "
+        f"@ {config.ICON_SOURCES[name]['pinned_ref']}"
+        for name in sources
     )
+    lines.extend(["", "Files:", ""])
+    lines.extend(f"- {filename} ({source})" for filename, source in files)
+    lines.extend([
+        "",
+        "Icons are vendored from each source repository at the pinned",
+        "ref above so the languages strip in the profile README is",
+        "self-contained and needs no external service at render time.",
+        "Re-vendor with `make icons`; add `--force` to redownload.",
+    ])
+    for name in sources:
+        lines.extend(["", f"## {name} license", "", _fetch_license(name)])
+    lines.append("")
     path.write_text("\n".join(lines), encoding="utf-8", newline="\n")
     print(f"fetched {ATTRIBUTION_NAME}")
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="Vendor devicon SVGs into assets/devicons."
+        description="Vendor icon SVGs into assets/devicons."
     )
     parser.add_argument(
         "--force",
@@ -141,14 +161,19 @@ def main(argv=None):
     targets = {}
     for language, (slug, variant) in config.DEVICON_MAP.items():
         targets.setdefault((slug, variant), language)
-    filenames = sorted(f"{slug}-{variant}.svg" for slug, variant in targets)
+    files = [
+        (f"{slug}-{variant}.svg", resolve_source(slug)) for slug, variant in targets
+    ]
 
     downloaded_any = False
     for (slug, variant), language in sorted(targets.items()):
         filename = f"{slug}-{variant}.svg"
         try:
             status = fetch_or_skip(
-                config.DEVICON_DIR / filename, icon_url(slug, variant), language, args.force
+                config.DEVICON_DIR / filename,
+                icon_url(slug, variant),
+                language,
+                args.force,
             )
         except ValueError as exc:
             print(f"rejected {filename}: {exc}")
@@ -157,7 +182,7 @@ def main(argv=None):
             downloaded_any = True
         print(f"{status} {filename}")
 
-    write_attribution(filenames, args.force, downloaded_any)
+    write_attribution(files, args.force, downloaded_any)
     return 0
 
 

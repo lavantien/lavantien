@@ -28,6 +28,7 @@
     "isArchived": false,
     "isFork": false,
     "languages": [
+      {"size": 10304702, "node": {"name": "Typst"}},
       {"size": 50000, "node": {"name": "Lua"}},
       {"size": 30000, "node": {"name": "Shell"}},
       {"size": 13000, "node": {"name": "F#"}},
