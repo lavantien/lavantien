@@ -22,7 +22,11 @@ def item(name, stars=0, langs=(), created="2024-01-01T00:00:00Z",
 
 class TestAggregate(unittest.TestCase):
     def test_empty_input(self):
-        self.assertEqual(aggregate([]), Aggregation(repos=[], lang_sizes={}))
+        self.assertEqual(
+            aggregate([]),
+            Aggregation(repos=[], lang_sizes={},
+                        no_ai_cutoff=config.NO_AI_FALLBACK_CUTOFF),
+        )
 
     def test_filters_fork_and_archived(self):
         agg = aggregate([
@@ -44,7 +48,11 @@ class TestAggregate(unittest.TestCase):
     def test_missing_visibility_treated_as_private(self):
         unknown = item("mystery", langs=[("JavaScript", 400000)])
         del unknown["visibility"]
-        self.assertEqual(aggregate([unknown]), Aggregation(repos=[], lang_sizes={}))
+        self.assertEqual(
+            aggregate([unknown]),
+            Aggregation(repos=[], lang_sizes={},
+                        no_ai_cutoff=config.NO_AI_FALLBACK_CUTOFF),
+        )
 
     def test_sums_bytes_across_repos(self):
         agg = aggregate([
@@ -97,6 +105,7 @@ class TestNoAiFlag(unittest.TestCase):
             item("same", created="2025-03-10T11:22:33Z"),
             item("newer", created="2025-03-10T11:22:34Z"),
         ])
+        self.assertEqual(agg.no_ai_cutoff, "2025-03-10T11:22:33Z")
         flags = {r.name: r.no_ai for r in agg.repos}
         self.assertEqual(flags, {
             "llm-tournament": False,
@@ -105,12 +114,15 @@ class TestNoAiFlag(unittest.TestCase):
             "newer": False,
         })
 
-    def test_batch_without_reference_repo_yields_all_false(self):
+    def test_missing_reference_repo_falls_back_to_config_cutoff(self):
         agg = aggregate([
-            item("ancient", created="2010-01-01T00:00:00Z"),
-            item("modern", created="2030-01-01T00:00:00Z"),
+            item("ancient", created="2024-12-31T23:59:59Z"),
+            item("equal", created=config.NO_AI_FALLBACK_CUTOFF),
+            item("modern", created="2025-06-01T00:00:00Z"),
         ])
-        self.assertEqual([r.no_ai for r in agg.repos], [False, False])
+        self.assertEqual(agg.no_ai_cutoff, config.NO_AI_FALLBACK_CUTOFF)
+        flags = {r.name: r.no_ai for r in agg.repos}
+        self.assertEqual(flags, {"ancient": True, "equal": False, "modern": False})
 
 
 class TestTopLanguages(unittest.TestCase):
@@ -148,16 +160,21 @@ class TestSelectRows(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         with open(config.FIXTURE_SAMPLE, encoding="utf-8") as fh:
-            cls.repos = aggregate(json.load(fh)).repos
+            cls.agg = aggregate(json.load(fh))
+        cls.repos = cls.agg.repos
+        cls.cutoff = cls.agg.no_ai_cutoff
 
     def test_fixture_row_order_and_limit(self):
         calls = []
 
-        def star_fetch(full_name):
+        def snapshot_fetch(full_name):
             calls.append(full_name)
-            return 9
+            return {"stars": 9, "description": "lib",
+                    "createdAt": "2025-01-01T20:30:10Z"}
 
-        rows = select_rows(self.repos, star_fetch=star_fetch)
+        rows = select_rows(
+            self.repos, snapshot_fetch=snapshot_fetch, cutoff=self.cutoff
+        )
         self.assertEqual(calls, ["lavantien/modern-swe-library"])
         self.assertEqual([(r.name, r.year) for r in rows], [
             ("dotfiles", 2023),
@@ -195,20 +212,32 @@ class TestSelectRows(unittest.TestCase):
         self.assertNotIn("sandbox-notes", [r.name for r in rows])
 
     def test_excluded_names_absent_and_no_duplicates(self):
-        rows = select_rows(self.repos, star_fetch=lambda full_name: 1)
+        rows = select_rows(
+            self.repos,
+            snapshot_fetch=lambda full_name: {"stars": 1, "description": "",
+                                              "createdAt": self.cutoff},
+            cutoff=self.cutoff,
+        )
         names = [r.name for r in rows]
         self.assertNotIn("lavantien", names)
         self.assertEqual(len(names), len(set(names)))
 
-    def test_falsy_star_fetch_stays_zero(self):
-        rows = select_rows([], star_fetch=lambda full_name: None)
+    def test_none_snapshot_fetch_yields_zero_stars(self):
+        rows = select_rows(
+            [], snapshot_fetch=lambda full_name: None,
+            cutoff=config.NO_AI_FALLBACK_CUTOFF,
+        )
         self.assertEqual(len(rows), len(config.PINNED_REPOS))
         self.assertTrue(all(r.stars == 0 for r in rows))
         modern = next(r for r in rows if r.name == "modern-swe-library")
         self.assertEqual(modern.stars_display, "200+0")
 
     def test_no_pinned_matches_builds_rows_from_config(self):
-        rows = select_rows([], star_fetch=lambda full_name: 7)
+        snap = {"stars": 7, "description": "", "createdAt": "2030-01-01T00:00:00Z"}
+        rows = select_rows(
+            [], snapshot_fetch=lambda full_name: snap,
+            cutoff=config.NO_AI_FALLBACK_CUTOFF,
+        )
         self.assertEqual(
             [(r.name, r.year) for r in rows],
             [(e["name"], e["year"]) for e in config.PINNED_REPOS],
@@ -219,8 +248,64 @@ class TestSelectRows(unittest.TestCase):
             modern.description,
             "Open knowledge library: curated resources for modern software engineering",
         )
+        self.assertTrue(modern.no_ai)
         others = [r for r in rows if r.name != "modern-swe-library"]
         self.assertTrue(all(r.description == "" for r in others))
+
+    def test_archived_pinned_repo_rebuilds_from_snapshot(self):
+        items = [
+            item("llm-tournament", created="2025-03-10T11:22:33Z"),
+            item("legacy", created="2024-06-01T00:00:00Z", archived=True),
+        ]
+        agg = aggregate(items)
+        snaps = {
+            "lavantien/legacy": {"stars": 21, "description": "batch description",
+                                 "createdAt": "2024-06-01T00:00:00Z"},
+            "lavantien/fresh": {"stars": 3, "description": "fresh batch description",
+                                "createdAt": "2026-01-01T00:00:00Z"},
+        }
+        entries = ({"name": "legacy", "year": 2024}, {"name": "fresh", "year": 2026})
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(agg.repos, snapshot_fetch=snaps.__getitem__,
+                               cutoff=agg.no_ai_cutoff)
+        by_name = {r.name: r for r in rows}
+        self.assertEqual(
+            (by_name["legacy"].stars, by_name["legacy"].description,
+             by_name["legacy"].year, by_name["legacy"].no_ai),
+            (21, "batch description", 2024, True),
+        )
+        self.assertEqual(
+            (by_name["fresh"].stars, by_name["fresh"].description,
+             by_name["fresh"].year, by_name["fresh"].no_ai),
+            (3, "fresh batch description", 2026, False),
+        )
+
+    def test_snapshot_none_keeps_config_description_and_zero_stars(self):
+        entries = (
+            {"name": "plain", "year": 2020},
+            {"name": "described", "year": 2021, "description": "config description"},
+        )
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(
+                [], snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        by_name = {r.name: (r.stars, r.description, r.no_ai) for r in rows}
+        self.assertEqual(by_name, {
+            "plain": (0, "", False),
+            "described": (0, "config description", False),
+        })
+
+    def test_snapshot_empty_description_falls_back_to_config(self):
+        entries = ({"name": "described", "year": 2021,
+                    "description": "config description"},)
+        snap = {"stars": 4, "description": "", "createdAt": "2020-01-01T00:00:00Z"}
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(
+                [], snapshot_fetch=lambda full_name: snap,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        self.assertEqual(rows[0].description, "config description")
 
     def test_pinned_no_ai_override_wins(self):
         repos = aggregate([
@@ -233,7 +318,10 @@ class TestSelectRows(unittest.TestCase):
             {"name": "newer", "year": 2026, "no_ai": True},
         )
         with mock.patch.object(config, "PINNED_REPOS", entries):
-            rows = select_rows(repos, star_fetch=lambda full_name: 0)
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff="2025-03-10T11:22:33Z",
+            )
         flags = {r.name: r.no_ai for r in rows}
         self.assertFalse(flags["older"])
         self.assertTrue(flags["newer"])
@@ -245,7 +333,10 @@ class TestSelectRows(unittest.TestCase):
             + [item("leftover", stars=99)]
         ).repos
         with mock.patch.object(config, "PINNED_REPOS", pinned):
-            rows = select_rows(repos, star_fetch=lambda full_name: 1)
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
         self.assertEqual([r.name for r in rows], [e["name"] for e in pinned])
         self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
 
@@ -255,8 +346,24 @@ class TestSelectRows(unittest.TestCase):
             [item(e["name"], stars=i) for i, e in enumerate(pinned)]
         ).repos
         with mock.patch.object(config, "PINNED_REPOS", pinned):
-            rows = select_rows(repos, star_fetch=lambda full_name: 1)
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
         self.assertEqual([r.name for r in rows], [e["name"] for e in pinned])
+
+    def test_free_market_tie_break_is_byte_order(self):
+        repos = aggregate([
+            item("beta", stars=5, langs=()),
+            item("Zeta", stars=5, langs=()),
+            item("alpha", stars=5, langs=()),
+        ]).repos
+        with mock.patch.object(config, "PINNED_REPOS", ()):
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        self.assertEqual([r.name for r in rows], ["Zeta", "alpha", "beta"])
 
 
 class TestFixtureIntegration(unittest.TestCase):

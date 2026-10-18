@@ -279,16 +279,16 @@ class TestEndToEndFromFixture(unittest.TestCase):
             second.getvalue().splitlines()[-1], "done: 0 changed, 2 unchanged"
         )
 
-    @mock.patch("scripts.github_client.fetch_star_count",
-                side_effect=AssertionError("network star fetch in --from-json mode"))
-    def test_from_json_mode_uses_stub_not_the_network(self, _star_fetch):
+    @mock.patch("scripts.github_client.fetch_repo_snapshot",
+                side_effect=AssertionError("network snapshot fetch in --from-json mode"))
+    def test_from_json_mode_uses_stub_not_the_network(self, _snapshot_fetch):
         with silence():
             rc = generate.main(self.args)
         self.assertEqual(rc, 0)
 
-    @mock.patch("scripts.github_client.fetch_star_count",
-                side_effect=AssertionError("network star fetch in --from-json mode"))
-    def test_stub_returns_own_stars_for_archived_pinned_repo(self, _star_fetch):
+    @mock.patch("scripts.github_client.fetch_repo_snapshot",
+                side_effect=AssertionError("network snapshot fetch in --from-json mode"))
+    def test_stub_returns_snapshot_for_archived_pinned_repo(self, _snapshot_fetch):
         src_items = [
             dict(item(name="modern-swe-library", stars=17, langs=()), archived=True),
             item(name="other", stars=3, langs=()),
@@ -310,9 +310,11 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn("(<b>0⭐</b>)", content)
 
-    @mock.patch("scripts.github_client.fetch_star_count", return_value=9)
+    @mock.patch("scripts.github_client.fetch_repo_snapshot",
+                return_value={"stars": 9, "description": "lib",
+                              "createdAt": "2023-01-01T00:00:00Z"})
     @mock.patch("scripts.github_client.fetch_repos")
-    def test_live_mode_wires_gh_client(self, fetch_repos, star_count):
+    def test_live_mode_wires_gh_client(self, fetch_repos, snapshot_fetch):
         fetch_repos.return_value = json.loads(
             config.FIXTURE_SAMPLE.read_text(encoding="utf-8"))
         with silence():
@@ -320,7 +322,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
                                 "--svg", str(self.svg)])
         self.assertEqual(rc, 0)
         fetch_repos.assert_called_once_with()
-        star_count.assert_called_once_with("lavantien/modern-swe-library")
+        snapshot_fetch.assert_called_once_with("lavantien/modern-swe-library")
         content = self.readme.read_text(encoding="utf-8")
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'

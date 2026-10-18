@@ -7,7 +7,12 @@ import unittest
 from unittest import mock
 
 from scripts import config, github_client
-from scripts.github_client import GhError, fetch_repos, fetch_star_count, load_repos_json
+from scripts.github_client import (
+    GhError,
+    fetch_repo_snapshot,
+    fetch_repos,
+    load_repos_json,
+)
 
 
 def gh_result(stdout="", stderr="", returncode=0):
@@ -71,8 +76,8 @@ class TestFetchRepos(unittest.TestCase):
 
     @mock.patch("scripts.github_client.subprocess.run")
     def test_nonzero_exit_excerpt_is_exactly_200_chars(self, run):
-        # 205 chars of stderr: the excerpt must keep exactly 200, so an
-        # off-by-one on the cap cannot slip the 201st char into the message
+        """205 chars of stderr: the excerpt must keep exactly 200, so an
+        off-by-one on the cap cannot slip the 201st char into the message."""
         run.return_value = gh_result(stderr="A" * 205, returncode=1)
         with self.assertRaises(GhError) as ctx:
             fetch_repos()
@@ -110,51 +115,103 @@ class TestFetchRepos(unittest.TestCase):
         )
 
 
-class TestFetchStarCount(unittest.TestCase):
+class TestFetchRepoSnapshot(unittest.TestCase):
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_parses_digit_stdout(self, run):
-        run.return_value = gh_result(stdout="1234\n")
-        self.assertEqual(fetch_star_count("lavantien/modern-swe-library"), 1234)
+    def test_parses_all_three_fields(self, run):
+        run.return_value = gh_result(stdout=json.dumps({
+            "stargazerCount": 1234,
+            "description": "curated resources",
+            "createdAt": "2023-05-06T07:08:09Z",
+        }))
+        self.assertEqual(
+            fetch_repo_snapshot("lavantien/modern-swe-library"),
+            {"stars": 1234, "description": "curated resources",
+             "createdAt": "2023-05-06T07:08:09Z"},
+        )
         run.assert_called_once_with(
             ["gh", "repo", "view", "lavantien/modern-swe-library",
-             "--json", "stargazerCount", "--jq", ".stargazerCount"],
+             "--json", "stargazerCount,description,createdAt"],
             capture_output=True, text=True, timeout=60,
         )
 
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_nondigit_stdout_returns_zero(self, run):
+    def test_null_description_normalizes_to_empty(self, run):
+        run.return_value = gh_result(stdout=json.dumps({
+            "stargazerCount": 3,
+            "description": None,
+            "createdAt": "2024-01-01T00:00:00Z",
+        }))
+        self.assertEqual(
+            fetch_repo_snapshot("x/y"),
+            {"stars": 3, "description": "", "createdAt": "2024-01-01T00:00:00Z"},
+        )
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_non_int_star_count_returns_none(self, run):
+        for bad in ("12", True):
+            with self.subTest(bad=bad):
+                run.return_value = gh_result(stdout=json.dumps({
+                    "stargazerCount": bad,
+                    "description": "d",
+                    "createdAt": "2024-01-01T00:00:00Z",
+                }))
+                self.assertIsNone(fetch_repo_snapshot("x/y"))
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_missing_fields_return_none(self, run):
+        base = {
+            "stargazerCount": 5,
+            "description": "d",
+            "createdAt": "2024-01-01T00:00:00Z",
+        }
+        for key in base:
+            with self.subTest(missing=key):
+                run.return_value = gh_result(
+                    stdout=json.dumps({k: v for k, v in base.items() if k != key})
+                )
+                self.assertIsNone(fetch_repo_snapshot("x/y"))
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_non_object_json_returns_none(self, run):
         run.return_value = gh_result(stdout="null")
-        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertIsNone(fetch_repo_snapshot("x/y"))
 
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_empty_stdout_returns_zero(self, run):
+    def test_invalid_json_returns_none(self, run):
         run.return_value = gh_result(stdout="")
-        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertIsNone(fetch_repo_snapshot("x/y"))
 
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_nonzero_exit_returns_zero(self, run):
+    def test_nonzero_exit_returns_none(self, run):
         run.return_value = gh_result(stderr="not found", returncode=1)
-        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertIsNone(fetch_repo_snapshot("x/y"))
 
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_subprocess_failure_returns_zero(self, run):
+    def test_subprocess_failure_returns_none(self, run):
         run.side_effect = OSError("no gh")
-        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertIsNone(fetch_repo_snapshot("x/y"))
 
     @mock.patch("scripts.github_client.subprocess.run")
     def test_retries_once_and_recovers(self, run):
-        # transient gh failure must not zero out the fixed repo's stars
+        """Transient gh failure must not wipe the fixed repo's data."""
         run.side_effect = [
             gh_result(stderr="boom", returncode=1),
-            gh_result(stdout="7\n"),
+            gh_result(stdout=json.dumps({
+                "stargazerCount": 7,
+                "description": "d",
+                "createdAt": "2024-01-01T00:00:00Z",
+            })),
         ]
-        self.assertEqual(fetch_star_count("x/y"), 7)
+        self.assertEqual(
+            fetch_repo_snapshot("x/y"),
+            {"stars": 7, "description": "d", "createdAt": "2024-01-01T00:00:00Z"},
+        )
         self.assertEqual(run.call_count, 2)
 
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_both_attempts_failing_returns_zero(self, run):
+    def test_both_attempts_failing_returns_none(self, run):
         run.side_effect = [gh_result(returncode=1), gh_result(returncode=1)]
-        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertIsNone(fetch_repo_snapshot("x/y"))
         self.assertEqual(run.call_count, 2)
 
 
@@ -167,14 +224,15 @@ class TestTimeouts(unittest.TestCase):
         self.assertEqual(str(ctx.exception), "gh repo list timed out after 60s")
 
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_star_count_timeout_returns_zero(self, run):
+    def test_snapshot_timeout_returns_none(self, run):
         run.side_effect = subprocess.TimeoutExpired(cmd="gh", timeout=60)
-        self.assertEqual(fetch_star_count("x/y"), 0)
+        self.assertIsNone(fetch_repo_snapshot("x/y"))
 
 
 class TestRecordMain(unittest.TestCase):
-    # `make record` entry: the committed fixture must never carry
-    # private repo metadata, whatever credential records it
+    """`make record` entry: the committed fixture must never carry
+    private repo metadata, whatever credential records it."""
+
     @mock.patch("scripts.github_client.fetch_repos")
     def test_records_public_unforked_only_archived_kept(self, fetch):
         fetch.return_value = [

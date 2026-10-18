@@ -1,4 +1,4 @@
-"""Thin gh CLI client: repo listing, fixture loading, star lookups.
+"""Thin gh CLI client: repo listing, fixture loading, snapshot lookups.
 
 gh reads GH_TOKEN from the inherited environment automatically.
 """
@@ -12,7 +12,7 @@ import sys
 from scripts import config
 
 _EXCERPT_LEN = 200
-_STAR_ATTEMPTS = 2
+_SNAPSHOT_ATTEMPTS = 2
 
 
 class GhError(RuntimeError):
@@ -61,28 +61,49 @@ def load_repos_json(path) -> list[dict]:
         raise GhError(f"cannot load repos json from {path}: {exc}") from exc
 
 
-def fetch_star_count(full_name: str, gh_exec: str = "gh") -> int:
-    # one retry: a transient gh failure must not zero the fixed repo's
-    # stars for a day (the readme commits whatever we return)
-    for _ in range(_STAR_ATTEMPTS):
+def fetch_repo_snapshot(full_name: str, gh_exec: str = "gh") -> dict | None:
+    """Live repo snapshot for a pinned repo missing from the aggregate.
+
+    One retry: a transient gh failure must not strip a day of live data
+    from the fixed repo (the readme commits whatever we return). A
+    payload without an int stargazerCount or missing any of the three
+    fields is a total failure and yields None, so callers fall back to
+    config values instead of half-built data.
+    """
+    for _ in range(_SNAPSHOT_ATTEMPTS):
         try:
             proc = _run(gh_exec, [
                 "repo", "view", full_name,
-                "--json", "stargazerCount", "--jq", ".stargazerCount",
+                "--json", "stargazerCount,description,createdAt",
             ])
         except (OSError, subprocess.TimeoutExpired):
             continue
-        if proc.returncode == 0:
-            count = proc.stdout.strip()
-            return int(count) if count.isdigit() else 0
-    return 0
+        if proc.returncode != 0:
+            continue
+        try:
+            data = json.loads(proc.stdout)
+        except json.JSONDecodeError:
+            return None
+        if not isinstance(data, dict):
+            return None
+        stars = data.get("stargazerCount")
+        if isinstance(stars, bool) or not isinstance(stars, int):
+            return None
+        if "description" not in data or "createdAt" not in data:
+            return None
+        return {
+            "stars": stars,
+            "description": data["description"] or "",
+            "createdAt": data["createdAt"],
+        }
+    return None
 
 
 def _record_main() -> int:
-    # `make record` entry: print the public, non-fork repo items as json
-    # so the committed fixture never carries private repo metadata,
-    # whatever credential records it. Archived public repos stay: the
-    # offline star stub needs them (the fixed first repo is archived).
+    """`make record` entry: print the public, non-fork repo items as json
+    so the committed fixture never carries private repo metadata,
+    whatever credential records it. Archived public repos stay: the
+    offline snapshot stub needs them (pinned repos can be archived)."""
     items = [
         item
         for item in fetch_repos()

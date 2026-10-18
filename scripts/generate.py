@@ -47,17 +47,21 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _fixture_star_fetch(items: list[dict]) -> Callable[[str], int]:
-    """Offline stand-in for gh repo view: full-name star lookup over the
-    loaded items, including forked/archived ones the aggregate filters
-    out (an archived pinned repo still carries real stars)."""
+def _fixture_snapshot_fetch(items: list[dict]) -> Callable[[str], dict | None]:
+    """Offline stand-in for gh repo view: full-name snapshot lookup over
+    the loaded items, including forked/archived ones the aggregate
+    filters out (an archived pinned repo still carries real data)."""
     own = {
-        f"{config.GH_OWNER}/{item['name']}": item["stargazerCount"]
+        f"{config.GH_OWNER}/{item['name']}": {
+            "stars": item["stargazerCount"],
+            "description": item.get("description") or "",
+            "createdAt": item["createdAt"],
+        }
         for item in items
     }
 
-    def fetch(full_name: str) -> int:
-        return own.get(full_name, 0)
+    def fetch(full_name: str) -> dict | None:
+        return own.get(full_name)
 
     return fetch
 
@@ -86,8 +90,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         items = github_client.load_repos_json(args.from_json)
     agg = aggregate(items)
-    star_fetch: Callable[[str], int] = (
-        github_client.fetch_star_count if args.live else _fixture_star_fetch(items)
+    snapshot_fetch: Callable[[str], dict | None] = (
+        github_client.fetch_repo_snapshot if args.live
+        else _fixture_snapshot_fetch(items)
     )
     strip = svg_strip.render_strip(top_languages(agg.lang_sizes))
     updated_line = (
@@ -99,7 +104,9 @@ def main(argv: list[str] | None = None) -> int:
         _read(args.readme),
         languages_block=readme_writer.build_languages_block(),
         repo_table=readme_writer.render_repo_table(
-            select_rows(agg.repos, star_fetch=star_fetch)
+            select_rows(
+                agg.repos, snapshot_fetch=snapshot_fetch, cutoff=agg.no_ai_cutoff
+            )
         ),
         updated_line=updated_line,
     )

@@ -100,6 +100,7 @@ class TestPinnedRepos(unittest.TestCase):
 
     def test_no_ai_badge_constants(self):
         self.assertEqual(config.NO_AI_REFERENCE_REPO, "llm-tournament")
+        self.assertEqual(config.NO_AI_FALLBACK_CUTOFF, "2025-01-01T20:30:10Z")
         self.assertEqual(config.NO_AI_IMG_SRC, "assets/no-ai.svg")
         self.assertEqual(config.NO_AI_ALT_TEXT, "no AI")
         self.assertEqual(config.NO_AI_IMG_WIDTH, 14)

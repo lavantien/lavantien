@@ -70,6 +70,7 @@ TABLE_REPO_LIMIT = 20
 EXCLUDED_REPO_NAMES = frozenset({"lavantien"})
 
 NO_AI_REFERENCE_REPO = "llm-tournament"
+NO_AI_FALLBACK_CUTOFF = "2025-01-01T20:30:10Z"
 NO_AI_IMG_SRC = "assets/no-ai.svg"
 NO_AI_ALT_TEXT = "no AI"
 NO_AI_IMG_WIDTH = 14

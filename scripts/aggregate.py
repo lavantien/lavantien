@@ -25,6 +25,7 @@ class Repo:
 class Aggregation:
     repos: list[Repo]
     lang_sizes: dict[str, int]
+    no_ai_cutoff: str
 
 
 def aggregate(items: Iterable[dict]) -> Aggregation:
@@ -33,16 +34,17 @@ def aggregate(items: Iterable[dict]) -> Aggregation:
     Profile stats cover public work only; gh reports the GraphQL enum
     ("PUBLIC"), a missing visibility is treated as private so a shape
     change can never leak it. The no-AI cutoff is the creation timestamp
-    of the reference repo in this batch: ISO 8601 Z strings compare
-    correctly as text, and strictly-before wins so the reference repo
-    itself is never badged.
+    of the reference repo in this batch, falling back to
+    NO_AI_FALLBACK_CUTOFF when it is absent so the cutoff is never None:
+    ISO 8601 Z strings compare correctly as text, and strictly-before
+    wins so the reference repo itself is never badged.
     """
     items = list(items)
     repos: list[Repo] = []
     lang_sizes: dict[str, int] = {}
     cutoff = next(
         (i["createdAt"] for i in items if i["name"] == config.NO_AI_REFERENCE_REPO),
-        None,
+        config.NO_AI_FALLBACK_CUTOFF,
     )
     for item in items:
         if item["isFork"] or item["isArchived"]:
@@ -54,12 +56,12 @@ def aggregate(items: Iterable[dict]) -> Aggregation:
             stars=item["stargazerCount"],
             description=item.get("description") or "",
             year=int(item["createdAt"][:4]),
-            no_ai=cutoff is not None and item["createdAt"] < cutoff,
+            no_ai=item["createdAt"] < cutoff,
         ))
         for lang in item.get("languages") or []:
             name = lang["node"]["name"]
             lang_sizes[name] = lang_sizes.get(name, 0) + lang.get("size", 0)
-    return Aggregation(repos=repos, lang_sizes=lang_sizes)
+    return Aggregation(repos=repos, lang_sizes=lang_sizes, no_ai_cutoff=cutoff)
 
 
 def top_languages(
@@ -77,14 +79,17 @@ def top_languages(
 def select_rows(
     repos: list[Repo],
     *,
-    star_fetch: Callable[[str], int],
+    snapshot_fetch: Callable[[str], dict | None],
+    cutoff: str,
 ) -> list[Repo]:
     """Build the table rows: pinned entries first at their fixed years
-    (a pinned repo missing from the aggregate is rebuilt from its config
-    entry with a live star fetch, so it never drops), then the free
-    market sorted by stars filling up to the table limit. Pinned years
-    always win over createdAt; stars and the derived no-AI flag stay
-    live from the snapshot unless the config entry pins them."""
+    (a pinned repo missing from the aggregate, e.g. archived, private,
+    or forked, is rebuilt from a live repo snapshot with the config
+    description as last resort, so it never drops or loses its badge),
+    then the free market sorted by stars filling up to the table limit.
+    Pinned years always win over createdAt; stars, description, and the
+    derived no-AI flag stay live from the snapshot unless the config
+    entry pins them."""
     by_name = {r.name: r for r in repos}
     rows: list[Repo] = []
     for entry in config.PINNED_REPOS:
@@ -92,11 +97,17 @@ def select_rows(
         if match is not None:
             row = replace(match, year=entry["year"])
         else:
+            snap = snapshot_fetch(f"{config.GH_OWNER}/{entry['name']}")
             row = Repo(
                 name=entry["name"],
-                stars=star_fetch(f"{config.GH_OWNER}/{entry['name']}") or 0,
-                description=entry.get("description", ""),
+                stars=snap["stars"] if snap else 0,
+                description=(
+                    snap["description"]
+                    if snap and snap["description"]
+                    else entry.get("description", "")
+                ),
                 year=entry["year"],
+                no_ai=snap is not None and snap["createdAt"] < cutoff,
             )
         if "no_ai" in entry:
             row = replace(row, no_ai=entry["no_ai"])
