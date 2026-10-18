@@ -97,9 +97,11 @@ def main(argv: list[str] | None = None) -> int:
     rows = select_rows(
         agg.repos, snapshot_fetch=snapshot_fetch, cutoff=agg.no_ai_cutoff
     )
-    icon_srcs, icon_plans = lang_icons.render_icons(
+    icon_srcs, icon_plans, skipped_icons = lang_icons.render_icons(
         {name for row in rows for name, _ in row.top_langs}, args.icons_dir
     )
+    for name in skipped_icons:
+        print(f"warning: no vendored icon for {name}; chip renders text-only")
     strip = svg_strip.render_strip(top_languages(agg.lang_sizes))
     updated_line = (
         f"{config.UPDATED_PREFIX}"

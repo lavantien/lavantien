@@ -22,15 +22,17 @@ def write_if_changed(path: pathlib.Path, content: str) -> bool:
     return True
 
 
-def render_icons(langs, directory) -> tuple[dict[str, str], list]:
+def render_icons(langs, directory) -> tuple[dict[str, str], list, list]:
     """Pure pass: language to img-src mapping plus (path, content)
     pairs, every document parsed and validated, nothing written. A
-    language without a vendored icon is absent from the mapping, so
-    its chip renders text-only instead of dangling. Two languages
-    sharing one vendored icon (Hack and PHP both ride the php mark)
-    get language-suffixed files so their brand colors never collapse
-    onto one overwritten image."""
+    language without a vendored icon is absent from the mapping (its
+    chip renders text-only instead of dangling) and lands in the
+    returned skipped list so the caller can trace the degradation.
+    Two languages sharing one vendored icon (Hack and PHP both ride
+    the php mark) get language-suffixed files so their brand colors
+    never collapse onto one overwritten image."""
     names = sorted(name for name in langs if name in config.DEVICON_MAP)
+    skipped = sorted(set(langs) - set(names))
     bases = {
         name: f"{config.DEVICON_MAP[name][0]}-{config.DEVICON_MAP[name][1]}.svg"
         for name in names
@@ -51,12 +53,12 @@ def render_icons(langs, directory) -> tuple[dict[str, str], list]:
             base = f"{base[:-4]}-{suffix}.svg"
         mapping[name] = f"{config.LANG_ICONS_SRC_DIR}/{base}"
         planned.append((pathlib.Path(directory) / base, content))
-    return mapping, planned
+    return mapping, planned, skipped
 
 
 def ensure_icons(langs, directory) -> tuple[dict[str, str], int]:
     """render_icons plus the writes: only missing or stale files change
     on disk, and the written count feeds the generator summary."""
-    mapping, planned = render_icons(langs, directory)
+    mapping, planned, _skipped = render_icons(langs, directory)
     changed = sum(write_if_changed(path, content) for path, content in planned)
     return mapping, changed

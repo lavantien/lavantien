@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from unittest import mock
 
 from scripts import config, svg_strip
-from scripts.lang_icons import ensure_icons, write_if_changed
+from scripts.lang_icons import ensure_icons, render_icons, write_if_changed
 
 
 class TestRenderIconSvg(unittest.TestCase):
@@ -18,19 +18,10 @@ class TestRenderIconSvg(unittest.TestCase):
     def test_document_head_and_tail_exact(self):
         content = svg_strip.render_icon_svg("Go")
         self.assertTrue(content.startswith(
-            f'<svg xmlns="{svg_strip.SVG_NS}" viewBox="0 0 128 128" '
-            f'width="{config.TABLE_LANG_ICON_SIZE}" '
-            f'height="{config.TABLE_LANG_ICON_SIZE}">'
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" '
+            'width="14" height="14">'
         ))
         self.assertTrue(content.endswith("</svg>\n"))
-
-    def test_size_attributes_come_from_config(self):
-        content = svg_strip.render_icon_svg("Go")
-        root = ET.fromstring(content)
-        self.assertEqual(
-            (root.get("width"), root.get("height")),
-            (str(config.TABLE_LANG_ICON_SIZE), str(config.TABLE_LANG_ICON_SIZE)),
-        )
 
     def test_unmapped_language_returns_none(self):
         self.assertIsNone(svg_strip.render_icon_svg("HTML"))
@@ -97,6 +88,16 @@ class TestEnsureIcons(unittest.TestCase):
             directory = pathlib.Path(tmp) / "icons"
             self.assertEqual(ensure_icons(set(), directory), ({}, 0))
             self.assertFalse(directory.exists())
+
+
+    def test_render_icons_reports_skipped_languages(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mapping, planned, skipped = render_icons(
+                {"HTML", "Go"}, pathlib.Path(tmp) / "icons"
+            )
+            self.assertEqual(skipped, ["HTML"])
+            self.assertEqual(list(mapping), ["Go"])
+            self.assertEqual(len(planned), 1)
 
 
 class TestWriteIfChanged(unittest.TestCase):

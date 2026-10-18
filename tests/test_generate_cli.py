@@ -427,6 +427,24 @@ class TestEndToEndFromFixture(unittest.TestCase):
             self.assertEqual(rc, 0)
             self.assertGreater(len(list(icons.glob("*.svg"))), 0)
 
+    def test_missing_icon_warns_and_renders_text_only_chip(self):
+        real = svg_strip.render_icon_svg
+
+        def without_go(name):
+            return None if name == "Go" else real(name)
+
+        with mock.patch.object(svg_strip, "render_icon_svg",
+                               side_effect=without_go):
+            with silence() as out:
+                rc = generate.main(self.args)
+        self.assertEqual(rc, 0)
+        self.assertIn("warning: no vendored icon for Go", out.getvalue())
+        content = self.readme.read_text(encoding="utf-8")
+        self.assertNotIn("assets/lang-icons/go-plain.svg", content)
+        self.assertIn("Go&nbsp;400K", content)
+        self.assertFalse((self.icons / "go-plain.svg").exists())
+        self.assertTrue((self.icons / "python-plain.svg").exists())
+
     def test_bootstrap_outranks_shadowing_scripts_package(self):
         with tempfile.TemporaryDirectory() as tmp:
             decoy = pathlib.Path(tmp)
