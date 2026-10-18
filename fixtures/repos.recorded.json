@@ -1,18 +1,224 @@
 [
   {
+    "createdAt": "2026-10-11T18:50:28Z",
+    "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 10329,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 2466211,
+        "node": {
+          "name": "Rust"
+        }
+      },
+      {
+        "size": 106141,
+        "node": {
+          "name": "Python"
+        }
+      },
+      {
+        "size": 78897,
+        "node": {
+          "name": "PowerShell"
+        }
+      }
+    ],
+    "name": "blind-trainer",
+    "stargazerCount": 3,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2026-06-29T00:58:46Z",
+    "description": "Offline single-user Go + SQLite app: a dual-pane HTMX sutta-quote workspace and the full Pali canon explorer in one binary, with the sync/parse/load/triangulate pipeline, graph, analytics, and a 16-verb qm CLI.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 1367660,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 189245,
+        "node": {
+          "name": "TSQL"
+        }
+      },
+      {
+        "size": 12293,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 20156,
+        "node": {
+          "name": "CSS"
+        }
+      },
+      {
+        "size": 21059,
+        "node": {
+          "name": "JavaScript"
+        }
+      },
+      {
+        "size": 16524,
+        "node": {
+          "name": "HTML"
+        }
+      },
+      {
+        "size": 12335,
+        "node": {
+          "name": "Go Template"
+        }
+      },
+      {
+        "size": 3951,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "quotes-manager",
+    "stargazerCount": 3,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2025-12-28T10:01:24Z",
+    "description": "16x16 gomoku/caro variant engine and PvP arena: exact-five bitboard rules, zero-alloc PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, mutation-gated Go 1.27+, SQLite/DuckDB, mobile-first HTMX 4+",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 19616,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 1758036,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 4140,
+        "node": {
+          "name": "PowerShell"
+        }
+      },
+      {
+        "size": 9813,
+        "node": {
+          "name": "CSS"
+        }
+      },
+      {
+        "size": 22101,
+        "node": {
+          "name": "JavaScript"
+        }
+      },
+      {
+        "size": 8840,
+        "node": {
+          "name": "Go Template"
+        }
+      },
+      {
+        "size": 10590,
+        "node": {
+          "name": "HTML"
+        }
+      },
+      {
+        "size": 2168,
+        "node": {
+          "name": "Cuda"
+        }
+      }
+    ],
+    "name": "caro-ai-pvp",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2026-09-23T03:23:56Z",
+    "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then empirical-Bayes shrinkage, cross-validated ALS matrix completion, rank normalization, and expectimax-style scoring with weights fitted by guarded coordinate ascent. Apriori, Naive Bayes, k-NN, and bagged ensembles benchmark the model.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 13576,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 1022850,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 22592,
+        "node": {
+          "name": "CSS"
+        }
+      },
+      {
+        "size": 121355,
+        "node": {
+          "name": "JavaScript"
+        }
+      },
+      {
+        "size": 67530,
+        "node": {
+          "name": "PowerShell"
+        }
+      },
+      {
+        "size": 506234,
+        "node": {
+          "name": "HTML"
+        }
+      },
+      {
+        "size": 42215,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "dota-helper",
+    "stargazerCount": 3,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2021-12-19T15:03:46Z",
     "description": "Config files for my GitHub profile.",
     "isArchived": false,
     "isFork": false,
     "languages": [
       {
-        "size": 1251,
+        "size": 1212,
         "node": {
           "name": "Makefile"
         }
       },
       {
-        "size": 124301,
+        "size": 132199,
         "node": {
           "name": "Python"
         }
@@ -23,86 +229,104 @@
     "visibility": "PUBLIC"
   },
   {
-    "createdAt": "2025-12-28T10:01:24Z",
-    "description": "16x16 gomoku/caro variant engine and PvP arena: exact-five bitboard rules, zero-alloc PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, mutation-gated Go 1.27+, SQLite/DuckDB, mobile-first HTMX 4+",
+    "createdAt": "2019-11-23T10:53:04Z",
+    "description": "FlowerShop full features web system and full backoffice powered by Java 27/Spring Boot 4 and Angular 22",
     "isArchived": false,
     "isFork": false,
     "languages": [
       {
-        "size": 8883,
+        "size": 412938,
         "node": {
-          "name": "Makefile"
+          "name": "Java"
         }
       },
       {
-        "size": 1452671,
-        "node": {
-          "name": "Go"
-        }
-      },
-      {
-        "size": 915,
-        "node": {
-          "name": "PowerShell"
-        }
-      },
-      {
-        "size": 8199,
-        "node": {
-          "name": "CSS"
-        }
-      },
-      {
-        "size": 18384,
+        "size": 157743,
         "node": {
           "name": "JavaScript"
         }
       },
       {
-        "size": 8198,
+        "size": 338382,
         "node": {
-          "name": "Go Template"
+          "name": "TypeScript"
         }
       },
       {
-        "size": 8526,
+        "size": 77723,
         "node": {
           "name": "HTML"
         }
-      }
-    ],
-    "name": "caro-ai-pvp",
-    "stargazerCount": 5,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2023-06-02T20:56:02Z",
-    "description": "Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
+      },
       {
-        "size": 8453,
+        "size": 7196,
         "node": {
-          "name": "Lua"
+          "name": "SCSS"
         }
       },
       {
-        "size": 312036,
+        "size": 8087,
         "node": {
-          "name": "Shell"
+          "name": "Makefile"
         }
       },
       {
-        "size": 236688,
+        "size": 2319,
         "node": {
           "name": "PowerShell"
         }
       },
       {
-        "size": 10304702,
+        "size": 9141,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "FlowerShop",
+    "stargazerCount": 15,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2023-06-02T20:56:02Z",
+    "description": "Dotfiles for Linux and Windows: Neovim, WezTerm, zsh, PowerShell, git hooks, Claude Code and OpenCode config, plus deploy, update, healthcheck, backup, restore, and uninstall scripts.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 8218,
+        "node": {
+          "name": "Lua"
+        }
+      },
+      {
+        "size": 369866,
+        "node": {
+          "name": "Shell"
+        }
+      },
+      {
+        "size": 217969,
+        "node": {
+          "name": "PowerShell"
+        }
+      },
+      {
+        "size": 11584096,
         "node": {
           "name": "Typst"
+        }
+      },
+      {
+        "size": 4885,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 829,
+        "node": {
+          "name": "Dockerfile"
         }
       }
     ],
@@ -111,56 +335,62 @@
     "visibility": "PUBLIC"
   },
   {
-    "createdAt": "2026-09-23T03:23:56Z",
-    "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then empirical-Bayes shrinkage, cross-validated ALS matrix completion, rank normalization, and expectimax-style scoring with weights fitted by guarded coordinate ascent. Apriori, Naive Bayes, k-NN, and bagged ensembles benchmark the model.",
+    "createdAt": "2026-10-09T15:34:11Z",
+    "description": "Speedsolving trainer for all WCA events: FSRS flashcards, 3D algorithm playback, and auto-generated 3-style commutators with structural classification. raylib 6, C23, and SQLite.",
     "isArchived": false,
     "isFork": false,
     "languages": [
       {
-        "size": 11629,
+        "size": 58742,
         "node": {
           "name": "Makefile"
         }
       },
       {
-        "size": 1034948,
+        "size": 313100,
         "node": {
-          "name": "Go"
+          "name": "Python"
         }
       },
       {
-        "size": 19521,
+        "size": 2116641,
         "node": {
-          "name": "CSS"
+          "name": "C"
         }
       },
       {
-        "size": 79007,
-        "node": {
-          "name": "JavaScript"
-        }
-      },
-      {
-        "size": 63331,
+        "size": 43236,
         "node": {
           "name": "PowerShell"
         }
       },
       {
-        "size": 401309,
+        "size": 31640,
+        "node": {
+          "name": "Java"
+        }
+      },
+      {
+        "size": 14613,
+        "node": {
+          "name": "Shell"
+        }
+      },
+      {
+        "size": 6577317,
         "node": {
           "name": "HTML"
         }
       },
       {
-        "size": 18164,
+        "size": 2043,
         "node": {
-          "name": "Python"
+          "name": "JavaScript"
         }
       }
     ],
-    "name": "dota-helper",
-    "stargazerCount": 3,
+    "name": "cubing-trainer",
+    "stargazerCount": 0,
     "visibility": "PUBLIC"
   },
   {
@@ -312,53 +542,6 @@
     ],
     "name": "IE203.F31.CN1.CNTT_Group6",
     "stargazerCount": 0,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2026-06-29T00:58:46Z",
-    "description": "Offline, single-user Go + SQLite app for curating a corpus of sutta quotes, with dual-pane HTMX editing, collections, categories, near-duplicate detection, and full-text search.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 359636,
-        "node": {
-          "name": "Go"
-        }
-      },
-      {
-        "size": 189245,
-        "node": {
-          "name": "TSQL"
-        }
-      },
-      {
-        "size": 1551,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 15340,
-        "node": {
-          "name": "CSS"
-        }
-      },
-      {
-        "size": 15334,
-        "node": {
-          "name": "JavaScript"
-        }
-      },
-      {
-        "size": 16090,
-        "node": {
-          "name": "HTML"
-        }
-      }
-    ],
-    "name": "quotes-manager",
-    "stargazerCount": 3,
     "visibility": "PUBLIC"
   },
   {
@@ -640,53 +823,6 @@
     ],
     "name": "js-async-parallel",
     "stargazerCount": 4,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2020-01-07T04:59:38Z",
-    "description": "An IoT platform on AWS.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 2122,
-        "node": {
-          "name": "C++"
-        }
-      },
-      {
-        "size": 1327,
-        "node": {
-          "name": "JavaScript"
-        }
-      },
-      {
-        "size": 9215,
-        "node": {
-          "name": "TypeScript"
-        }
-      },
-      {
-        "size": 2270,
-        "node": {
-          "name": "HTML"
-        }
-      },
-      {
-        "size": 4234,
-        "node": {
-          "name": "Java"
-        }
-      },
-      {
-        "size": 80,
-        "node": {
-          "name": "SCSS"
-        }
-      }
-    ],
-    "name": "iot",
-    "stargazerCount": 0,
     "visibility": "PUBLIC"
   },
   {
@@ -973,47 +1109,6 @@
     ],
     "name": "go-bigint",
     "stargazerCount": 3,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2019-11-23T10:53:04Z",
-    "description": "FlowerShop full features web app powered by Spring Boot and Angular",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 30160,
-        "node": {
-          "name": "Java"
-        }
-      },
-      {
-        "size": 1327,
-        "node": {
-          "name": "JavaScript"
-        }
-      },
-      {
-        "size": 57501,
-        "node": {
-          "name": "TypeScript"
-        }
-      },
-      {
-        "size": 43164,
-        "node": {
-          "name": "HTML"
-        }
-      },
-      {
-        "size": 3113,
-        "node": {
-          "name": "SCSS"
-        }
-      }
-    ],
-    "name": "FlowerShop",
-    "stargazerCount": 14,
     "visibility": "PUBLIC"
   },
   {

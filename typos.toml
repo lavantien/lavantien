@@ -3,6 +3,7 @@ dota = "dota"
 
 [files]
 extend-exclude = [
+    "README.md",
     "fixtures/repos.recorded.json",
     "fixtures/repos.sample.json",
     "fixtures/readme.messy.md",
