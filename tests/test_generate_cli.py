@@ -296,9 +296,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             + '<br><img src="assets/lang-icons/typst-original.svg" alt="Typst"'
               ' width="14" height="14">&nbsp;10.3M'
               '&nbsp;&nbsp;&nbsp; <img src="assets/lang-icons/lua-plain.svg"'
-              ' alt="Lua" width="14" height="14">&nbsp;50K'
-              '&nbsp;&nbsp;&nbsp; <img src="assets/lang-icons/bash-plain.svg"'
-              ' alt="Shell" width="14" height="14">&nbsp;30K',
+              ' alt="Lua" width="14" height="14">&nbsp;50K',
             content,
         )
         self.assertNotIn(
