@@ -13,7 +13,7 @@
         }
       },
       {
-        "size": 186855,
+        "size": 188667,
         "node": {
           "name": "Python"
         }
@@ -25,7 +25,7 @@
   },
   {
     "createdAt": "2026-10-11T18:50:28Z",
-    "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
+    "description": "3BLD/WCA cubing trainer in Rust/Bevy: alg repository with mechanical cube verification, FSRS-5 case drills, SQLite persistence, 3D replay, full fuzz/mutation",
     "forkCount": 2,
     "isArchived": false,
     "isFork": false,
@@ -109,7 +109,7 @@
   },
   {
     "createdAt": "2026-06-29T00:58:46Z",
-    "description": "Offline single-user Go + SQLite app: a dual-pane HTMX sutta-quote workspace and the full Pali canon explorer in one binary, with the sync/parse/load/triangulate pipeline, graph, analytics, and a 16-verb qm CLI.",
+    "description": "Offline single-user app: a dual-pane quote workspace and the full text corpus explorer, with the sync/parse/load/triangulate pipeline, graph, analytics, qm CLI.",
     "forkCount": 2,
     "isArchived": false,
     "isFork": false,
