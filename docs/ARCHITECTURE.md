@@ -20,7 +20,7 @@ Icons come from two pinned upstreams, resolved per slug through `ICON_SOURCES` a
 
 Variant and stand-in caveats, all verified against the `icons/` tree of devicon at the pinned ref: Rust and C ship no plain variant, only original and line, so they use original. Blade has no devicon and rides the Laravel mark. Hack has no devicon and rides the PHP mark. The Markdown mark is `markdown-original.svg` from devicon at the pinned ref, fetched 2026-10-19, an outline icon whose paths carry no fill attribute at all, which the recolor treats like black and paints the linguist blue `#083fa1`. Lua brand navy `#000080`, Rust brand black, and any default black fill vanish on the GitHub dark theme, so `RECOLOR_FILLS` replaces them with the language brand hex at embed time.
 
-Color sources: shields.io ported hexes for the original workflow set, MathWorks orange for MATLAB per linguist, gray for Hack per linguist, Typst teal `#239dad` per `lib/linguist/languages.yml` in `github-linguist/linguist`.
+Color sources: shields.io ported hexes for the original workflow set, MathWorks orange for MATLAB per linguist, gray for Hack per linguist, Typst teal `#239dad` per `lib/linguist/languages.yml` in `github-linguist/linguist`. Markdown deviates from linguist navy `#083fa1` on purpose: that fill fails the 3:1 contrast minimum on the GitHub dark canvas (2.01:1) on a thin outline mark, so the chip uses GitHub's Primer accent blue `#2f81f7` (5.05:1 on dark, 3.75:1 on light), the same visible-on-both-themes rule that drove the shields port for the original set.
 
 ## invariants under test
 

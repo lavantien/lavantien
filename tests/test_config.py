@@ -125,7 +125,7 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(config.DEVICON_MAP["Shell"], ("bash", "plain"))
         self.assertEqual(config.LANG_COLORS["PowerShell"], "#5391FE")
         self.assertEqual(config.DEVICON_MAP["PowerShell"], ("powershell", "plain"))
-        self.assertEqual(config.LANG_COLORS["Markdown"], "#083fa1")
+        self.assertEqual(config.LANG_COLORS["Markdown"], "#2f81f7")
         self.assertEqual(config.DEVICON_MAP["Markdown"], ("markdown", "original"))
 
     def test_excluded_repo_names(self):

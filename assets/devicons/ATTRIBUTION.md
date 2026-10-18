@@ -25,6 +25,7 @@ Files:
 - kotlin-plain.svg (devicon)
 - laravel-original.svg (devicon)
 - lua-plain.svg (devicon)
+- markdown-original.svg (devicon)
 - matlab-plain.svg (devicon)
 - objectivec-plain.svg (devicon)
 - perl-plain.svg (devicon)

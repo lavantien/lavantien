@@ -131,7 +131,7 @@ LANG_COLORS = {
     "Typst": "#239dad",
     "Shell": "#4EAA25",
     "PowerShell": "#5391FE",
-    "Markdown": "#083fa1",
+    "Markdown": "#2f81f7",
 }
 DEFAULT_COLOR = "#8b949e"
 TEXT_MAIN = "#6e7781"

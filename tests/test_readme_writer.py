@@ -32,10 +32,10 @@ _CELL_RE = re.compile(
     r'</td><td width="[^"]*">(?P<desc>.*?)</td>'
 )
 _CHIP_RE = re.compile(
-    r'<img src="(?P<src>[^"]+)" alt="(?P<alt>[A-Za-z][A-Za-z0-9+#]*)"'
+    r'<img src="(?P<src>[^"]+)" alt="(?P<alt>[A-Za-z][A-Za-z0-9+#-]*)"'
     r' width="\d+" height="\d+">'
     r"&nbsp;(?P<isize>\d+(?:\.\d+)?[MK]?)"
-    r"|(?P<lang>[A-Za-z][A-Za-z0-9+#]*)&nbsp;(?P<tsize>\d+(?:\.\d+)?[MK]?)"
+    r"|(?P<lang>[A-Za-z][A-Za-z0-9+#-]*)&nbsp;(?P<tsize>\d+(?:\.\d+)?[MK]?)"
 )
 
 
@@ -248,6 +248,32 @@ class TestRenderRepoTable(unittest.TestCase):
         self.assertIn("<td width=\"25%\">uses &lt;algorithm&gt; &amp; "
                       "\"quotes\"</td>", table)
         self.assertNotIn("<algorithm>", table)
+
+    def test_chip_parser_accepts_hyphenated_language(self):
+        chips, srcs = parse_langs(
+            '<br><img src="assets/lang-icons/objectivec-plain.svg"'
+            ' alt="Objective-C" width="14" height="14">&nbsp;12K'
+        )
+        self.assertEqual(chips, (("Objective-C", 12000),))
+        self.assertEqual(
+            srcs, {"Objective-C": "assets/lang-icons/objectivec-plain.svg"}
+        )
+        self.assertEqual(parse_langs("<br>Objective-C&nbsp;12K"), ((("Objective-C", 12000),), {}))
+
+    def test_hostile_lang_is_escaped_in_chips(self):
+        hostile = ('a&b<c>"', 5000)
+        table = render_repo_table(
+            [repo("svc", 2024, 8, "doc", top_langs=(hostile,))],
+            icon_srcs={'a&b<c>"': "assets/lang-icons/go-plain.svg"},
+        )
+        self.assertIn('alt="a&amp;b&lt;c&gt;&quot;"', table)
+        self.assertIn("&nbsp;5K", table)
+        self.assertNotIn('alt="a&b', table)
+        text_only = render_repo_table(
+            [repo("svc", 2024, 8, "doc", top_langs=(hostile,))], icon_srcs={}
+        )
+        self.assertIn("<br>a&amp;b&lt;c&gt;&quot;&nbsp;5K", text_only)
+        self.assertNotIn("<br>a&b", text_only)
 
     def test_byte_matches_fixture_table(self):
         messy = load_messy()
