@@ -232,6 +232,19 @@ class TestRenderRepoTable(unittest.TestCase):
         self.assertNotIn("<br>K", table)
         self.assertNotIn("lang-icons", table)
 
+    def test_hostile_name_and_description_are_escaped(self):
+        table = render_repo_table([
+            repo("a&b<c>", 2020, 3, 'uses <algorithm> & "quotes"'),
+        ], icon_srcs={})
+        self.assertIn(
+            '<a href="https://github.com/lavantien/a&amp;b&lt;c&gt;">a&amp;b&lt;c&gt;'
+            "</a>",
+            table,
+        )
+        self.assertIn("<td width=\"25%\">uses &lt;algorithm&gt; &amp; "
+                      "\"quotes\"</td>", table)
+        self.assertNotIn("<algorithm>", table)
+
     def test_byte_matches_fixture_table(self):
         messy = load_messy()
         table, rows, icon_srcs = parse_fixture_table(messy)
@@ -435,6 +448,9 @@ class TestRewriteReadme(unittest.TestCase):
 class TestRepoTableMarkers(unittest.TestCase):
     LANGS_BLOCK = "\n".join((config.MARKER_START, EXPECTED_IMG, config.MARKER_END))
     USER_TABLE = "<table>\n<tr><td>mine</td></tr>\n</table>"
+    FOREIGN_ATTRIBUTED_TABLE = (
+        '<table align="center">\n<tr><td>stats</td></tr>\n</table>'
+    )
     OLD_GEN_TABLE = "<table>\n<tr><td>old gen</td></tr>\n</table>"
     GEN_TABLE = "<table>\n<tr><td>gen</td></tr>\n</table>"
 
@@ -457,6 +473,32 @@ class TestRepoTableMarkers(unittest.TestCase):
         self.assertIn(self.USER_TABLE, result)
         self.assertEqual(result.count("<table>"), 2)
         self.assertEqual(result.count(config.MARKER_REPOS_START), 1)
+        self.assertIn(config.MARKER_REPOS_START + "\n" + self.GEN_TABLE, result)
+        self.assertEqual(self.rewrite(result), result)
+
+    def test_foreign_attributed_table_survives_markerless_adoption(self):
+        content = "\n\n".join(
+            (self.OLD_GEN_TABLE, self.FOREIGN_ATTRIBUTED_TABLE,
+             "*Last updated: 2026-01-01*")
+        ) + "\n"
+        result = self.rewrite(content)
+        self.assertIn(self.FOREIGN_ATTRIBUTED_TABLE, result)
+        self.assertNotIn(self.OLD_GEN_TABLE, result)
+        self.assertIn(config.MARKER_REPOS_START + "\n" + self.GEN_TABLE, result)
+        self.assertEqual(self.rewrite(result), result)
+
+    def test_attributed_generator_table_is_adopted(self):
+        attributed_old = (
+            f'<table width="{config.TABLE_WIDTH}">\n<tr><td>old gen</td></tr>\n'
+            "</table>"
+        )
+        content = "\n\n".join(
+            (self.FOREIGN_ATTRIBUTED_TABLE, attributed_old,
+             "*Last updated: 2026-01-01*")
+        ) + "\n"
+        result = self.rewrite(content)
+        self.assertIn(self.FOREIGN_ATTRIBUTED_TABLE, result)
+        self.assertNotIn(attributed_old, result)
         self.assertIn(config.MARKER_REPOS_START + "\n" + self.GEN_TABLE, result)
         self.assertEqual(self.rewrite(result), result)
 

@@ -6,13 +6,17 @@ accumulating leading blank lines. All regions are keyed on stable
 markers or structural spans, so a second pass is a byte-identical no-op.
 """
 
+import html
 import re
 from collections.abc import Mapping
 from typing import Protocol, Sequence
 
 from scripts import config, svg_strip
 
-_TABLE_RE = re.compile(r"<table\b[^>]*>.*?</table>", re.DOTALL)
+_OWNED_TABLE_OPEN = re.escape(f'<table width="{config.TABLE_WIDTH}">')
+_TABLE_RE = re.compile(
+    rf"(?:<table>|{_OWNED_TABLE_OPEN}).*?</table>", re.DOTALL
+)
 _UPDATED_LINE_RE = re.compile(
     r"(?m)^" + re.escape(config.UPDATED_PREFIX) + r".*$"
 )
@@ -54,9 +58,10 @@ def render_repo_table(
 
 
 def _repo_cell(row: RepoLike, icon_srcs: Mapping[str, str]) -> str:
+    name = html.escape(row.name, quote=True)
     link = (
         f'<td width="{config.TABLE_CELL_WIDTH}">'
-        f'<a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a><br>'
+        f'<a href="{config.REPO_URL_BASE}/{name}">{name}</a><br>'
         f"(<i>{row.year}</i>){config.META_JOIN}(<b>{row.stars_display or row.stars}⭐</b>)"
     )
     if row.no_ai:
@@ -73,7 +78,8 @@ def _repo_cell(row: RepoLike, icon_srcs: Mapping[str, str]) -> str:
         ]
         link += f"<br>{config.LANG_CHIP_JOIN.join(chips)}"
     return (
-        f'{link}</td><td width="{config.TABLE_CELL_WIDTH}">{row.description}</td>'
+        f'{link}</td><td width="{config.TABLE_CELL_WIDTH}">'
+        f"{html.escape(row.description, quote=False)}</td>"
     )
 
 

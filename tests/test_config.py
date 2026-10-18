@@ -130,13 +130,15 @@ class TestPinnedRepos(unittest.TestCase):
 
 
 class TestNoAiBadgeAsset(unittest.TestCase):
-    def test_single_logo_red_border_green_text(self):
+    def test_single_logo_with_id_pinned_colors(self):
         path = config.REPO_ROOT / config.NO_AI_IMG_SRC
         root = ET.parse(path).getroot()
         paths = root.findall("{http://www.w3.org/2000/svg}path")
-        fills = {p.get("fill") for p in paths}
-        self.assertEqual(len(paths), 2)
-        self.assertEqual(fills, {config.NO_AI_BORDER_COLOR, config.NO_AI_TEXT_COLOR})
+        self.assertEqual(
+            {p.get("id"): p.get("fill") for p in paths},
+            {"ring": config.NO_AI_BORDER_COLOR,
+             "letters": config.NO_AI_TEXT_COLOR},
+        )
         self.assertTrue(all(p.get("d") for p in paths))
 
 
