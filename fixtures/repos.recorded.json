@@ -1,5 +1,29 @@
 [
   {
+    "createdAt": "2021-12-19T15:03:46Z",
+    "description": "Config files for my GitHub profile.",
+    "forkCount": 2,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 1212,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 186620,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "lavantien",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2026-10-11T18:50:28Z",
     "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
     "forkCount": 2,
@@ -81,30 +105,6 @@
     ],
     "name": "dotfiles",
     "stargazerCount": 35,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2021-12-19T15:03:46Z",
-    "description": "Config files for my GitHub profile.",
-    "forkCount": 2,
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 1212,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 183082,
-        "node": {
-          "name": "Python"
-        }
-      }
-    ],
-    "name": "lavantien",
-    "stargazerCount": 5,
     "visibility": "PUBLIC"
   },
   {
