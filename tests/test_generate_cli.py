@@ -49,9 +49,10 @@ EXPECTED_LANGS = [
 ]
 
 BADGE_IMG = (
-    f' <img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
+    f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
     f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
 )
+NBSP_JOIN = "&nbsp;"
 
 
 def item(name="svc", stars=5, langs=(("Go", 100),), created="2024-01-01T00:00:00Z",
@@ -194,7 +195,7 @@ class TestMalformedPayloadFuzz(unittest.TestCase):
         self.assertNotIn("\r", svg_text)
         content = readme.read_text(encoding="utf-8")
         self.assertTrue(content.startswith(config.MARKER_START))
-        self.assertEqual(content.count("<table>"), 1)
+        self.assertEqual(content.count("<table"), 1)
         self.assertEqual(content.count("</table>"), 1)
         updated = [ln for ln in content.split("\n")
                    if ln.startswith(config.UPDATED_PREFIX)]
@@ -229,8 +230,12 @@ class TestEndToEndFromFixture(unittest.TestCase):
         content = self.readme.read_text(encoding="utf-8")
         self.assertTrue(content.startswith(config.MARKER_START))
         self.assertEqual(content[0], "<")
-        self.assertEqual(content.count("<table>"), 1)
+        self.assertEqual(content.count("<table"), 1)
         self.assertEqual(content.count("</table>"), 1)
+        self.assertIn(f'<table width="{config.TABLE_WIDTH}">', content)
+        self.assertEqual(
+            content.count(f'<td width="{config.TABLE_CELL_WIDTH}">'), 40
+        )
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         updated = [ln for ln in content.split("\n")
                    if ln.startswith(config.UPDATED_PREFIX)]
@@ -239,17 +244,18 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
+            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
+            + NBSP_JOIN + BADGE_IMG,
             content,
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
-            "<br>(<i>2023</i>) (<b>42⭐</b>)" + BADGE_IMG,
+            "<br>(<i>2023</i>)&nbsp;(<b>42⭐</b>)" + NBSP_JOIN + BADGE_IMG,
             content,
         )
         self.assertNotIn(
             '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
-            "<br>(<i>2025</i>) (<b>15⭐</b>)" + BADGE_IMG,
+            "<br>(<i>2025</i>)&nbsp;(<b>15⭐</b>)" + NBSP_JOIN + BADGE_IMG,
             content,
         )
         self.assertEqual(content.count(BADGE_IMG), 15)
@@ -305,7 +311,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+17⭐</b>)" + BADGE_IMG,
+            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+17⭐</b>)"
+            + NBSP_JOIN + BADGE_IMG,
             content,
         )
         self.assertIn("(<b>0⭐</b>)", content)
@@ -342,7 +349,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
         content = self.readme.read_text(encoding="utf-8")
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
+            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
+            + NBSP_JOIN + BADGE_IMG,
             content,
         )
 

@@ -17,15 +17,17 @@ EXPECTED_IMG = (
 )
 UPDATED_NEW = config.UPDATED_PREFIX + "2026-10-06" + config.UPDATED_SUFFIX
 BADGE_IMG = (
-    f' <img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
+    f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
     f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
 )
+NBSP_JOIN = "&nbsp;"
 
 _ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.DOTALL)
 _CELL_RE = re.compile(
-    r'<td><a href="https://github\.com/lavantien/(?P<name>[^"]+)">(?P=name)</a>'
-    r"<br>\(<i>(?P<year>\d{4})</i>\) \(<b>(?P<stars>[^<]*)⭐</b>\)"
-    r"(?P<badge> <img [^>]+>)?</td><td>(?P<desc>.*?)</td>"
+    r'<td width="[^"]*"><a href="https://github\.com/lavantien/(?P<name>[^"]+)">'
+    r"(?P=name)</a>"
+    r"<br>\(<i>(?P<year>\d{4})</i>\)&nbsp;\(<b>(?P<stars>[^<]*)⭐</b>\)"
+    r"(?P<badge>&nbsp;<img [^>]+>)?</td><td width=\"[^\"]*\">(?P<desc>.*?)</td>"
 )
 
 
@@ -41,7 +43,7 @@ def load_messy():
 
 
 def parse_fixture_table(messy):
-    start = messy.index("<table>")
+    start = messy.index("<table")
     end = messy.index("</table>") + len("</table>")
     table = messy[start:end]
     rows = []
@@ -92,20 +94,23 @@ class TestRenderRepoTable(unittest.TestCase):
         )
         expected = "\n".join(
             (
-                "<table>",
-                "<tr><td><a href=\"https://github.com/lavantien/alpha\">alpha</a>"
-                "<br>(<i>2020</i>) (<b>1⭐</b>)</td><td>first</td>"
-                "<td><a href=\"https://github.com/lavantien/beta\">beta</a>"
-                "<br>(<i>2021</i>) (<b>2⭐</b>)</td><td>second</td></tr>",
-                "<tr><td><a href=\"https://github.com/lavantien/gamma\">gamma</a>"
-                "<br>(<i>2022</i>) (<b>3⭐</b>)</td><td>third</td></tr>",
+                '<table width="100%">',
+                '<tr><td width="25%"><a href="https://github.com/lavantien/alpha">'
+                "alpha</a><br>(<i>2020</i>)&nbsp;(<b>1⭐</b>)"
+                '</td><td width="25%">first</td>'
+                '<td width="25%"><a href="https://github.com/lavantien/beta">'
+                "beta</a><br>(<i>2021</i>)&nbsp;(<b>2⭐</b>)"
+                '</td><td width="25%">second</td></tr>',
+                '<tr><td width="25%"><a href="https://github.com/lavantien/gamma">'
+                "gamma</a><br>(<i>2022</i>)&nbsp;(<b>3⭐</b>)"
+                '</td><td width="25%">third</td></tr>',
                 "</table>",
             )
         )
         self.assertEqual(table, expected)
 
     def test_empty_rows(self):
-        self.assertEqual(render_repo_table([]), "<table>\n</table>")
+        self.assertEqual(render_repo_table([]), '<table width="100%">\n</table>')
 
     def test_badged_prefixed_cell_exact(self):
         table = render_repo_table([
@@ -114,20 +119,24 @@ class TestRenderRepoTable(unittest.TestCase):
         ])
         self.assertEqual(
             table,
-            "<table>\n"
-            '<tr><td><a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+9⭐</b>)"
+            '<table width="100%">\n'
+            '<tr><td width="25%">'
+            '<a href="https://github.com/lavantien/modern-swe-library">'
+            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
+            + NBSP_JOIN
             + BADGE_IMG
-            + "</td><td>lib</td></tr>\n</table>",
+            + '</td><td width="25%">lib</td></tr>\n</table>',
         )
 
     def test_plain_cell_exact_without_img(self):
         table = render_repo_table([repo("plain", 2020, 3, "doc")])
         self.assertEqual(
             table,
-            "<table>\n"
-            '<tr><td><a href="https://github.com/lavantien/plain">plain</a>'
-            "<br>(<i>2020</i>) (<b>3⭐</b>)</td><td>doc</td></tr>\n</table>",
+            '<table width="100%">\n'
+            '<tr><td width="25%">'
+            '<a href="https://github.com/lavantien/plain">plain</a>'
+            "<br>(<i>2020</i>)&nbsp;(<b>3⭐</b>)"
+            '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
     def test_byte_matches_fixture_table(self):
@@ -207,7 +216,7 @@ class TestRewriteReadme(unittest.TestCase):
         self.assertEqual(lines[2], config.MARKER_END)
         self.assertEqual(lines[3], "")
         self.assertEqual(lines[4], config.MARKER_REPOS_START)
-        self.assertEqual(lines[5], "<table>")
+        self.assertEqual(lines[5], '<table width="100%">')
 
     def test_idempotent_on_messy_and_clean(self):
         kwargs = rewrite_kwargs()
@@ -218,7 +227,7 @@ class TestRewriteReadme(unittest.TestCase):
 
     def test_exactly_one_table(self):
         result = rewrite_readme(load_messy(), **rewrite_kwargs())
-        self.assertEqual(result.count("<table>"), 1)
+        self.assertEqual(result.count("<table"), 1)
         self.assertEqual(result.count("</table>"), 1)
         self.assertIn('href="https://github.com/lavantien/modern-swe-library"', result)
 
@@ -253,7 +262,7 @@ class TestRewriteReadme(unittest.TestCase):
         self.assertIn("## Notes", result)
         self.assertIn("keep me", result)
         self.assertNotIn("junk", result)
-        self.assertLess(result.index("## Notes"), result.index("<table>"))
+        self.assertLess(result.index("## Notes"), result.index("<table"))
         self.assertLess(result.index("</table>"), result.index(UPDATED_NEW))
 
     def test_stray_start_marker_dropped_and_idempotent(self):

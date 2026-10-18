@@ -11,7 +11,7 @@ from typing import Protocol, Sequence
 
 from scripts import config
 
-_TABLE_RE = re.compile(r"<table>.*?</table>", re.DOTALL)
+_TABLE_RE = re.compile(r"<table\b[^>]*>.*?</table>", re.DOTALL)
 _UPDATED_LINE_RE = re.compile(
     r"(?m)^" + re.escape(config.UPDATED_PREFIX) + r".*$"
 )
@@ -39,7 +39,7 @@ def build_languages_block() -> str:
 
 
 def render_repo_table(rows: Sequence[RepoLike]) -> str:
-    lines = ["<table>"]
+    lines = [f'<table width="{config.TABLE_WIDTH}">']
     for i in range(0, len(rows), 2):
         cells = "".join(_repo_cell(row) for row in rows[i : i + 2])
         lines.append(f"<tr>{cells}</tr>")
@@ -49,16 +49,20 @@ def render_repo_table(rows: Sequence[RepoLike]) -> str:
 
 def _repo_cell(row: RepoLike) -> str:
     link = (
-        f'<td><a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a><br>'
-        f"(<i>{row.year}</i>) (<b>{row.stars_display or row.stars}⭐</b>)"
+        f'<td width="{config.TABLE_CELL_WIDTH}">'
+        f'<a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a><br>'
+        f"(<i>{row.year}</i>){config.META_JOIN}(<b>{row.stars_display or row.stars}⭐</b>)"
     )
     if row.no_ai:
         link += (
-            f' <img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
+            f"{config.META_JOIN}"
+            f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
             f' width="{config.NO_AI_IMG_WIDTH}"'
             f' height="{config.NO_AI_IMG_HEIGHT}">'
         )
-    return f"{link}</td><td>{row.description}</td>"
+    return (
+        f'{link}</td><td width="{config.TABLE_CELL_WIDTH}">{row.description}</td>'
+    )
 
 
 def normalize(content: str) -> str:

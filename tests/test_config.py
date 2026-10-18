@@ -1,5 +1,6 @@
 import re
 import unittest
+import xml.etree.ElementTree as ET
 
 from scripts import config
 
@@ -98,6 +99,16 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(config.UPDATED_PREFIX, "*Last updated: ")
         self.assertEqual(config.UPDATED_SUFFIX, "*")
 
+    def test_table_layout_constants(self):
+        self.assertEqual(config.TABLE_WIDTH, "100%")
+        self.assertEqual(config.TABLE_CELL_WIDTH, "25%")
+        self.assertEqual(config.META_JOIN, "&nbsp;")
+
+    def test_excluded_repo_names(self):
+        self.assertEqual(
+            config.EXCLUDED_REPO_NAMES, frozenset({"lavantien", "neovim"})
+        )
+
     def test_no_ai_badge_constants(self):
         self.assertEqual(config.NO_AI_REFERENCE_REPO, "llm-tournament")
         self.assertEqual(config.NO_AI_FALLBACK_CUTOFF, "2025-01-01T20:30:10Z")
@@ -105,6 +116,19 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(config.NO_AI_ALT_TEXT, "no AI")
         self.assertEqual(config.NO_AI_IMG_WIDTH, 14)
         self.assertEqual(config.NO_AI_IMG_HEIGHT, 14)
+        self.assertEqual(config.NO_AI_BORDER_COLOR, "#ff0000")
+        self.assertEqual(config.NO_AI_TEXT_COLOR, "#008000")
+
+
+class TestNoAiBadgeAsset(unittest.TestCase):
+    def test_single_logo_red_border_green_text(self):
+        path = config.REPO_ROOT / config.NO_AI_IMG_SRC
+        root = ET.parse(path).getroot()
+        paths = root.findall("{http://www.w3.org/2000/svg}path")
+        fills = {p.get("fill") for p in paths}
+        self.assertEqual(len(paths), 2)
+        self.assertEqual(fills, {config.NO_AI_BORDER_COLOR, config.NO_AI_TEXT_COLOR})
+        self.assertTrue(all(p.get("d") for p in paths))
 
 
 class TestLiteralPins(unittest.TestCase):

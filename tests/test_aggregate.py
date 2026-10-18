@@ -222,6 +222,27 @@ class TestSelectRows(unittest.TestCase):
         self.assertNotIn("lavantien", names)
         self.assertEqual(len(names), len(set(names)))
 
+    def test_neovim_skipped_free_market_fills_next(self):
+        repos = aggregate([
+            item("neovim", stars=5, langs=()),
+            item("zz-next", stars=3, langs=()),
+        ]).repos
+        with mock.patch.object(config, "PINNED_REPOS", ()):
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        self.assertEqual([r.name for r in rows], ["zz-next"])
+        only_excludes_lavantien = frozenset({"lavantien"})
+        with mock.patch.object(config, "PINNED_REPOS", ()), \
+                mock.patch.object(config, "EXCLUDED_REPO_NAMES",
+                                  only_excludes_lavantien):
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        self.assertEqual([r.name for r in rows], ["neovim", "zz-next"])
+
     def test_none_snapshot_fetch_yields_zero_stars(self):
         rows = select_rows(
             [], snapshot_fetch=lambda full_name: None,

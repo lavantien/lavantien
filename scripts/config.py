@@ -67,7 +67,10 @@ PINNED_REPOS = (
     {"name": "go-flutter-microservices-skeleton", "year": 2022},
 )
 TABLE_REPO_LIMIT = 20
-EXCLUDED_REPO_NAMES = frozenset({"lavantien"})
+TABLE_WIDTH = "100%"
+TABLE_CELL_WIDTH = "25%"
+META_JOIN = "&nbsp;"
+EXCLUDED_REPO_NAMES = frozenset({"lavantien", "neovim"})
 
 NO_AI_REFERENCE_REPO = "llm-tournament"
 NO_AI_FALLBACK_CUTOFF = "2025-01-01T20:30:10Z"
@@ -75,6 +78,8 @@ NO_AI_IMG_SRC = "assets/no-ai.svg"
 NO_AI_ALT_TEXT = "no AI"
 NO_AI_IMG_WIDTH = 14
 NO_AI_IMG_HEIGHT = 14
+NO_AI_BORDER_COLOR = "#ff0000"
+NO_AI_TEXT_COLOR = "#008000"
 
 GH_OWNER = "lavantien"
 REPO_URL_BASE = f"https://github.com/{GH_OWNER}"
