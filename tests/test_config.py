@@ -117,7 +117,7 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(config.FORK_GLYPH, "♆")
 
     def test_table_language_row_constants(self):
-        self.assertEqual(config.TABLE_LANGS_N, 2)
+        self.assertEqual(config.TABLE_LANGS_N, 3)
         self.assertEqual(config.TABLE_LANG_ICON_SIZE, 14)
         self.assertEqual(config.LANG_CHIP_JOIN, "&nbsp;&nbsp;&nbsp; ")
         self.assertEqual(config.LANG_ICONS_SRC_DIR, "assets/lang-icons")
@@ -137,7 +137,7 @@ class TestPinnedRepos(unittest.TestCase):
 
     def test_excluded_repo_names(self):
         self.assertEqual(
-            config.EXCLUDED_REPO_NAMES, frozenset({"lavantien", "neovim"})
+            config.EXCLUDED_REPO_NAMES, frozenset({"lavantien", "neovim", "dev"})
         )
 
     def test_no_ai_badge_constants(self):

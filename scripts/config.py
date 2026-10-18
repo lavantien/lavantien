@@ -79,14 +79,14 @@ META_JOIN = "&nbsp;"
 META_ITEM_JOIN = "&nbsp;&nbsp;&nbsp;&nbsp;"
 STAR_GLYPH = "✪"
 FORK_GLYPH = "♆"
-TABLE_LANGS_N = 2
+TABLE_LANGS_N = 3
 TABLE_LANGS_EXTRA = frozenset({"Shell", "PowerShell", "Markdown"})
 TABLE_LANGS_ALLOW = PROG_LANGS | TABLE_LANGS_EXTRA
 TABLE_LANG_ICON_SIZE = 14
 LANG_CHIP_JOIN = "&nbsp;&nbsp;&nbsp; "
 LANG_ICONS_SRC_DIR = "assets/lang-icons"
 LANG_ICONS_DIR = REPO_ROOT / "assets" / "lang-icons"
-EXCLUDED_REPO_NAMES = frozenset({"lavantien", "neovim"})
+EXCLUDED_REPO_NAMES = frozenset({"lavantien", "neovim", "dev"})
 
 NO_AI_REFERENCE_REPO = "llm-tournament"
 NO_AI_FALLBACK_CUTOFF = "2025-01-01T20:30:10Z"
