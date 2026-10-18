@@ -122,6 +122,10 @@ def main(argv: list[str] | None = None) -> int:
         changed = lang_icons.write_if_changed(path, content)
         changed_count += changed
         print(f"{'changed' if changed else 'unchanged'}: {path}")
+    for name in lang_icons.prune_icons(
+        args.icons_dir, [p.name for p, _ in icon_plans]
+    ):
+        print(f"pruned: {args.icons_dir / name}")
     print(f"done: {changed_count} changed, {len(reports) - changed_count} unchanged")
     return 0
 

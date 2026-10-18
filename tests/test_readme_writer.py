@@ -93,7 +93,10 @@ def parse_fixture_table(messy):
     rows = []
     icon_srcs: dict[str, str] = {}
     for tr in _ROW_RE.findall(table):
-        for match in _CELL_RE.finditer(tr):
+        matches = list(_CELL_RE.finditer(tr))
+        if len(matches) != 2:
+            raise ValueError(f"row does not parse as exactly two cells: {tr!r}")
+        for match in matches:
             stars_text = match["stars"]
             top_langs, srcs = parse_langs(match["langsrow"])
             icon_srcs.update(srcs)
@@ -294,6 +297,16 @@ class TestRenderRepoTable(unittest.TestCase):
         self.assertEqual(sum(1 for r in rows if r.top_langs), 10)
         self.assertGreater(len(icon_srcs), 0)
         self.assertEqual(render_repo_table(rows, icon_srcs=icon_srcs), table)
+
+    def test_corrupted_cell_raises_instead_of_skipping(self):
+        table = (
+            '<table width="100%">\n<tr><td width="25%">'
+            '<a href="https://github.com/lavantien/x">x</a>'
+            "<br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>1✪</b>"
+            '</td><td width="25%">d</td></tr>\n</table>'
+        )
+        with self.assertRaises(ValueError):
+            parse_fixture_table(f"lead\n{table}\ntrail")
 
 
 class TestNormalize(unittest.TestCase):

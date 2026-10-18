@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from unittest import mock
 
 from scripts import config, svg_strip
-from scripts.lang_icons import ensure_icons, render_icons, write_if_changed
+from scripts.lang_icons import ensure_icons, prune_icons, render_icons, write_if_changed
 
 
 class TestRenderIconSvg(unittest.TestCase):
@@ -98,6 +98,36 @@ class TestEnsureIcons(unittest.TestCase):
             self.assertEqual(skipped, ["HTML"])
             self.assertEqual(list(mapping), ["Go"])
             self.assertEqual(len(planned), 1)
+
+
+class TestPruneIcons(unittest.TestCase):
+    def test_deletes_unreferenced_and_keeps_referenced(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = pathlib.Path(tmp)
+            (directory / "go-plain.svg").write_text("go\n", encoding="utf-8")
+            (directory / "orphan.svg").write_text("old\n", encoding="utf-8")
+            removed = prune_icons(directory, {"assets/lang-icons/go-plain.svg"})
+            self.assertEqual(removed, ["orphan.svg"])
+            self.assertEqual(
+                [p.name for p in directory.glob("*.svg")], ["go-plain.svg"]
+            )
+
+    def test_missing_directory_is_noop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(
+                prune_icons(pathlib.Path(tmp) / "absent", set()), []
+            )
+
+    def test_empty_keep_set_empties_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = pathlib.Path(tmp)
+            (directory / "go-plain.svg").write_text("go\n", encoding="utf-8")
+            (directory / "lua-plain.svg").write_text("lua\n", encoding="utf-8")
+            self.assertEqual(
+                prune_icons(directory, set()),
+                ["go-plain.svg", "lua-plain.svg"],
+            )
+            self.assertEqual(list(directory.glob("*.svg")), [])
 
 
 class TestWriteIfChanged(unittest.TestCase):

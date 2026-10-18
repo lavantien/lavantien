@@ -61,3 +61,18 @@ def ensure_icons(langs, directory) -> tuple[dict[str, str], int]:
     mapping, planned, _skipped = render_icons(langs, directory)
     changed = sum(write_if_changed(path, content) for path, content in planned)
     return mapping, changed
+
+
+def prune_icons(directory, referenced) -> list[str]:
+    """Delete standalone icon files the current table no longer
+    references, so the directory holds exactly the referenced set and
+    the daily workflow's `git add` commits the deletions too."""
+    if not directory.is_dir():
+        return []
+    keep = {pathlib.PurePosixPath(src).name for src in referenced}
+    removed = []
+    for path in sorted(directory.glob("*.svg")):
+        if path.name not in keep:
+            path.unlink()
+            removed.append(path.name)
+    return removed

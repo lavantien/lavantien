@@ -448,6 +448,17 @@ class TestEndToEndFromFixture(unittest.TestCase):
             self.assertEqual(rc, 0)
             self.assertGreater(len(list(icons.glob("*.svg"))), 0)
 
+    def test_prunes_orphaned_icon_files(self):
+        orphan = self.icons / "orphan.svg"
+        self.icons.mkdir(parents=True)
+        orphan.write_text("stale\n", encoding="utf-8")
+        with silence() as out:
+            rc = generate.main(self.args)
+        self.assertEqual(rc, 0)
+        self.assertFalse(orphan.exists())
+        self.assertIn(f"pruned: {orphan}", out.getvalue())
+        self.assertTrue((self.icons / "markdown-original.svg").exists())
+
     def test_missing_icon_warns_and_renders_text_only_chip(self):
         real = svg_strip.render_icon_svg
 
