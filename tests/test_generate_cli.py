@@ -239,17 +239,17 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
+            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
             content,
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
-            " (<i>2023</i>) (<b>42⭐</b>)" + BADGE_IMG,
+            "<br>(<i>2023</i>) (<b>42⭐</b>)" + BADGE_IMG,
             content,
         )
         self.assertNotIn(
             '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
-            " (<i>2025</i>) (<b>15⭐</b>)" + BADGE_IMG,
+            "<br>(<i>2025</i>) (<b>15⭐</b>)" + BADGE_IMG,
             content,
         )
         self.assertEqual(content.count(BADGE_IMG), 15)
@@ -305,7 +305,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>200+17⭐</b>)" + BADGE_IMG,
+            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+17⭐</b>)" + BADGE_IMG,
             content,
         )
         self.assertIn("(<b>0⭐</b>)", content)
@@ -324,7 +324,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         content = self.readme.read_text(encoding="utf-8")
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
+            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
             content,
         )
 

@@ -49,8 +49,8 @@ def render_repo_table(rows: Sequence[RepoLike]) -> str:
 
 def _repo_cell(row: RepoLike) -> str:
     link = (
-        f'<td><a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a>'
-        f" (<i>{row.year}</i>) (<b>{row.stars_display or row.stars}⭐</b>)"
+        f'<td><a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a><br>'
+        f"(<i>{row.year}</i>) (<b>{row.stars_display or row.stars}⭐</b>)"
     )
     if row.no_ai:
         link += (

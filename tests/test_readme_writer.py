@@ -24,7 +24,7 @@ BADGE_IMG = (
 _ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.DOTALL)
 _CELL_RE = re.compile(
     r'<td><a href="https://github\.com/lavantien/(?P<name>[^"]+)">(?P=name)</a>'
-    r" \(<i>(?P<year>\d{4})</i>\) \(<b>(?P<stars>[^<]*)⭐</b>\)"
+    r"<br>\(<i>(?P<year>\d{4})</i>\) \(<b>(?P<stars>[^<]*)⭐</b>\)"
     r"(?P<badge> <img [^>]+>)?</td><td>(?P<desc>.*?)</td>"
 )
 
@@ -94,11 +94,11 @@ class TestRenderRepoTable(unittest.TestCase):
             (
                 "<table>",
                 "<tr><td><a href=\"https://github.com/lavantien/alpha\">alpha</a>"
-                " (<i>2020</i>) (<b>1⭐</b>)</td><td>first</td>"
+                "<br>(<i>2020</i>) (<b>1⭐</b>)</td><td>first</td>"
                 "<td><a href=\"https://github.com/lavantien/beta\">beta</a>"
-                " (<i>2021</i>) (<b>2⭐</b>)</td><td>second</td></tr>",
+                "<br>(<i>2021</i>) (<b>2⭐</b>)</td><td>second</td></tr>",
                 "<tr><td><a href=\"https://github.com/lavantien/gamma\">gamma</a>"
-                " (<i>2022</i>) (<b>3⭐</b>)</td><td>third</td></tr>",
+                "<br>(<i>2022</i>) (<b>3⭐</b>)</td><td>third</td></tr>",
                 "</table>",
             )
         )
@@ -116,7 +116,7 @@ class TestRenderRepoTable(unittest.TestCase):
             table,
             "<table>\n"
             '<tr><td><a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>200+9⭐</b>)"
+            "modern-swe-library</a><br>(<i>2023</i>) (<b>200+9⭐</b>)"
             + BADGE_IMG
             + "</td><td>lib</td></tr>\n</table>",
         )
@@ -127,7 +127,7 @@ class TestRenderRepoTable(unittest.TestCase):
             table,
             "<table>\n"
             '<tr><td><a href="https://github.com/lavantien/plain">plain</a>'
-            " (<i>2020</i>) (<b>3⭐</b>)</td><td>doc</td></tr>\n</table>",
+            "<br>(<i>2020</i>) (<b>3⭐</b>)</td><td>doc</td></tr>\n</table>",
         )
 
     def test_byte_matches_fixture_table(self):
