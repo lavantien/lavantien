@@ -262,7 +262,7 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
         self.assertEqual(rows[1].stars, 9)
         self.assertEqual(rows[1].stars_display, "200+9")
-        self.assertEqual(rows[1].top_langs, (("Markdown", 1114),))
+        self.assertEqual(rows[1].top_langs, (("Markdown", 1296),))
         by_name = {r.name: r.top_langs for r in rows}
         self.assertEqual(by_name["dotfiles"], (("Typst", 10304702), ("Lua", 50000)))
         self.assertEqual(by_name["go-worker-pool"], (("Go", 260000), ("Python", 140000)))
@@ -337,7 +337,7 @@ class TestSelectRows(unittest.TestCase):
             for r in rows if r.name != "modern-swe-library"
         ))
         modern = next(r for r in rows if r.name == "modern-swe-library")
-        self.assertEqual(modern.top_langs, (("Markdown", 1114),))
+        self.assertEqual(modern.top_langs, (("Markdown", 1296),))
         self.assertEqual(modern.description, "")
         self.assertTrue(modern.no_ai)
         others = [r for r in rows if r.name != "modern-swe-library"]

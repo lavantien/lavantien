@@ -55,7 +55,7 @@ PINNED_REPOS = (
     {"name": "modern-swe-library", "year": 2023, "stars_prefix": 200,
      "no_ai": True,
      "description": "Open knowledge library: curated resources for modern software engineering",
-     "langs": (("Markdown", 1114),)},
+     "langs": (("Markdown", 1296),)},
     {"name": "FlowerShop", "year": 2018},
     {"name": "caro-ai-pvp", "year": 2025},
     {"name": "blind-trainer", "year": 2026},
