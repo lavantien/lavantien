@@ -15,6 +15,15 @@ class TestRenderIconSvg(unittest.TestCase):
         self.assertIn(config.LANG_COLORS["Lua"], fills)
         self.assertNotIn("#000080", fills)
 
+    def test_document_head_and_tail_exact(self):
+        content = svg_strip.render_icon_svg("Go")
+        self.assertTrue(content.startswith(
+            f'<svg xmlns="{svg_strip.SVG_NS}" viewBox="0 0 128 128" '
+            f'width="{config.TABLE_LANG_ICON_SIZE}" '
+            f'height="{config.TABLE_LANG_ICON_SIZE}">'
+        ))
+        self.assertTrue(content.endswith("</svg>\n"))
+
     def test_size_attributes_come_from_config(self):
         content = svg_strip.render_icon_svg("Go")
         root = ET.fromstring(content)
