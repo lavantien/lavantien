@@ -159,6 +159,16 @@ class TestItemTopLangs(unittest.TestCase):
             (("Go", 7),),
         )
 
+    def test_shell_dialects_count_for_table_rows(self):
+        entry = lambda name, size: {"size": size, "node": {"name": name}}
+        self.assertEqual(
+            item_top_langs({"languages": [
+                entry("Typst", 11584096), entry("Shell", 369866),
+                entry("PowerShell", 217969), entry("Lua", 8218),
+            ]}),
+            (("Typst", 11584096), ("Shell", 369866)),
+        )
+
     def test_missing_null_or_empty_languages(self):
         no_key = {}
         self.assertEqual(item_top_langs(no_key), ())

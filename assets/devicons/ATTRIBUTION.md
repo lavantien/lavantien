@@ -1,6 +1,6 @@
 # Vendored icons
 
-Vendored: 2026-10-09
+Vendored: 2026-10-19
 
 Sources:
 
@@ -9,6 +9,7 @@ Sources:
 
 Files:
 
+- bash-plain.svg (devicon)
 - c-original.svg (devicon)
 - clojure-original.svg (devicon)
 - cplusplus-plain.svg (devicon)
@@ -28,6 +29,7 @@ Files:
 - objectivec-plain.svg (devicon)
 - perl-plain.svg (devicon)
 - php-plain.svg (devicon)
+- powershell-plain.svg (devicon)
 - python-plain.svg (devicon)
 - r-plain.svg (devicon)
 - ruby-plain.svg (devicon)

@@ -10,9 +10,13 @@ SOURCE_KEYS = {"repo", "raw_base", "pinned_ref", "icon_path", "license_path"}
 
 
 class TestConfig(unittest.TestCase):
-    def test_prog_langs_have_colors_and_icons(self):
-        self.assertEqual(config.PROG_LANGS, frozenset(config.LANG_COLORS))
-        self.assertEqual(config.PROG_LANGS, frozenset(config.DEVICON_MAP))
+    def test_strip_and_table_langs_have_colors_and_icons(self):
+        self.assertEqual(
+            config.TABLE_LANGS_ALLOW, config.PROG_LANGS | config.TABLE_LANGS_EXTRA
+        )
+        self.assertEqual(config.TABLE_LANGS_ALLOW, frozenset(config.LANG_COLORS))
+        self.assertEqual(config.TABLE_LANGS_ALLOW, frozenset(config.DEVICON_MAP))
+        self.assertTrue(config.PROG_LANGS < config.TABLE_LANGS_ALLOW)
 
     def test_colors_are_hex(self):
         for lang, color in config.LANG_COLORS.items():
@@ -112,6 +116,11 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(
             config.LANG_ICONS_DIR, config.REPO_ROOT / "assets" / "lang-icons"
         )
+        self.assertEqual(config.TABLE_LANGS_EXTRA, frozenset({"Shell", "PowerShell"}))
+        self.assertEqual(config.LANG_COLORS["Shell"], "#4EAA25")
+        self.assertEqual(config.DEVICON_MAP["Shell"], ("bash", "plain"))
+        self.assertEqual(config.LANG_COLORS["PowerShell"], "#5391FE")
+        self.assertEqual(config.DEVICON_MAP["PowerShell"], ("powershell", "plain"))
 
     def test_excluded_repo_names(self):
         self.assertEqual(

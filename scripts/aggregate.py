@@ -30,13 +30,16 @@ class Aggregation:
 
 
 def item_top_langs(item: Mapping) -> tuple[tuple[str, int], ...]:
-    """Top TABLE_LANGS_N program languages of one gh repo item, edges
-    summed, allowlisted, and byte-sorted exactly like the strip."""
+    """Top TABLE_LANGS_N languages of one gh repo item under the table
+    allowlist (program languages plus the shell dialects), edges
+    summed and byte-sorted exactly like the strip."""
     sizes: dict[str, int] = {}
     for lang in item.get("languages") or []:
         name = lang["node"]["name"]
         sizes[name] = sizes.get(name, 0) + lang.get("size", 0)
-    return tuple(top_languages(sizes, n=config.TABLE_LANGS_N))
+    return tuple(
+        top_languages(sizes, allow=config.TABLE_LANGS_ALLOW, n=config.TABLE_LANGS_N)
+    )
 
 
 def aggregate(items: Iterable[dict]) -> Aggregation:

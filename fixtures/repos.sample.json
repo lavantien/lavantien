@@ -298,7 +298,9 @@
     "description": "free-market filler tying go-worker-pool at seven stars, sorted after it",
     "isArchived": false,
     "isFork": false,
-    "languages": [],
+    "languages": [
+      {"size": 526, "node": {"name": "Shell"}}
+    ],
     "name": "tied-zebra",
     "stargazerCount": 7,
     "visibility": "public"

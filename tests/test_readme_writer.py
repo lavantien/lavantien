@@ -250,7 +250,7 @@ class TestRenderRepoTable(unittest.TestCase):
         table, rows, icon_srcs = parse_fixture_table(messy)
         self.assertEqual(len(rows), 20)
         self.assertEqual(sum(1 for r in rows if r.no_ai), 15)
-        self.assertEqual(sum(1 for r in rows if r.top_langs), 10)
+        self.assertEqual(sum(1 for r in rows if r.top_langs), 11)
         self.assertGreater(len(icon_srcs), 0)
         self.assertEqual(render_repo_table(rows, icon_srcs=icon_srcs), table)
 

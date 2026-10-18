@@ -289,11 +289,19 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(content.count(BADGE_IMG), 15)
         icon_names = sorted(p.name for p in self.icons.glob("*.svg"))
         self.assertEqual(icon_names, [
-            "c-original.svg", "go-plain.svg", "java-plain.svg",
+            "bash-plain.svg", "c-original.svg", "go-plain.svg", "java-plain.svg",
             "javascript-plain.svg", "kotlin-plain.svg", "lua-plain.svg",
             "perl-plain.svg", "python-plain.svg", "ruby-plain.svg",
             "typescript-plain.svg", "typst-original.svg",
         ])
+        self.assertIn(
+            '<a href="https://github.com/lavantien/tied-zebra">tied-zebra</a>'
+            "<br>(<i>2022</i>)&nbsp;(<b>7⭐</b>)"
+            + NBSP_JOIN + BADGE_IMG
+            + '<br><img src="assets/lang-icons/bash-plain.svg" alt="Shell"'
+              ' width="14" height="14">&nbsp;Shell&nbsp;526',
+            content,
+        )
 
     def test_second_run_is_byte_identical_noop(self):
         with silence() as first:
@@ -459,6 +467,14 @@ class TestEndToEndFromFixture(unittest.TestCase):
             self.assertTrue(any(icons.glob("*.svg")))
             self.assertTrue(readme.read_text(encoding="utf-8")
                             .startswith(config.MARKER_START))
+
+
+class TestWorkflow(unittest.TestCase):
+    def test_cron_commits_every_artifact_family(self):
+        lines = config.WORKFLOW_PATH.read_text(encoding="utf-8").splitlines()
+        add_line = next(ln for ln in lines if "git add" in ln)
+        for artifact in ("README.md", "assets/languages.svg", "assets/lang-icons"):
+            self.assertIn(artifact, add_line)
 
 
 if __name__ == "__main__":

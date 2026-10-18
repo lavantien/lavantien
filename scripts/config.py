@@ -15,6 +15,7 @@ FIXTURE_RECORDED = REPO_ROOT / "fixtures" / "repos.recorded.json"
 FIXTURE_SAMPLE = REPO_ROOT / "fixtures" / "repos.sample.json"
 FIXTURE_README_MESSY = REPO_ROOT / "fixtures" / "readme.messy.md"
 GOLDEN_SVG = REPO_ROOT / "fixtures" / "languages.golden.svg"
+WORKFLOW_PATH = REPO_ROOT / ".github" / "workflows" / "update-readme.yml"
 
 TOP_N = 10
 STRIP_HEIGHT = 28
@@ -71,6 +72,8 @@ TABLE_WIDTH = "100%"
 TABLE_CELL_WIDTH = "25%"
 META_JOIN = "&nbsp;"
 TABLE_LANGS_N = 2
+TABLE_LANGS_EXTRA = frozenset({"Shell", "PowerShell"})
+TABLE_LANGS_ALLOW = PROG_LANGS | TABLE_LANGS_EXTRA
 TABLE_LANG_ICON_SIZE = 14
 LANG_CHIP_JOIN = " "
 LANG_ICONS_SRC_DIR = "assets/lang-icons"
@@ -125,6 +128,8 @@ LANG_COLORS = {
     "Perl": "#0073A1",
     "F#": "#378BBA",
     "Typst": "#239dad",
+    "Shell": "#4EAA25",
+    "PowerShell": "#5391FE",
 }
 DEFAULT_COLOR = "#8b949e"
 TEXT_MAIN = "#6e7781"
@@ -159,6 +164,8 @@ DEVICON_MAP = {
     "F#": ("fsharp", "plain"),
     "Hack": ("php", "plain"),
     "Typst": ("typst", "original"),
+    "Shell": ("bash", "plain"),
+    "PowerShell": ("powershell", "plain"),
 }
 
 ICON_SOURCES = {

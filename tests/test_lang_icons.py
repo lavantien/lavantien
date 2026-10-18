@@ -76,6 +76,22 @@ class TestEnsureIcons(unittest.TestCase):
                 [p.name for p in directory.glob("*.svg")], ["go-plain.svg"]
             )
 
+    def test_alias_collision_keeps_distinct_files_and_colors(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = pathlib.Path(tmp)
+            mapping, changed = ensure_icons({"Hack", "PHP"}, directory)
+            self.assertEqual(changed, 2)
+            self.assertNotEqual(mapping["Hack"], mapping["PHP"])
+            self.assertEqual(
+                sorted(p.name for p in directory.glob("*.svg")),
+                ["php-plain-hack.svg", "php-plain-php.svg"],
+            )
+            hack = (directory / "php-plain-hack.svg").read_text(encoding="utf-8")
+            php = (directory / "php-plain-php.svg").read_text(encoding="utf-8")
+            self.assertIn(config.LANG_COLORS["Hack"], hack)
+            self.assertIn(config.LANG_COLORS["PHP"], php)
+            self.assertNotEqual(hack, php)
+
     def test_empty_language_set_writes_nothing(self):
         with tempfile.TemporaryDirectory() as tmp:
             directory = pathlib.Path(tmp) / "icons"
@@ -95,6 +111,13 @@ class TestWriteIfChanged(unittest.TestCase):
             path = pathlib.Path(tmp) / "f.svg"
             write_if_changed(path, "a\n")
             self.assertFalse(write_if_changed(path, "a\n"))
+
+    def test_overwrites_file_with_invalid_utf8_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = pathlib.Path(tmp) / "f.svg"
+            path.write_bytes(b"\xff\xfe<svg")
+            self.assertTrue(write_if_changed(path, "ok\n"))
+            self.assertEqual(path.read_bytes(), b"ok\n")
 
 
 if __name__ == "__main__":
