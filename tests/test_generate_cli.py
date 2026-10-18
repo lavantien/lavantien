@@ -8,7 +8,7 @@ import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import datetime
 from unittest import mock
 
 from scripts import config, generate, svg_strip
@@ -114,6 +114,20 @@ def silence():
     out, err = io.StringIO(), io.StringIO()
     with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
         yield out
+
+
+@contextlib.contextmanager
+def frozen_clock(moment):
+    with mock.patch.object(generate, "datetime") as frozen:
+        frozen.now.return_value = moment
+        yield
+
+
+FROZEN_STAMP = "2026-10-19 04:30"
+FROZEN_UPDATED = (
+    f"{config.UPDATED_PREFIX}{FROZEN_STAMP}"
+    f"{config.UPDATED_TZ_SUFFIX}{config.UPDATED_SUFFIX}"
+)
 
 
 class TestArgParsing(unittest.TestCase):
@@ -234,7 +248,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         return 2 + len(list(self.icons.glob("*.svg")))
 
     def test_happy_path_rewrites_readme_and_writes_strip(self):
-        with silence() as out:
+        with silence() as out, frozen_clock(datetime(2026, 10, 19, 4, 30)):
             rc = generate.main(self.args)
         self.assertEqual(rc, 0)
         total = self._artifact_total()
@@ -258,12 +272,9 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(
             content.count(f'<td width="{config.TABLE_CELL_WIDTH}">'), 40
         )
-        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         updated = [ln for ln in content.split("\n")
                    if ln.startswith(config.UPDATED_PREFIX)]
-        self.assertEqual(
-            updated, [f"{config.UPDATED_PREFIX}{today}{config.UPDATED_SUFFIX}"]
-        )
+        self.assertEqual(updated, [FROZEN_UPDATED])
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
@@ -314,13 +325,13 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
 
     def test_second_run_is_byte_identical_noop(self):
-        with silence() as first:
+        with silence() as first, frozen_clock(datetime(2026, 10, 19, 4, 30)):
             self.assertEqual(generate.main(self.args), 0)
         total = self._artifact_total()
         readme_once = self.readme.read_bytes()
         svg_once = self.svg.read_bytes()
         icons_once = {p.name: p.read_bytes() for p in self.icons.glob("*.svg")}
-        with silence() as second:
+        with silence() as second, frozen_clock(datetime(2026, 10, 19, 4, 30)):
             self.assertEqual(generate.main(self.args), 0)
         self.assertEqual(self.readme.read_bytes(), readme_once)
         self.assertEqual(self.svg.read_bytes(), svg_once)
@@ -332,10 +343,10 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn("unchanged", second.getvalue())
 
     def test_final_summary_line_is_exact(self):
-        with silence() as first:
+        with silence() as first, frozen_clock(datetime(2026, 10, 19, 4, 30)):
             self.assertEqual(generate.main(self.args), 0)
         total = self._artifact_total()
-        with silence() as second:
+        with silence() as second, frozen_clock(datetime(2026, 10, 19, 4, 30)):
             self.assertEqual(generate.main(self.args), 0)
         self.assertEqual(
             first.getvalue().splitlines()[-1],

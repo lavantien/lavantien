@@ -104,6 +104,9 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(config.TABLE_REPO_LIMIT, 20)
         self.assertEqual(config.UPDATED_PREFIX, "*Last updated: ")
         self.assertEqual(config.UPDATED_SUFFIX, "*")
+        self.assertEqual(config.UPDATED_TZ_OFFSET_HOURS, -5)
+        self.assertEqual(config.UPDATED_TIME_FORMAT, "%Y-%m-%d %H:%M")
+        self.assertEqual(config.UPDATED_TZ_SUFFIX, " UTC-5")
 
     def test_table_layout_constants(self):
         self.assertEqual(config.TABLE_WIDTH, "100%")

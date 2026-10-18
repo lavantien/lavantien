@@ -43,6 +43,9 @@ README_ALT_TEXT = "Top languages by code volume"
 README_IMG_SRC = "assets/languages.svg"
 UPDATED_PREFIX = "*Last updated: "
 UPDATED_SUFFIX = "*"
+UPDATED_TZ_OFFSET_HOURS = -5
+UPDATED_TIME_FORMAT = "%Y-%m-%d %H:%M"
+UPDATED_TZ_SUFFIX = f" UTC{UPDATED_TZ_OFFSET_HOURS:+d}"
 
 PROG_LANGS = frozenset({
     "Go", "Dart", "C#", "TypeScript", "Python", "Java", "JavaScript",

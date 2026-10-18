@@ -13,7 +13,7 @@ import argparse
 import pathlib
 import sys
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 _REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(_REPO_ROOT) not in sys.path:
@@ -104,10 +104,11 @@ def main(argv: list[str] | None = None) -> int:
     for name in skipped_icons:
         print(f"warning: no vendored icon for {name}; chip renders text-only")
     strip = svg_strip.render_strip(top_languages(agg.lang_sizes))
+    updated_tz = timezone(timedelta(hours=config.UPDATED_TZ_OFFSET_HOURS))
+    stamp = datetime.now(updated_tz).strftime(config.UPDATED_TIME_FORMAT)
     updated_line = (
-        f"{config.UPDATED_PREFIX}"
-        f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
-        f"{config.UPDATED_SUFFIX}"
+        f"{config.UPDATED_PREFIX}{stamp}"
+        f"{config.UPDATED_TZ_SUFFIX}{config.UPDATED_SUFFIX}"
     )
     readme_content = readme_writer.rewrite_readme(
         _read(args.readme),
