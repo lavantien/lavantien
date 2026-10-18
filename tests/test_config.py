@@ -97,6 +97,7 @@ class TestPinnedRepos(unittest.TestCase):
             {"name": "go-edge-mesh", "year": 2021},
             {"name": "order-demo", "year": 2021},
             {"name": "go-flutter-microservices-skeleton", "year": 2022},
+            {"name": "distributed-booking-microservices", "year": 2021},
         ))
 
     def test_table_and_updated_line(self):

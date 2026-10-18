@@ -297,7 +297,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         icon_names = sorted(p.name for p in self.icons.glob("*.svg"))
         self.assertEqual(icon_names, [
             "bash-plain.svg", "c-original.svg", "go-plain.svg", "java-plain.svg",
-            "javascript-plain.svg", "kotlin-plain.svg", "lua-plain.svg",
+            "javascript-plain.svg", "lua-plain.svg",
             "markdown-original.svg", "perl-plain.svg", "python-plain.svg",
             "ruby-plain.svg", "typescript-plain.svg", "typst-original.svg",
         ])

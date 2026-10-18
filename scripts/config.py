@@ -67,6 +67,7 @@ PINNED_REPOS = (
     {"name": "go-edge-mesh", "year": 2021},
     {"name": "order-demo", "year": 2021},
     {"name": "go-flutter-microservices-skeleton", "year": 2022},
+    {"name": "distributed-booking-microservices", "year": 2021},
 )
 TABLE_REPO_LIMIT = 20
 TABLE_WIDTH = "100%"

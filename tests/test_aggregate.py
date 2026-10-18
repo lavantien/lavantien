@@ -265,13 +265,13 @@ class TestSelectRows(unittest.TestCase):
             ("go-edge-mesh", 2021),
             ("order-demo", 2021),
             ("go-flutter-microservices-skeleton", 2022),
+            ("distributed-booking-microservices", 2021),
             ("high-alpha", 2020),
             ("runner-beta", 2021),
             ("go-web-service", 2023),
             ("go-worker-pool", 2024),
             ("tied-zebra", 2022),
             ("ruby-perl-migrator", 2022),
-            ("kotlin-android-lab", 2022),
         ])
         self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
         self.assertEqual(rows[1].stars, 9)
@@ -281,6 +281,7 @@ class TestSelectRows(unittest.TestCase):
         by_forks = {r.name: r.forks for r in rows}
         self.assertEqual(by_forks["dotfiles"], 3)
         self.assertEqual(by_forks["quotes-manager"], 2)
+        self.assertEqual(by_forks["distributed-booking-microservices"], 2)
         by_name = {r.name: r.top_langs for r in rows}
         self.assertEqual(by_name["dotfiles"], (("Typst", 10304702), ("Lua", 50000)))
         self.assertEqual(by_name["go-worker-pool"], (("Go", 260000), ("Python", 140000)))
@@ -289,9 +290,10 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(badged, {
             "dotfiles", "modern-swe-library", "FlowerShop", "genetic-cpp",
             "SumoBot", "go-edge-mesh", "order-demo",
-            "go-flutter-microservices-skeleton", "high-alpha", "runner-beta",
+            "go-flutter-microservices-skeleton", "distributed-booking-microservices",
+            "high-alpha", "runner-beta",
             "go-web-service", "go-worker-pool", "tied-zebra",
-            "ruby-perl-migrator", "kotlin-android-lab",
+            "ruby-perl-migrator",
         })
         self.assertNotIn("sandbox-notes", [r.name for r in rows])
 
