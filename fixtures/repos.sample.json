@@ -189,5 +189,115 @@
     "name": "sandbox-notes",
     "stargazerCount": 2,
     "visibility": "public"
+  },
+  {
+    "createdAt": "2025-01-01T14:21:49Z",
+    "description": "",
+    "isArchived": true,
+    "isFork": false,
+    "languages": [],
+    "name": "modern-swe-library",
+    "stargazerCount": 9,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2026-10-11T18:50:28Z",
+    "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "blind-trainer",
+    "stargazerCount": 3,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2026-06-29T00:58:46Z",
+    "description": "Offline, single-user Go + SQLite app for curating a corpus of sutta quotes, with dual-pane HTMX editing, collections, categories, near-duplicate detection, and full-text search.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "quotes-manager",
+    "stargazerCount": 3,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2026-09-23T03:23:56Z",
+    "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then empirical-Bayes shrinkage, cross-validated ALS matrix completion, rank normalization, and expectimax-style scoring with weights fitted by guarded coordinate ascent. Apriori, Naive Bayes, k-NN, and bagged ensembles benchmark the model.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "dota-helper",
+    "stargazerCount": 3,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2019-12-06T17:13:03Z",
+    "description": "An implementation of Genetic Algorithm to solve the general Travelling Salesman problem.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "genetic-cpp",
+    "stargazerCount": 4,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2023-05-12T05:20:08Z",
+    "description": "An Docker-based Edge distributed mesh data processing system, with fake sensors, pure Go bootstrapper, pseudo-thirdparty and web UI. Integrated with Mosquitto MQTT, Telegraf, InfluxDB, and Grafana visualization",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "go-edge-mesh",
+    "stargazerCount": 5,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2021-12-20T16:15:11Z",
+    "description": "A production-ready simple order service demo",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "order-demo",
+    "stargazerCount": 6,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2022-04-28T14:17:43Z",
+    "description": "go-flutter-microservices-skeleton",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "go-flutter-microservices-skeleton",
+    "stargazerCount": 6,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2020-08-08T00:00:00Z",
+    "description": "free-market filler with the highest star count",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "high-alpha",
+    "stargazerCount": 12,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2021-09-09T00:00:00Z",
+    "description": "free-market filler sorted right after high-alpha",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "runner-beta",
+    "stargazerCount": 11,
+    "visibility": "public"
+  },
+  {
+    "createdAt": "2022-10-10T00:00:00Z",
+    "description": "free-market filler tying go-worker-pool at seven stars, sorted after it",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "tied-zebra",
+    "stargazerCount": 7,
+    "visibility": "public"
   }
 ]

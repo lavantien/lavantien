@@ -2,6 +2,9 @@
 
 Aggregation and rendering run to completion before the first byte hits
 disk, so malformed data can never leave a half-updated artifact behind.
+Direct execution (make generate runs this file by path) puts scripts/
+on sys.path instead of the repo root, so the scripts package itself is
+unresolvable; the root is bootstrapped onto sys.path before importing it.
 """
 
 from __future__ import annotations
@@ -12,9 +15,6 @@ import sys
 from collections.abc import Callable
 from datetime import datetime, timezone
 
-# direct execution (make generate runs this file by path) puts scripts/
-# on sys.path instead of the repo root, so the scripts package itself is
-# unresolvable; bootstrap the root before importing it
 _REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
@@ -48,9 +48,9 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
 
 
 def _fixture_star_fetch(items: list[dict]) -> Callable[[str], int]:
-    # offline stand-in for gh repo view: full-name star lookup over the
-    # loaded items, including forked/archived ones the aggregate filters
-    # out (the fixed first repo is archived yet still carries real stars)
+    """Offline stand-in for gh repo view: full-name star lookup over the
+    loaded items, including forked/archived ones the aggregate filters
+    out (an archived pinned repo still carries real stars)."""
     own = {
         f"{config.GH_OWNER}/{item['name']}": item["stargazerCount"]
         for item in items
@@ -70,10 +70,11 @@ def _read(path: pathlib.Path) -> str:
 
 
 def _write_if_changed(path: pathlib.Path, content: str) -> bool:
+    """Write only when the bytes differ; bytes not text mode keeps the
+    artifacts LF on every platform."""
     if path.is_file() and _read(path) == content:
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
-    # bytes not text mode: artifacts stay LF on every platform
     path.write_bytes(content.encode("utf-8"))
     return True
 
@@ -92,6 +93,7 @@ def main(argv: list[str] | None = None) -> int:
     updated_line = (
         f"{config.UPDATED_PREFIX}"
         f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
+        f"{config.UPDATED_SUFFIX}"
     )
     readme_content = readme_writer.rewrite_readme(
         _read(args.readme),

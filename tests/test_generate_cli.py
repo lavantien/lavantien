@@ -48,6 +48,11 @@ EXPECTED_LANGS = [
     ("Lua", 50000),
 ]
 
+BADGE_IMG = (
+    f' <img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
+    f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
+)
+
 
 def item(name="svc", stars=5, langs=(("Go", 100),), created="2024-01-01T00:00:00Z",
          description="d", fork=False, archived=False, visibility="public"):
@@ -229,17 +234,25 @@ class TestEndToEndFromFixture(unittest.TestCase):
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         updated = [ln for ln in content.split("\n")
                    if ln.startswith(config.UPDATED_PREFIX)]
-        self.assertEqual(updated, [f"{config.UPDATED_PREFIX}{today}"])
+        self.assertEqual(
+            updated, [f"{config.UPDATED_PREFIX}{today}{config.UPDATED_SUFFIX}"]
+        )
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>0⭐</b>)",
+            "modern-swe-library</a> (<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
             content,
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
-            " (<i>2023</i>) (<b>42⭐</b>)",
+            " (<i>2023</i>) (<b>42⭐</b>)" + BADGE_IMG,
             content,
         )
+        self.assertNotIn(
+            '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
+            " (<i>2025</i>) (<b>15⭐</b>)" + BADGE_IMG,
+            content,
+        )
+        self.assertEqual(content.count(BADGE_IMG), 15)
 
     def test_second_run_is_byte_identical_noop(self):
         with silence() as first:
@@ -275,7 +288,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
 
     @mock.patch("scripts.github_client.fetch_star_count",
                 side_effect=AssertionError("network star fetch in --from-json mode"))
-    def test_stub_returns_own_stars_for_fixed_repo_in_items(self, _star_fetch):
+    def test_stub_returns_own_stars_for_archived_pinned_repo(self, _star_fetch):
         src_items = [
             dict(item(name="modern-swe-library", stars=17, langs=()), archived=True),
             item(name="other", stars=3, langs=()),
@@ -292,10 +305,10 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>17⭐</b>)",
+            "modern-swe-library</a> (<i>2023</i>) (<b>200+17⭐</b>)" + BADGE_IMG,
             content,
         )
-        self.assertNotIn("(<b>0⭐</b>)", content)
+        self.assertIn("(<b>0⭐</b>)", content)
 
     @mock.patch("scripts.github_client.fetch_star_count", return_value=9)
     @mock.patch("scripts.github_client.fetch_repos")
@@ -307,12 +320,11 @@ class TestEndToEndFromFixture(unittest.TestCase):
                                 "--svg", str(self.svg)])
         self.assertEqual(rc, 0)
         fetch_repos.assert_called_once_with()
-        star_count.assert_called_once_with(
-            f"{config.GH_OWNER}/{config.FIXED_FIRST_REPO['name']}")
+        star_count.assert_called_once_with("lavantien/modern-swe-library")
         content = self.readme.read_text(encoding="utf-8")
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a> (<i>2023</i>) (<b>9⭐</b>)",
+            "modern-swe-library</a> (<i>2023</i>) (<b>200+9⭐</b>)" + BADGE_IMG,
             content,
         )
 

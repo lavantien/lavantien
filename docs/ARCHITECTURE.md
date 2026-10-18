@@ -5,7 +5,7 @@ Pipeline behind the profile README. Every constant lives in `scripts/config.py`.
 ## flow
 
 1. `scripts/github_client.py` lists repos through the `gh` CLI with the GraphQL field set pinned in `GH_JSON_FIELDS`, reading `GH_TOKEN` from the environment.
-2. `scripts/aggregate.py` keeps public, non-fork, non-archived repos, sums language bytes across them, and applies the star table selection rules.
+2. `scripts/aggregate.py` keeps public, non-fork, non-archived repos, sums language bytes, and builds table rows as `PINNED_REPOS` in config order at their fixed years (a pinned repo missing from aggregation, e.g. the archived modern-swe-library, falls back to its config description plus a `gh repo view` star lookup, with an optional per-entry `no_ai` override), then free-market repos sorted by stars descending with an alphabetical tie-break, filled up to `TABLE_REPO_LIMIT = 20` entries.
 3. `top_languages` filters the sums to `PROG_LANGS`, sorts by bytes descending with an alphabetical tie-break, and cuts at `TOP_N`.
 4. `scripts/svg_strip.py` renders one icon plus a `Name Size` label per language into a self-contained SVG at natural width. Icons load from `assets/devicons/<slug>-<variant>.svg`; a missing file or unmapped language falls back to a gray letter tile.
 5. `scripts/readme_writer.py` rewrites the marker regions of `README.md` and writes `assets/languages.svg`. Both artifacts render fully before the first byte hits disk, so malformed data can never leave a half-updated artifact.
@@ -27,5 +27,9 @@ Color sources: shields.io ported hexes for the original workflow set, MathWorks 
 - `PROG_LANGS`, `LANG_COLORS`, and `DEVICON_MAP` share one key set, so every allowlisted language has a color and an icon entry.
 - Every mapped slug resolves to a configured icon source and its `icon_path` template formats into an `icons/` path.
 - The golden SVG pins the exact rendered bytes of the sample top 10, which transitively pins the vendored icon files themselves.
+- Pinned repos always render with live star counts and only the year fixed.
+- modern-swe-library renders its star count as `200+<live count>` via `stars_prefix`.
+- Every repo created strictly before the creation timestamp of `NO_AI_REFERENCE_REPO` (llm-tournament) shows the `assets/no-ai.svg` badge next to its star count, derived at aggregation time from the same batch, and the reference repo itself is never badged.
+- The updated line is fully config-driven, `UPDATED_PREFIX` + UTC date + `UPDATED_SUFFIX`, and `_UPDATED_LINE_RE` derives from `re.escape(UPDATED_PREFIX)` so writer and format cannot drift.
 - `make mutate` swaps token-level mutants into `scripts/` against the suite and requires a clean `scripts/` tree so restores stay verifiable.
 - Two expressions avoid comparison operators because the equality boundary they would need is unreachable, which leaves any `<=`/`<` form with a structurally equivalent mutant: `tag.rpartition("}")[-1]` for namespace stripping and `m.end() in range(updated.start())` for the owned-table bound in `readme_writer`.

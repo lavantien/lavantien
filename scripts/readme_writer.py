@@ -12,7 +12,9 @@ from typing import Protocol, Sequence
 from scripts import config
 
 _TABLE_RE = re.compile(r"<table>.*?</table>", re.DOTALL)
-_UPDATED_LINE_RE = re.compile(r"(?m)^\*Last updated: .*$")
+_UPDATED_LINE_RE = re.compile(
+    r"(?m)^" + re.escape(config.UPDATED_PREFIX) + r".*$"
+)
 _STRAY_LANG_MARKERS = frozenset((config.MARKER_START, config.MARKER_END))
 _STRAY_REPOS_MARKERS = frozenset(
     (config.MARKER_REPOS_START, config.MARKER_REPOS_END)
@@ -24,6 +26,8 @@ class RepoLike(Protocol):
     stars: int
     description: str
     year: int
+    stars_display: str
+    no_ai: bool
 
 
 def build_languages_block() -> str:
@@ -46,9 +50,15 @@ def render_repo_table(rows: Sequence[RepoLike]) -> str:
 def _repo_cell(row: RepoLike) -> str:
     link = (
         f'<td><a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a>'
-        f" (<i>{row.year}</i>) (<b>{row.stars}⭐</b>)</td>"
+        f" (<i>{row.year}</i>) (<b>{row.stars_display or row.stars}⭐</b>)"
     )
-    return f"{link}<td>{row.description}</td>"
+    if row.no_ai:
+        link += (
+            f' <img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
+            f' width="{config.NO_AI_IMG_WIDTH}"'
+            f' height="{config.NO_AI_IMG_HEIGHT}">'
+        )
+    return f"{link}</td><td>{row.description}</td>"
 
 
 def normalize(content: str) -> str:

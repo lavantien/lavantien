@@ -73,6 +73,39 @@ class TestIconSources(unittest.TestCase):
         self.assertEqual(config.ICON_SOURCE_OVERRIDES["typst"], "simple-icons")
 
 
+class TestPinnedRepos(unittest.TestCase):
+    def test_pinned_repos_exact(self):
+        self.assertEqual(config.PINNED_REPOS, (
+            {"name": "dotfiles", "year": 2023},
+            {"name": "modern-swe-library", "year": 2023, "stars_prefix": 200,
+             "no_ai": True,
+             "description": "Open knowledge library: curated resources for modern software engineering"},
+            {"name": "FlowerShop", "year": 2018},
+            {"name": "caro-ai-pvp", "year": 2025},
+            {"name": "blind-trainer", "year": 2026},
+            {"name": "quotes-manager", "year": 2026},
+            {"name": "dota-helper", "year": 2026},
+            {"name": "llm-tournament", "year": 2024},
+            {"name": "genetic-cpp", "year": 2016},
+            {"name": "SumoBot", "year": 2017},
+            {"name": "go-edge-mesh", "year": 2021},
+            {"name": "order-demo", "year": 2021},
+            {"name": "go-flutter-microservices-skeleton", "year": 2022},
+        ))
+
+    def test_table_and_updated_line(self):
+        self.assertEqual(config.TABLE_REPO_LIMIT, 20)
+        self.assertEqual(config.UPDATED_PREFIX, "*Last updated: ")
+        self.assertEqual(config.UPDATED_SUFFIX, "*")
+
+    def test_no_ai_badge_constants(self):
+        self.assertEqual(config.NO_AI_REFERENCE_REPO, "llm-tournament")
+        self.assertEqual(config.NO_AI_IMG_SRC, "assets/no-ai.svg")
+        self.assertEqual(config.NO_AI_ALT_TEXT, "no AI")
+        self.assertEqual(config.NO_AI_IMG_WIDTH, 14)
+        self.assertEqual(config.NO_AI_IMG_HEIGHT, 14)
+
+
 class TestLiteralPins(unittest.TestCase):
     def test_pinned_constants(self):
         self.assertEqual(config.GH_REPO_LIMIT, 300)

@@ -1,4 +1,9 @@
-# recorded gh api payload, regenerated verbatim by `make record`;
-# repo names and description prose (Dota, ALS, Mosquitto, ...) trip typos
+[default.extend-words]
+dota = "dota"
+
 [files]
-extend-exclude = ["fixtures/repos.recorded.json"]
+extend-exclude = [
+    "fixtures/repos.recorded.json",
+    "fixtures/repos.sample.json",
+    "fixtures/readme.messy.md",
+]

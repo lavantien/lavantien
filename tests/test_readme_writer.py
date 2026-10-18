@@ -15,18 +15,24 @@ EXPECTED_IMG = (
     '<p align="center"><img src="assets/languages.svg"'
     ' alt="Top languages by code volume"></p>'
 )
-UPDATED_NEW = config.UPDATED_PREFIX + "2026-10-06*"
+UPDATED_NEW = config.UPDATED_PREFIX + "2026-10-06" + config.UPDATED_SUFFIX
+BADGE_IMG = (
+    f' <img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
+    f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
+)
 
 _ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.DOTALL)
 _CELL_RE = re.compile(
     r'<td><a href="https://github\.com/lavantien/(?P<name>[^"]+)">(?P=name)</a>'
-    r" \(<i>(?P<year>\d{4})</i>\) \(<b>(?P<stars>\d+)⭐</b>\)</td><td>(?P<desc>.*?)</td>"
+    r" \(<i>(?P<year>\d{4})</i>\) \(<b>(?P<stars>[^<]*)⭐</b>\)"
+    r"(?P<badge> <img [^>]+>)?</td><td>(?P<desc>.*?)</td>"
 )
 
 
-def repo(name, year, stars, description):
+def repo(name, year, stars, description, stars_display="", no_ai=False):
     return types.SimpleNamespace(
-        name=name, year=year, stars=stars, description=description
+        name=name, year=year, stars=stars, description=description,
+        stars_display=stars_display, no_ai=no_ai,
     )
 
 
@@ -41,12 +47,15 @@ def parse_fixture_table(messy):
     rows = []
     for tr in _ROW_RE.findall(table):
         for match in _CELL_RE.finditer(tr):
+            stars_text = match["stars"]
             rows.append(
                 repo(
                     match["name"],
                     int(match["year"]),
-                    int(match["stars"]),
+                    int(stars_text.rsplit("+", 1)[-1]),
                     match["desc"],
+                    stars_display=stars_text if "+" in stars_text else "",
+                    no_ai=match["badge"] is not None,
                 )
             )
     return table, rows
@@ -98,10 +107,34 @@ class TestRenderRepoTable(unittest.TestCase):
     def test_empty_rows(self):
         self.assertEqual(render_repo_table([]), "<table>\n</table>")
 
+    def test_badged_prefixed_cell_exact(self):
+        table = render_repo_table([
+            repo("modern-swe-library", 2023, 9, "lib",
+                 stars_display="200+9", no_ai=True),
+        ])
+        self.assertEqual(
+            table,
+            "<table>\n"
+            '<tr><td><a href="https://github.com/lavantien/modern-swe-library">'
+            "modern-swe-library</a> (<i>2023</i>) (<b>200+9⭐</b>)"
+            + BADGE_IMG
+            + "</td><td>lib</td></tr>\n</table>",
+        )
+
+    def test_plain_cell_exact_without_img(self):
+        table = render_repo_table([repo("plain", 2020, 3, "doc")])
+        self.assertEqual(
+            table,
+            "<table>\n"
+            '<tr><td><a href="https://github.com/lavantien/plain">plain</a>'
+            " (<i>2020</i>) (<b>3⭐</b>)</td><td>doc</td></tr>\n</table>",
+        )
+
     def test_byte_matches_fixture_table(self):
         messy = load_messy()
         table, rows = parse_fixture_table(messy)
-        self.assertEqual(len(rows), 10)
+        self.assertEqual(len(rows), 20)
+        self.assertEqual(sum(1 for r in rows if r.no_ai), 15)
         self.assertEqual(render_repo_table(rows), table)
 
 
@@ -145,8 +178,8 @@ class TestReplaceBetween(unittest.TestCase):
         )
 
     def test_unchanged_when_start_absent_and_end_beyond_offset(self):
-        # end marker present but past the offset a missing start marker
-        # would search from: the span lookup must bail out, not replace
+        """End marker present but past the offset a missing start marker
+        would search from: the span lookup must bail out, not replace."""
         content = "x" * 30 + config.MARKER_END
         self.assertIs(
             replace_between(content, config.MARKER_START, config.MARKER_END, "NEW"),
@@ -196,6 +229,19 @@ class TestRewriteReadme(unittest.TestCase):
         ]
         self.assertEqual(found, [UPDATED_NEW])
         self.assertNotIn(config.UPDATED_PREFIX + "2026-10-05*", result)
+
+    def test_suffixless_legacy_updated_line_replaced(self):
+        content = (
+            "## Notes\n\n<table>\n<tr>junk</tr>\n</table>\n\n"
+            + config.UPDATED_PREFIX
+            + "2026-01-01\n"
+        )
+        result = rewrite_readme(content, **rewrite_kwargs())
+        found = [
+            ln for ln in result.split("\n") if ln.startswith(config.UPDATED_PREFIX)
+        ]
+        self.assertEqual(found, [UPDATED_NEW])
+        self.assertNotIn(config.UPDATED_PREFIX + "2026-01-01", result)
 
     def test_unrelated_content_preserved(self):
         content = (
@@ -311,8 +357,8 @@ class TestRepoTableMarkers(unittest.TestCase):
         self.assertEqual(self.rewrite(result), result)
 
     def test_adoption_targets_table_adjacent_to_updated_line(self):
-        # no markers yet: the generator-owned table is the one sitting right
-        # before the updated line; a user table above must survive
+        """No markers yet: the generator-owned table is the one sitting
+        right before the updated line; a user table above must survive."""
         content = "\n\n".join(
             (self.USER_TABLE, self.OLD_GEN_TABLE, "*Last updated: 2026-01-01*")
         ) + "\n"
@@ -333,8 +379,8 @@ class TestRepoTableMarkers(unittest.TestCase):
         self.assertEqual(self.rewrite(result), result)
 
     def test_tables_after_updated_replace_last(self):
-        # no owned table before the updated line: the last table is the
-        # generator's, an earlier one is left alone
+        """No owned table before the updated line: the last table is the
+        generator's, an earlier one is left alone."""
         table_a = "<table>\n<tr><td>first</td></tr>\n</table>"
         table_b = "<table>\n<tr><td>second</td></tr>\n</table>"
         content = "*Last updated: 2026-01-01*\n\n" + table_a + "\n\n" + table_b + "\n"

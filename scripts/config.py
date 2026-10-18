@@ -41,6 +41,7 @@ MARKER_REPOS_END = "<!-- repos:end -->"
 README_ALT_TEXT = "Top languages by code volume"
 README_IMG_SRC = "assets/languages.svg"
 UPDATED_PREFIX = "*Last updated: "
+UPDATED_SUFFIX = "*"
 
 PROG_LANGS = frozenset({
     "Go", "Dart", "C#", "TypeScript", "Python", "Java", "JavaScript",
@@ -48,15 +49,31 @@ PROG_LANGS = frozenset({
     "Blade", "Svelte", "Objective-C", "Hack", "Clojure", "Scala",
     "Haskell", "Elixir", "Julia", "R", "MATLAB", "Perl", "F#", "Typst",
 })
-YEAR_OVERRIDES = {"SumoBot": 2017, "FlowerShop": 2018}
-PINNED_REPOS = ["dotfiles", "llm-tournament", "caro-ai-pvp"]
-FIXED_FIRST_REPO = {
-    "name": "modern-swe-library",
-    "year": 2023,
-    "description": "Open knowledge library: curated resources for modern software engineering",
-}
-TABLE_ROW_LIMIT = 10
+PINNED_REPOS = (
+    {"name": "dotfiles", "year": 2023},
+    {"name": "modern-swe-library", "year": 2023, "stars_prefix": 200,
+     "no_ai": True,
+     "description": "Open knowledge library: curated resources for modern software engineering"},
+    {"name": "FlowerShop", "year": 2018},
+    {"name": "caro-ai-pvp", "year": 2025},
+    {"name": "blind-trainer", "year": 2026},
+    {"name": "quotes-manager", "year": 2026},
+    {"name": "dota-helper", "year": 2026},
+    {"name": "llm-tournament", "year": 2024},
+    {"name": "genetic-cpp", "year": 2016},
+    {"name": "SumoBot", "year": 2017},
+    {"name": "go-edge-mesh", "year": 2021},
+    {"name": "order-demo", "year": 2021},
+    {"name": "go-flutter-microservices-skeleton", "year": 2022},
+)
+TABLE_REPO_LIMIT = 20
 EXCLUDED_REPO_NAMES = frozenset({"lavantien"})
+
+NO_AI_REFERENCE_REPO = "llm-tournament"
+NO_AI_IMG_SRC = "assets/no-ai.svg"
+NO_AI_ALT_TEXT = "no AI"
+NO_AI_IMG_WIDTH = 14
+NO_AI_IMG_HEIGHT = 14
 
 GH_OWNER = "lavantien"
 REPO_URL_BASE = f"https://github.com/{GH_OWNER}"

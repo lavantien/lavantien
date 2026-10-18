@@ -53,14 +53,14 @@ class TestAggregate(unittest.TestCase):
         ])
         self.assertEqual(agg.lang_sizes, {"Go": 560005, "HTML": 10})
 
-    def test_year_overrides_applied(self):
+    def test_year_taken_from_created_at(self):
         agg = aggregate([
             item("SumoBot", created="2019-04-01T00:00:00Z"),
             item("FlowerShop", created="2020-06-15T00:00:00Z"),
             item("plain", created="2025-03-10T11:22:33Z"),
         ])
         years = {r.name: r.year for r in agg.repos}
-        self.assertEqual(years, {"SumoBot": 2017, "FlowerShop": 2018, "plain": 2025})
+        self.assertEqual(years, {"SumoBot": 2019, "FlowerShop": 2020, "plain": 2025})
 
     def test_description_none_becomes_empty(self):
         agg = aggregate([dict(item("x"), description=None)])
@@ -87,6 +87,30 @@ class TestAggregate(unittest.TestCase):
         del no_name["name"]
         with self.assertRaises(KeyError):
             aggregate([no_name])
+
+
+class TestNoAiFlag(unittest.TestCase):
+    def test_cutoff_derived_from_reference_repo(self):
+        agg = aggregate([
+            item("llm-tournament", created="2025-03-10T11:22:33Z"),
+            item("older", created="2025-03-10T11:22:32Z"),
+            item("same", created="2025-03-10T11:22:33Z"),
+            item("newer", created="2025-03-10T11:22:34Z"),
+        ])
+        flags = {r.name: r.no_ai for r in agg.repos}
+        self.assertEqual(flags, {
+            "llm-tournament": False,
+            "older": True,
+            "same": False,
+            "newer": False,
+        })
+
+    def test_batch_without_reference_repo_yields_all_false(self):
+        agg = aggregate([
+            item("ancient", created="2010-01-01T00:00:00Z"),
+            item("modern", created="2030-01-01T00:00:00Z"),
+        ])
+        self.assertEqual([r.no_ai for r in agg.repos], [False, False])
 
 
 class TestTopLanguages(unittest.TestCase):
@@ -131,17 +155,44 @@ class TestSelectRows(unittest.TestCase):
 
         def star_fetch(full_name):
             calls.append(full_name)
-            return 99
+            return 9
 
         rows = select_rows(self.repos, star_fetch=star_fetch)
         self.assertEqual(calls, ["lavantien/modern-swe-library"])
-        self.assertEqual([r.name for r in rows], [
-            "modern-swe-library", "dotfiles", "llm-tournament", "caro-ai-pvp",
-            "FlowerShop", "go-web-service", "go-worker-pool", "SumoBot",
-            "ruby-perl-migrator", "kotlin-android-lab",
+        self.assertEqual([(r.name, r.year) for r in rows], [
+            ("dotfiles", 2023),
+            ("modern-swe-library", 2023),
+            ("FlowerShop", 2018),
+            ("caro-ai-pvp", 2025),
+            ("blind-trainer", 2026),
+            ("quotes-manager", 2026),
+            ("dota-helper", 2026),
+            ("llm-tournament", 2024),
+            ("genetic-cpp", 2016),
+            ("SumoBot", 2017),
+            ("go-edge-mesh", 2021),
+            ("order-demo", 2021),
+            ("go-flutter-microservices-skeleton", 2022),
+            ("high-alpha", 2020),
+            ("runner-beta", 2021),
+            ("go-web-service", 2023),
+            ("go-worker-pool", 2024),
+            ("tied-zebra", 2022),
+            ("ruby-perl-migrator", 2022),
+            ("kotlin-android-lab", 2022),
         ])
-        self.assertEqual(len(rows), config.TABLE_ROW_LIMIT)
-        self.assertEqual(rows[0].stars, 99)
+        self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
+        self.assertEqual(rows[1].stars, 9)
+        self.assertEqual(rows[1].stars_display, "200+9")
+        badged = {r.name for r in rows if r.no_ai}
+        self.assertEqual(badged, {
+            "dotfiles", "modern-swe-library", "FlowerShop", "genetic-cpp",
+            "SumoBot", "go-edge-mesh", "order-demo",
+            "go-flutter-microservices-skeleton", "high-alpha", "runner-beta",
+            "go-web-service", "go-worker-pool", "tied-zebra",
+            "ruby-perl-migrator", "kotlin-android-lab",
+        })
+        self.assertNotIn("sandbox-notes", [r.name for r in rows])
 
     def test_excluded_names_absent_and_no_duplicates(self):
         rows = select_rows(self.repos, star_fetch=lambda full_name: 1)
@@ -150,30 +201,62 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(len(names), len(set(names)))
 
     def test_falsy_star_fetch_stays_zero(self):
-        repos = aggregate([item("only", stars=5)]).repos
-        rows = select_rows(repos, star_fetch=lambda full_name: None)
-        self.assertEqual(rows[0].name, config.FIXED_FIRST_REPO["name"])
-        self.assertEqual(rows[0].stars, 0)
-        self.assertEqual([r.name for r in rows[1:]], ["only"])
+        rows = select_rows([], star_fetch=lambda full_name: None)
+        self.assertEqual(len(rows), len(config.PINNED_REPOS))
+        self.assertTrue(all(r.stars == 0 for r in rows))
+        modern = next(r for r in rows if r.name == "modern-swe-library")
+        self.assertEqual(modern.stars_display, "200+0")
+
+    def test_no_pinned_matches_builds_rows_from_config(self):
+        rows = select_rows([], star_fetch=lambda full_name: 7)
+        self.assertEqual(
+            [(r.name, r.year) for r in rows],
+            [(e["name"], e["year"]) for e in config.PINNED_REPOS],
+        )
+        self.assertTrue(all(r.stars == 7 for r in rows))
+        modern = next(r for r in rows if r.name == "modern-swe-library")
+        self.assertEqual(
+            modern.description,
+            "Open knowledge library: curated resources for modern software engineering",
+        )
+        others = [r for r in rows if r.name != "modern-swe-library"]
+        self.assertTrue(all(r.description == "" for r in others))
+
+    def test_pinned_no_ai_override_wins(self):
+        repos = aggregate([
+            item("llm-tournament", created="2025-03-10T11:22:33Z"),
+            item("older", created="2024-01-01T00:00:00Z"),
+            item("newer", created="2026-01-01T00:00:00Z"),
+        ]).repos
+        entries = (
+            {"name": "older", "year": 2024, "no_ai": False},
+            {"name": "newer", "year": 2026, "no_ai": True},
+        )
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(repos, star_fetch=lambda full_name: 0)
+        flags = {r.name: r.no_ai for r in rows}
+        self.assertFalse(flags["older"])
+        self.assertTrue(flags["newer"])
 
     def test_pinned_saturation_appends_no_remaining_rows(self):
-        pinned = [f"pinned-{i}" for i in range(10)]
+        pinned = [{"name": f"pinned-{i}", "year": 2000 + i} for i in range(20)]
         repos = aggregate(
-            [item(name, stars=i) for i, name in enumerate(pinned)]
+            [item(e["name"], stars=i) for i, e in enumerate(pinned)]
             + [item("leftover", stars=99)]
         ).repos
         with mock.patch.object(config, "PINNED_REPOS", pinned):
             rows = select_rows(repos, star_fetch=lambda full_name: 1)
-        self.assertEqual(
-            [r.name for r in rows],
-            [config.FIXED_FIRST_REPO["name"], *pinned],
-        )
+        self.assertEqual([r.name for r in rows], [e["name"] for e in pinned])
+        self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
 
-    def test_no_pinned_matches_leaves_short_list(self):
-        rows = select_rows([], star_fetch=lambda full_name: 7)
-        self.assertEqual([r.name for r in rows], [config.FIXED_FIRST_REPO["name"]])
-        self.assertEqual(rows[0].year, config.FIXED_FIRST_REPO["year"])
-        self.assertEqual(rows[0].description, config.FIXED_FIRST_REPO["description"])
+    def test_more_pinned_than_limit_keeps_all(self):
+        pinned = [{"name": f"pinned-{i}", "year": 2000 + i} for i in range(22)]
+        repos = aggregate(
+            [item(e["name"], stars=i) for i, e in enumerate(pinned)]
+        ).repos
+        with mock.patch.object(config, "PINNED_REPOS", pinned):
+            rows = select_rows(repos, star_fetch=lambda full_name: 1)
+        self.assertEqual([r.name for r in rows], [e["name"] for e in pinned])
 
 
 class TestFixtureIntegration(unittest.TestCase):
@@ -188,6 +271,15 @@ class TestFixtureIntegration(unittest.TestCase):
         with open(config.FIXTURE_SAMPLE, encoding="utf-8") as fh:
             agg = aggregate(json.load(fh))
         self.assertEqual(top_languages(agg.lang_sizes), self.EXPECTED)
+
+
+class TestRecordedFixtureCoverage(unittest.TestCase):
+    def test_recorded_fixture_covers_pinned_repos(self):
+        with open(config.FIXTURE_RECORDED, encoding="utf-8") as fh:
+            recorded = {entry["name"] for entry in json.load(fh)}
+        for entry in config.PINNED_REPOS:
+            self.assertIn(entry["name"], recorded, entry["name"])
+        self.assertIn(config.NO_AI_REFERENCE_REPO, recorded)
 
 
 if __name__ == "__main__":
