@@ -1,7 +1,92 @@
 [
   {
+    "createdAt": "2026-10-11T18:50:28Z",
+    "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
+    "forkCount": 2,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 12528,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 2466211,
+        "node": {
+          "name": "Rust"
+        }
+      },
+      {
+        "size": 106141,
+        "node": {
+          "name": "Python"
+        }
+      },
+      {
+        "size": 80474,
+        "node": {
+          "name": "PowerShell"
+        }
+      }
+    ],
+    "name": "blind-trainer",
+    "stargazerCount": 3,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2023-06-02T20:56:02Z",
+    "description": "Universal SWE dotfiles for both linux/windows. Neovim, wezterm/winterm, zsh/pwsh, git hooks, claudecode/opencode. Preconfig dev env idempotent bootstrap/deploy, 1 single command to update all packages, healthcheck, backup/restore.",
+    "forkCount": 3,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 8218,
+        "node": {
+          "name": "Lua"
+        }
+      },
+      {
+        "size": 369866,
+        "node": {
+          "name": "Shell"
+        }
+      },
+      {
+        "size": 217969,
+        "node": {
+          "name": "PowerShell"
+        }
+      },
+      {
+        "size": 11584169,
+        "node": {
+          "name": "Typst"
+        }
+      },
+      {
+        "size": 4885,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 829,
+        "node": {
+          "name": "Dockerfile"
+        }
+      }
+    ],
+    "name": "dotfiles",
+    "stargazerCount": 35,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2021-12-19T15:03:46Z",
     "description": "Config files for my GitHub profile.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -12,7 +97,7 @@
         }
       },
       {
-        "size": 180487,
+        "size": 183082,
         "node": {
           "name": "Python"
         }
@@ -23,8 +108,69 @@
     "visibility": "PUBLIC"
   },
   {
+    "createdAt": "2026-06-29T00:58:46Z",
+    "description": "Offline single-user Go + SQLite app: a dual-pane HTMX sutta-quote workspace and the full Pali canon explorer in one binary, with the sync/parse/load/triangulate pipeline, graph, analytics, and a 16-verb qm CLI.",
+    "forkCount": 2,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 1367660,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 189245,
+        "node": {
+          "name": "TSQL"
+        }
+      },
+      {
+        "size": 12284,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 20156,
+        "node": {
+          "name": "CSS"
+        }
+      },
+      {
+        "size": 21059,
+        "node": {
+          "name": "JavaScript"
+        }
+      },
+      {
+        "size": 16524,
+        "node": {
+          "name": "HTML"
+        }
+      },
+      {
+        "size": 12335,
+        "node": {
+          "name": "Go Template"
+        }
+      },
+      {
+        "size": 3951,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "quotes-manager",
+    "stargazerCount": 3,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2019-10-02T07:35:27Z",
     "description": "Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -42,6 +188,7 @@
   {
     "createdAt": "2023-05-12T05:20:08Z",
     "description": "An Docker-based Edge distributed mesh data processing system, with fake sensors, pure Go bootstrapper, pseudo-thirdparty and web UI. Integrated with Mosquitto MQTT, Telegraf, InfluxDB, and Grafana visualization",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -83,6 +230,7 @@
   {
     "createdAt": "2022-04-28T14:17:43Z",
     "description": "go-flutter-microservices-skeleton",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -160,6 +308,7 @@
   {
     "createdAt": "2023-05-06T12:59:15Z",
     "description": "A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -170,6 +319,7 @@
   {
     "createdAt": "2022-01-05T23:08:34Z",
     "description": "Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -199,6 +349,7 @@
   {
     "createdAt": "2019-09-25T16:12:38Z",
     "description": "An eCommerce Demo, written in .Net Core 3 & Angular 8 & MS SQL Server",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -234,6 +385,7 @@
   {
     "createdAt": "2024-12-12T13:13:02Z",
     "description": "TUI program to concurrently scrap the web, then save to local sqlite with fts5, which enable full text search",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -257,6 +409,7 @@
   {
     "createdAt": "2021-04-04T04:51:23Z",
     "description": "A giga optimized Sudoku solver and generator",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -274,6 +427,7 @@
   {
     "createdAt": "2022-03-29T17:49:22Z",
     "description": "A simple program to determine space allocation for an office renter",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -291,6 +445,7 @@
   {
     "createdAt": "2021-12-26T05:52:51Z",
     "description": "A place to dump all",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -306,149 +461,9 @@
     "visibility": "PUBLIC"
   },
   {
-    "createdAt": "2023-06-02T20:56:02Z",
-    "description": "Universal SWE dotfiles for both linux/windows. Neovim, wezterm/winterm, zsh/pwsh, git hooks, claudecode/opencode, plus deploy. Preconfig dev env idempotent bootstrap, 1 single command to update all packages, healthcheck, backup/restore.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 8218,
-        "node": {
-          "name": "Lua"
-        }
-      },
-      {
-        "size": 369866,
-        "node": {
-          "name": "Shell"
-        }
-      },
-      {
-        "size": 217969,
-        "node": {
-          "name": "PowerShell"
-        }
-      },
-      {
-        "size": 11584169,
-        "node": {
-          "name": "Typst"
-        }
-      },
-      {
-        "size": 4885,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 829,
-        "node": {
-          "name": "Dockerfile"
-        }
-      }
-    ],
-    "name": "dotfiles",
-    "stargazerCount": 35,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2026-10-11T18:50:28Z",
-    "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 10329,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 2466211,
-        "node": {
-          "name": "Rust"
-        }
-      },
-      {
-        "size": 106141,
-        "node": {
-          "name": "Python"
-        }
-      },
-      {
-        "size": 78897,
-        "node": {
-          "name": "PowerShell"
-        }
-      }
-    ],
-    "name": "blind-trainer",
-    "stargazerCount": 3,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2026-06-29T00:58:46Z",
-    "description": "Offline single-user Go + SQLite app: a dual-pane HTMX sutta-quote workspace and the full Pali canon explorer in one binary, with the sync/parse/load/triangulate pipeline, graph, analytics, and a 16-verb qm CLI.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 1367660,
-        "node": {
-          "name": "Go"
-        }
-      },
-      {
-        "size": 189245,
-        "node": {
-          "name": "TSQL"
-        }
-      },
-      {
-        "size": 12293,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 20156,
-        "node": {
-          "name": "CSS"
-        }
-      },
-      {
-        "size": 21059,
-        "node": {
-          "name": "JavaScript"
-        }
-      },
-      {
-        "size": 16524,
-        "node": {
-          "name": "HTML"
-        }
-      },
-      {
-        "size": 12335,
-        "node": {
-          "name": "Go Template"
-        }
-      },
-      {
-        "size": 3951,
-        "node": {
-          "name": "Python"
-        }
-      }
-    ],
-    "name": "quotes-manager",
-    "stargazerCount": 3,
-    "visibility": "PUBLIC"
-  },
-  {
     "createdAt": "2025-12-28T10:01:24Z",
     "description": "16x16 gomoku/caro variant engine and PvP arena: alpha-beta engine, bitboard, zero-alloc parallel PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, self-sustained opening book, full mutation/fuzz, SQLite/DuckDB, mobile-first HTMX4",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -508,6 +523,7 @@
   {
     "createdAt": "2026-09-23T03:23:56Z",
     "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then programmatically normalize, analyze, and produce the score matrix with Bayes, ALS, kNN, and expectimax.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -561,6 +577,7 @@
   {
     "createdAt": "2019-11-23T10:53:04Z",
     "description": "FlowerShop full features web system and full backoffice powered by Java 27/Spring Boot 4 and Angular 22",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -620,6 +637,7 @@
   {
     "createdAt": "2026-10-09T15:34:11Z",
     "description": "Speedsolving trainer for all WCA events: FSRS flashcards, 3D algorithm playback, and auto-generated 3-style commutators with structural classification. raylib 6, C23, and SQLite.",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -679,6 +697,7 @@
   {
     "createdAt": "2019-12-06T17:13:03Z",
     "description": "An implementation of Genetic Algorithm to solve the general Travelling Salesman problem.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -702,6 +721,7 @@
   {
     "createdAt": "2025-01-01T20:30:10Z",
     "description": "Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -761,6 +781,7 @@
   {
     "createdAt": "2021-12-20T16:15:11Z",
     "description": "A production-ready simple order service demo",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -796,6 +817,7 @@
   {
     "createdAt": "2026-07-08T03:30:49Z",
     "description": "Nh\u00c3\u00b3m ti\u00e1\u00bb\u0192u lu\u00e1\u00ba\u00adn m\u00c3\u00b4n H\u00e1\u00bb\u2021 th\u00e1\u00bb\u2018ng qu\u00e1\u00ba\u00a3n tr\u00e1\u00bb\u2039 qui tr\u00c3\u00acnh nghi\u00e1\u00bb\u2021p v\u00e1\u00bb\u00a5",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -813,6 +835,7 @@
   {
     "createdAt": "2023-05-31T08:37:05Z",
     "description": "A Pig Game Duo written purely in HTML, CSS, and JavaScript",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -842,6 +865,7 @@
   {
     "createdAt": "2024-11-15T06:36:53Z",
     "description": "generates a history of all deposits and withdrawals for a specified month",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -859,6 +883,7 @@
   {
     "createdAt": "2019-09-16T13:39:58Z",
     "description": "A show match between two great warriors.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -876,6 +901,7 @@
   {
     "createdAt": "2025-01-24T07:01:02Z",
     "description": "Transform Google Takeout emails into organized, archival-quality PDFs with attachments",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -893,6 +919,7 @@
   {
     "createdAt": "2019-12-01T05:42:39Z",
     "description": "A CLI tool for creating and solving sudoku at any difficulty.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -916,6 +943,7 @@
   {
     "createdAt": "2023-05-19T14:18:44Z",
     "description": "A simple RESTful API with Validator and Unit Testing",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -933,6 +961,7 @@
   {
     "createdAt": "2022-03-13T03:18:41Z",
     "description": "Rust Realtime Chat App Demo",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -968,6 +997,7 @@
   {
     "createdAt": "2024-06-27T23:25:23Z",
     "description": "Simple Weather Web App with React",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -997,6 +1027,7 @@
   {
     "createdAt": "2021-12-24T07:38:57Z",
     "description": "Watch for changes in a folders and move appropriated files to appropriated directories",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1020,6 +1051,7 @@
   {
     "createdAt": "2023-05-28T14:31:00Z",
     "description": "Oldschool Web with JS, HTML, CSS -> Babel, Webpack -> React, JSX, TSX",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1043,6 +1075,7 @@
   {
     "createdAt": "2025-07-19T08:51:03Z",
     "description": "giga minimal neovim config for programmers",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1060,6 +1093,7 @@
   {
     "createdAt": "2023-05-30T18:42:56Z",
     "description": "A async parallel fibonacci calculation using Worker Threads",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1077,6 +1111,7 @@
   {
     "createdAt": "2023-04-04T16:05:55Z",
     "description": "Simple full-stack Health App written in Go and React",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1112,6 +1147,7 @@
   {
     "createdAt": "2021-12-22T19:59:01Z",
     "description": "Go API that read a csv file and provide endpoints for Svelte UI to fetch movies from",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1159,6 +1195,7 @@
   {
     "createdAt": "2025-06-14T09:43:44Z",
     "description": "A blazingly fast Go program that finds all prime numbers up to a specified limit (e.g., 200,000,000) using a parallelized Segmented Sieve of Eratosthenes algorithm. It leverages Goroutines for concurrent sieving of number segments, offering dynamic load balancing.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1176,6 +1213,7 @@
   {
     "createdAt": "2023-07-04T19:03:04Z",
     "description": "Linear Programming implement in Go",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1211,6 +1249,7 @@
   {
     "createdAt": "2022-11-22T16:08:14Z",
     "description": "A big unsigned integer implementation in Go, including reading, parsing, randomizing, and other operations, with multiplication implemented with FFT and other optimization techniques",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1228,6 +1267,7 @@
   {
     "createdAt": "2024-12-19T12:27:26Z",
     "description": "",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -1244,7 +1284,8 @@
   },
   {
     "createdAt": "2025-01-01T14:21:49Z",
-    "description": "",
+    "description": "Open knowledge library: curated resources for modern software engineering",
+    "forkCount": 4,
     "isArchived": true,
     "isFork": false,
     "languages": [],
@@ -1255,6 +1296,7 @@
   {
     "createdAt": "2023-05-19T19:45:59Z",
     "description": "My Neovim Configs",
+    "forkCount": 0,
     "isArchived": true,
     "isFork": false,
     "languages": [
