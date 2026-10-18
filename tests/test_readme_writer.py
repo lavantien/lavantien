@@ -20,16 +20,16 @@ BADGE_IMG = (
     f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
     f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
 )
-NBSP_JOIN = "&nbsp;&nbsp;"
+NBSP_JOIN = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
 _ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.DOTALL)
 _CELL_RE = re.compile(
     r'<td width="[^"]*"><a href="https://github\.com/lavantien/(?P<name>[^"]+)">'
     r"(?P=name)</a>"
     r"<br>\(<i>(?P<year>\d{4})</i>\)"
-    r"&nbsp;&nbsp;<b>(?P<stars>[^<]*)✪</b>"
-    r"&nbsp;&nbsp;<b>(?P<forks>\d+)♆</b>"
-    r"(?P<badge>&nbsp;&nbsp;<img [^>]+>)?"
+    r"&nbsp;&nbsp;&nbsp;&nbsp;<b>(?P<stars>[^<]*)✪</b>"
+    r"&nbsp;&nbsp;&nbsp;&nbsp;<b>(?P<forks>\d+)♆</b>"
+    r"(?P<badge>&nbsp;&nbsp;&nbsp;&nbsp;<img [^>]+>)?"
     r"(?P<langsrow>(?:<br>(?:(?!</td>).)*))?"
     r'</td><td width="[^"]*">(?P<desc>.*?)</td>'
 )
@@ -152,13 +152,16 @@ class TestRenderRepoTable(unittest.TestCase):
             (
                 '<table width="100%">',
                 '<tr><td width="25%"><a href="https://github.com/lavantien/alpha">'
-                "alpha</a><br>(<i>2020</i>)&nbsp;&nbsp;<b>1✪</b>&nbsp;&nbsp;<b>0♆</b>"
+                "alpha</a><br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>1✪</b>"
+                "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
                 '</td><td width="25%">first</td>'
                 '<td width="25%"><a href="https://github.com/lavantien/beta">'
-                "beta</a><br>(<i>2021</i>)&nbsp;&nbsp;<b>2✪</b>&nbsp;&nbsp;<b>0♆</b>"
+                "beta</a><br>(<i>2021</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>2✪</b>"
+                "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
                 '</td><td width="25%">second</td></tr>',
                 '<tr><td width="25%"><a href="https://github.com/lavantien/gamma">'
-                "gamma</a><br>(<i>2022</i>)&nbsp;&nbsp;<b>3✪</b>&nbsp;&nbsp;<b>0♆</b>"
+                "gamma</a><br>(<i>2022</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>3✪</b>"
+                "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
                 '</td><td width="25%">third</td></tr>',
                 "</table>",
             )
@@ -181,7 +184,7 @@ class TestRenderRepoTable(unittest.TestCase):
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
-            "&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;<b>1♆</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>1♆</b>"
             + NBSP_JOIN
             + BADGE_IMG
             + '</td><td width="25%">lib</td></tr>\n</table>',
@@ -194,7 +197,8 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/plain">plain</a>'
-            "<br>(<i>2020</i>)&nbsp;&nbsp;<b>3✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            "<br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>3✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
             '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
@@ -208,12 +212,13 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/svc">svc</a>'
-            "<br>(<i>2024</i>)&nbsp;&nbsp;<b>8✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            "<br>(<i>2024</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>8✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
             "<br>"
             '<img src="assets/lang-icons/go-plain.svg" alt="Go"'
             ' width="14" height="14">'
             "&nbsp;2.2M"
-            "&nbsp; "
+            "&nbsp;&nbsp;&nbsp; "
             '<img src="assets/lang-icons/python-plain.svg" alt="Python"'
             ' width="14" height="14">'
             "&nbsp;140K"
@@ -229,7 +234,8 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/svc">svc</a>'
-            "<br>(<i>2024</i>)&nbsp;&nbsp;<b>8✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            "<br>(<i>2024</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>8✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
             "<br>Kotlin&nbsp;75K"
             '</td><td width="25%">doc</td></tr>\n</table>',
         )

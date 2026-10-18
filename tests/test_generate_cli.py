@@ -56,7 +56,7 @@ BADGE_IMG = (
     f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
     f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
 )
-NBSP_JOIN = "&nbsp;&nbsp;"
+NBSP_JOIN = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
 
 def item(name="svc", stars=5, langs=(("Go", 100),), created="2024-01-01T00:00:00Z",
@@ -267,7 +267,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
-            "&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;<b>4♆</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>4♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
               ' width="14" height="14">&nbsp;1K',
@@ -279,17 +279,19 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
-            "<br>(<i>2023</i>)&nbsp;&nbsp;<b>42✪</b>&nbsp;&nbsp;<b>3♆</b>"
+            "<br>(<i>2023</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>42✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>3♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/typst-original.svg" alt="Typst"'
               ' width="14" height="14">&nbsp;10.3M'
-              '&nbsp; <img src="assets/lang-icons/lua-plain.svg" alt="Lua"'
-              ' width="14" height="14">&nbsp;50K',
+              '&nbsp;&nbsp;&nbsp; <img src="assets/lang-icons/lua-plain.svg"'
+              ' alt="Lua" width="14" height="14">&nbsp;50K',
             content,
         )
         self.assertNotIn(
             '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
-            "<br>(<i>2025</i>)&nbsp;&nbsp;<b>15✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            "<br>(<i>2025</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>15✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
             + NBSP_JOIN + BADGE_IMG,
             content,
         )
@@ -303,7 +305,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
         ])
         self.assertIn(
             '<a href="https://github.com/lavantien/tied-zebra">tied-zebra</a>'
-            "<br>(<i>2022</i>)&nbsp;&nbsp;<b>7✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            "<br>(<i>2022</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>7✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/bash-plain.svg" alt="Shell"'
               ' width="14" height="14">&nbsp;526',
@@ -372,11 +375,11 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
-            "&nbsp;&nbsp;<b>200+17✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+17✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
             + NBSP_JOIN + BADGE_IMG,
             content,
         )
-        self.assertIn("<b>0✪</b>&nbsp;&nbsp;<b>0♆</b>", content)
+        self.assertIn("<b>0✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>", content)
 
     def test_fixture_snapshot_fetch_normalizes_descriptions(self):
         items = [
@@ -416,7 +419,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
-            "&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;<b>4♆</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>4♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
               ' width="14" height="14">&nbsp;1K',
