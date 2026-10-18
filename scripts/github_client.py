@@ -10,6 +10,7 @@ import subprocess
 import sys
 
 from scripts import config
+from scripts.aggregate import item_top_langs
 
 _EXCERPT_LEN = 200
 _SNAPSHOT_ATTEMPTS = 2
@@ -74,7 +75,7 @@ def fetch_repo_snapshot(full_name: str, gh_exec: str = "gh") -> dict | None:
         try:
             proc = _run(gh_exec, [
                 "repo", "view", full_name,
-                "--json", "stargazerCount,description,createdAt",
+                "--json", "stargazerCount,description,createdAt,languages",
             ])
         except (OSError, subprocess.TimeoutExpired):
             continue
@@ -95,6 +96,7 @@ def fetch_repo_snapshot(full_name: str, gh_exec: str = "gh") -> dict | None:
             "stars": stars,
             "description": data["description"] or "",
             "createdAt": data["createdAt"],
+            "langs": item_top_langs(data),
         }
     return None
 

@@ -19,8 +19,13 @@ _REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from scripts import config, github_client, readme_writer, svg_strip
-from scripts.aggregate import aggregate, select_rows, top_languages
+from scripts import config, github_client, lang_icons, readme_writer, svg_strip
+from scripts.aggregate import (
+    aggregate,
+    item_top_langs,
+    select_rows,
+    top_languages,
+)
 
 
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
@@ -44,6 +49,10 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
         "--svg", type=pathlib.Path, default=config.SVG_PATH,
         help="svg artifact to write (default: %(default)s)",
     )
+    parser.add_argument(
+        "--icons-dir", type=pathlib.Path, default=config.LANG_ICONS_DIR,
+        help="directory for standalone language icons (default: %(default)s)",
+    )
     return parser.parse_args(argv)
 
 
@@ -56,6 +65,7 @@ def _fixture_snapshot_fetch(items: list[dict]) -> Callable[[str], dict | None]:
             "stars": item["stargazerCount"],
             "description": item.get("description") or "",
             "createdAt": item["createdAt"],
+            "langs": item_top_langs(item),
         }
         for item in items
     }
@@ -73,16 +83,6 @@ def _read(path: pathlib.Path) -> str:
         return ""
 
 
-def _write_if_changed(path: pathlib.Path, content: str) -> bool:
-    """Write only when the bytes differ; bytes not text mode keeps the
-    artifacts LF on every platform."""
-    if path.is_file() and _read(path) == content:
-        return False
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(content.encode("utf-8"))
-    return True
-
-
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     if args.live:
@@ -94,6 +94,12 @@ def main(argv: list[str] | None = None) -> int:
         github_client.fetch_repo_snapshot if args.live
         else _fixture_snapshot_fetch(items)
     )
+    rows = select_rows(
+        agg.repos, snapshot_fetch=snapshot_fetch, cutoff=agg.no_ai_cutoff
+    )
+    icon_srcs, icon_plans = lang_icons.render_icons(
+        {name for row in rows for name, _ in row.top_langs}, args.icons_dir
+    )
     strip = svg_strip.render_strip(top_languages(agg.lang_sizes))
     updated_line = (
         f"{config.UPDATED_PREFIX}"
@@ -103,19 +109,16 @@ def main(argv: list[str] | None = None) -> int:
     readme_content = readme_writer.rewrite_readme(
         _read(args.readme),
         languages_block=readme_writer.build_languages_block(),
-        repo_table=readme_writer.render_repo_table(
-            select_rows(
-                agg.repos, snapshot_fetch=snapshot_fetch, cutoff=agg.no_ai_cutoff
-            )
-        ),
+        repo_table=readme_writer.render_repo_table(rows, icon_srcs=icon_srcs),
         updated_line=updated_line,
     )
-    svg_changed = _write_if_changed(args.svg, strip)
-    readme_changed = _write_if_changed(args.readme, readme_content)
-    for path, changed in ((args.svg, svg_changed), (args.readme, readme_changed)):
+    reports = [(args.svg, strip), (args.readme, readme_content), *icon_plans]
+    changed_count = 0
+    for path, content in reports:
+        changed = lang_icons.write_if_changed(path, content)
+        changed_count += changed
         print(f"{'changed' if changed else 'unchanged'}: {path}")
-    changed_count = svg_changed + readme_changed
-    print(f"done: {changed_count} changed, {2 - changed_count} unchanged")
+    print(f"done: {changed_count} changed, {len(reports) - changed_count} unchanged")
     return 0
 
 

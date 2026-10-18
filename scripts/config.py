@@ -70,6 +70,11 @@ TABLE_REPO_LIMIT = 20
 TABLE_WIDTH = "100%"
 TABLE_CELL_WIDTH = "25%"
 META_JOIN = "&nbsp;"
+TABLE_LANGS_N = 2
+TABLE_LANG_ICON_SIZE = 14
+LANG_CHIP_JOIN = " "
+LANG_ICONS_SRC_DIR = "assets/lang-icons"
+LANG_ICONS_DIR = REPO_ROOT / "assets" / "lang-icons"
 EXCLUDED_REPO_NAMES = frozenset({"lavantien", "neovim"})
 
 NO_AI_REFERENCE_REPO = "llm-tournament"

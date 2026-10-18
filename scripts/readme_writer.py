@@ -7,9 +7,10 @@ markers or structural spans, so a second pass is a byte-identical no-op.
 """
 
 import re
+from collections.abc import Mapping
 from typing import Protocol, Sequence
 
-from scripts import config
+from scripts import config, svg_strip
 
 _TABLE_RE = re.compile(r"<table\b[^>]*>.*?</table>", re.DOTALL)
 _UPDATED_LINE_RE = re.compile(
@@ -28,6 +29,7 @@ class RepoLike(Protocol):
     year: int
     stars_display: str
     no_ai: bool
+    top_langs: tuple[tuple[str, int], ...]
 
 
 def build_languages_block() -> str:
@@ -38,16 +40,20 @@ def build_languages_block() -> str:
     return "\n".join((config.MARKER_START, img, config.MARKER_END))
 
 
-def render_repo_table(rows: Sequence[RepoLike]) -> str:
+def render_repo_table(
+    rows: Sequence[RepoLike], *, icon_srcs: Mapping[str, str]
+) -> str:
     lines = [f'<table width="{config.TABLE_WIDTH}">']
     for i in range(0, len(rows), 2):
-        cells = "".join(_repo_cell(row) for row in rows[i : i + 2])
+        cells = "".join(
+            _repo_cell(row, icon_srcs) for row in rows[i : i + 2]
+        )
         lines.append(f"<tr>{cells}</tr>")
     lines.append("</table>")
     return "\n".join(lines)
 
 
-def _repo_cell(row: RepoLike) -> str:
+def _repo_cell(row: RepoLike, icon_srcs: Mapping[str, str]) -> str:
     link = (
         f'<td width="{config.TABLE_CELL_WIDTH}">'
         f'<a href="{config.REPO_URL_BASE}/{row.name}">{row.name}</a><br>'
@@ -60,8 +66,26 @@ def _repo_cell(row: RepoLike) -> str:
             f' width="{config.NO_AI_IMG_WIDTH}"'
             f' height="{config.NO_AI_IMG_HEIGHT}">'
         )
+    if row.top_langs:
+        chips = [
+            _lang_chip(lang, size, icon_srcs.get(lang))
+            for lang, size in row.top_langs
+        ]
+        link += f"<br>{config.LANG_CHIP_JOIN.join(chips)}"
     return (
         f'{link}</td><td width="{config.TABLE_CELL_WIDTH}">{row.description}</td>'
+    )
+
+
+def _lang_chip(lang: str, size: int, icon_src: str | None) -> str:
+    label = f"{lang}{config.META_JOIN}{svg_strip.format_bytes(size)}"
+    if icon_src is None:
+        return label
+    return (
+        f'<img src="{icon_src}" alt="{lang}"'
+        f' width="{config.TABLE_LANG_ICON_SIZE}"'
+        f' height="{config.TABLE_LANG_ICON_SIZE}">'
+        f"{config.META_JOIN}{label}"
     )
 
 

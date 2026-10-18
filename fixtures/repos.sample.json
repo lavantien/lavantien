@@ -195,7 +195,10 @@
     "description": "",
     "isArchived": true,
     "isFork": false,
-    "languages": [],
+    "languages": [
+      {"size": 400000, "node": {"name": "Go"}},
+      {"size": 50000, "node": {"name": "Python"}}
+    ],
     "name": "modern-swe-library",
     "stargazerCount": 9,
     "visibility": "public"

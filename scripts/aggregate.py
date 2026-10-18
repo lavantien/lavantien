@@ -19,6 +19,7 @@ class Repo:
     year: int
     stars_display: str = ""
     no_ai: bool = False
+    top_langs: tuple[tuple[str, int], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -26,6 +27,16 @@ class Aggregation:
     repos: list[Repo]
     lang_sizes: dict[str, int]
     no_ai_cutoff: str
+
+
+def item_top_langs(item: Mapping) -> tuple[tuple[str, int], ...]:
+    """Top TABLE_LANGS_N program languages of one gh repo item, edges
+    summed, allowlisted, and byte-sorted exactly like the strip."""
+    sizes: dict[str, int] = {}
+    for lang in item.get("languages") or []:
+        name = lang["node"]["name"]
+        sizes[name] = sizes.get(name, 0) + lang.get("size", 0)
+    return tuple(top_languages(sizes, n=config.TABLE_LANGS_N))
 
 
 def aggregate(items: Iterable[dict]) -> Aggregation:
@@ -57,6 +68,7 @@ def aggregate(items: Iterable[dict]) -> Aggregation:
             description=item.get("description") or "",
             year=int(item["createdAt"][:4]),
             no_ai=item["createdAt"] < cutoff,
+            top_langs=item_top_langs(item),
         ))
         for lang in item.get("languages") or []:
             name = lang["node"]["name"]
@@ -108,6 +120,7 @@ def select_rows(
                 ),
                 year=entry["year"],
                 no_ai=snap is not None and snap["createdAt"] < cutoff,
+                top_langs=snap["langs"] if snap else (),
             )
         if "no_ai" in entry:
             row = replace(row, no_ai=entry["no_ai"])

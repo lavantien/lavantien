@@ -2,6 +2,7 @@ import contextlib
 import io
 import json
 import pathlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -16,10 +17,11 @@ from scripts.github_client import GhError
 
 
 class TestWriteOrdering(unittest.TestCase):
-    def test_no_svg_written_when_readme_render_fails(self):
+    def test_no_artifacts_written_when_readme_render_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             readme = pathlib.Path(tmp) / "README.md"
             svg = pathlib.Path(tmp) / "s.svg"
+            icons = pathlib.Path(tmp) / "icons"
             readme.write_text("seed", encoding="utf-8")
             with mock.patch(
                 "scripts.readme_writer.rewrite_readme",
@@ -31,9 +33,11 @@ class TestWriteOrdering(unittest.TestCase):
                             "--from-json", str(config.FIXTURE_SAMPLE),
                             "--readme", str(readme),
                             "--svg", str(svg),
+                            "--icons-dir", str(icons),
                         ]
                     )
             self.assertFalse(svg.exists())
+            self.assertFalse(icons.exists())
             self.assertEqual(readme.read_text(encoding="utf-8"), "seed")
 
 SVG_NS = "http://www.w3.org/2000/svg"
@@ -142,7 +146,8 @@ class TestSourceFailures(unittest.TestCase):
             with silence():
                 with self.assertRaises(GhError) as ctx:
                     generate.main(["--from-json", str(missing),
-                                   "--readme", str(readme), "--svg", str(svg)])
+                                   "--readme", str(readme), "--svg", str(svg),
+                                   "--icons-dir", str(root / "icons")])
             self.assertIn(str(missing), str(ctx.exception))
             self._assert_untouched(readme, svg)
 
@@ -155,7 +160,8 @@ class TestSourceFailures(unittest.TestCase):
             with silence():
                 with self.assertRaises(GhError):
                     generate.main(["--from-json", str(src),
-                                   "--readme", str(readme), "--svg", str(svg)])
+                                   "--readme", str(readme), "--svg", str(svg),
+                                   "--icons-dir", str(root / "icons")])
             self._assert_untouched(readme, svg)
 
 
@@ -170,12 +176,14 @@ class TestMalformedPayloadFuzz(unittest.TestCase):
             root = pathlib.Path(tmp)
             readme = root / "README.md"
             svg = root / "languages.svg"
+            icons = root / "icons"
             readme.write_text(SENTINEL_README, encoding="utf-8")
             svg.write_text(SENTINEL_SVG, encoding="utf-8")
             src = root / "repos.json"
             src.write_text(text, encoding="utf-8")
             args = ["--from-json", str(src),
-                    "--readme", str(readme), "--svg", str(svg)]
+                    "--readme", str(readme), "--svg", str(svg),
+                    "--icons-dir", str(icons)]
             try:
                 with silence():
                     rc = generate.main(args)
@@ -183,20 +191,26 @@ class TestMalformedPayloadFuzz(unittest.TestCase):
                 self._assert_untouched(readme, svg)
             else:
                 self.assertEqual(rc, 0)
-                self._assert_wellformed(readme, svg)
+                self._assert_wellformed(readme, svg, icons)
 
     def _assert_untouched(self, readme, svg):
         self.assertEqual(readme.read_text(encoding="utf-8"), SENTINEL_README)
         self.assertEqual(svg.read_text(encoding="utf-8"), SENTINEL_SVG)
 
-    def _assert_wellformed(self, readme, svg):
+    def _assert_wellformed(self, readme, svg, icons):
         svg_text = svg.read_text(encoding="utf-8")
         ET.fromstring(svg_text)
         self.assertNotIn("\r", svg_text)
+        for path in sorted(icons.glob("*.svg")):
+            ET.fromstring(path.read_text(encoding="utf-8"))
         content = readme.read_text(encoding="utf-8")
         self.assertTrue(content.startswith(config.MARKER_START))
         self.assertEqual(content.count("<table"), 1)
         self.assertEqual(content.count("</table>"), 1)
+        for chip_src in set(re.findall(r'src="([^"]+)"', content)):
+            if chip_src.startswith(config.LANG_ICONS_SRC_DIR):
+                self.assertTrue((icons / pathlib.PurePosixPath(chip_src).name)
+                                .is_file(), chip_src)
         updated = [ln for ln in content.split("\n")
                    if ln.startswith(config.UPDATED_PREFIX)]
         self.assertEqual(len(updated), 1)
@@ -208,15 +222,21 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         self.readme = pathlib.Path(tmp.name) / "README.md"
         self.svg = pathlib.Path(tmp.name) / "languages.svg"
+        self.icons = pathlib.Path(tmp.name) / "icons"
         self.readme.write_bytes(config.FIXTURE_README_MESSY.read_bytes())
         self.args = ["--from-json", str(config.FIXTURE_SAMPLE),
-                     "--readme", str(self.readme), "--svg", str(self.svg)]
+                     "--readme", str(self.readme), "--svg", str(self.svg),
+                     "--icons-dir", str(self.icons)]
+
+    def _artifact_total(self):
+        return 2 + len(list(self.icons.glob("*.svg")))
 
     def test_happy_path_rewrites_readme_and_writes_strip(self):
         with silence() as out:
             rc = generate.main(self.args)
         self.assertEqual(rc, 0)
-        self.assertIn("2 changed", out.getvalue())
+        total = self._artifact_total()
+        self.assertIn(f"done: {total} changed, 0 unchanged", out.getvalue())
 
         svg_text = self.svg.read_text(encoding="utf-8")
         root = ET.fromstring(svg_text)
@@ -245,12 +265,20 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
-            + NBSP_JOIN + BADGE_IMG,
+            + NBSP_JOIN + BADGE_IMG
+            + '<br><img src="assets/lang-icons/go-plain.svg" alt="Go"'
+              ' width="14" height="14">&nbsp;Go&nbsp;400K'
+              ' <img src="assets/lang-icons/python-plain.svg" alt="Python"'
+              ' width="14" height="14">&nbsp;Python&nbsp;50K',
             content,
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
-            "<br>(<i>2023</i>)&nbsp;(<b>42⭐</b>)" + NBSP_JOIN + BADGE_IMG,
+            "<br>(<i>2023</i>)&nbsp;(<b>42⭐</b>)" + NBSP_JOIN + BADGE_IMG
+            + '<br><img src="assets/lang-icons/typst-original.svg" alt="Typst"'
+              ' width="14" height="14">&nbsp;Typst&nbsp;10.3M'
+              ' <img src="assets/lang-icons/lua-plain.svg" alt="Lua"'
+              ' width="14" height="14">&nbsp;Lua&nbsp;50K',
             content,
         )
         self.assertNotIn(
@@ -259,30 +287,45 @@ class TestEndToEndFromFixture(unittest.TestCase):
             content,
         )
         self.assertEqual(content.count(BADGE_IMG), 15)
+        icon_names = sorted(p.name for p in self.icons.glob("*.svg"))
+        self.assertEqual(icon_names, [
+            "c-original.svg", "go-plain.svg", "java-plain.svg",
+            "javascript-plain.svg", "kotlin-plain.svg", "lua-plain.svg",
+            "perl-plain.svg", "python-plain.svg", "ruby-plain.svg",
+            "typescript-plain.svg", "typst-original.svg",
+        ])
 
     def test_second_run_is_byte_identical_noop(self):
         with silence() as first:
             self.assertEqual(generate.main(self.args), 0)
+        total = self._artifact_total()
         readme_once = self.readme.read_bytes()
         svg_once = self.svg.read_bytes()
+        icons_once = {p.name: p.read_bytes() for p in self.icons.glob("*.svg")}
         with silence() as second:
             self.assertEqual(generate.main(self.args), 0)
         self.assertEqual(self.readme.read_bytes(), readme_once)
         self.assertEqual(self.svg.read_bytes(), svg_once)
-        self.assertIn("2 changed", first.getvalue())
+        self.assertEqual(
+            {p.name: p.read_bytes() for p in self.icons.glob("*.svg")}, icons_once
+        )
+        self.assertIn(f"done: {total} changed, 0 unchanged", first.getvalue())
         self.assertIn("0 changed", second.getvalue())
         self.assertIn("unchanged", second.getvalue())
 
     def test_final_summary_line_is_exact(self):
         with silence() as first:
             self.assertEqual(generate.main(self.args), 0)
+        total = self._artifact_total()
         with silence() as second:
             self.assertEqual(generate.main(self.args), 0)
         self.assertEqual(
-            first.getvalue().splitlines()[-1], "done: 2 changed, 0 unchanged"
+            first.getvalue().splitlines()[-1],
+            f"done: {total} changed, 0 unchanged",
         )
         self.assertEqual(
-            second.getvalue().splitlines()[-1], "done: 0 changed, 2 unchanged"
+            second.getvalue().splitlines()[-1],
+            f"done: 0 changed, {total} unchanged",
         )
 
     @mock.patch("scripts.github_client.fetch_repo_snapshot",
@@ -304,9 +347,11 @@ class TestEndToEndFromFixture(unittest.TestCase):
             src.write_text(json.dumps(src_items), encoding="utf-8")
             readme = pathlib.Path(tmp) / "README.md"
             svg = pathlib.Path(tmp) / "languages.svg"
+            icons = pathlib.Path(tmp) / "icons"
             with silence():
                 rc = generate.main(["--from-json", str(src),
-                                    "--readme", str(readme), "--svg", str(svg)])
+                                    "--readme", str(readme), "--svg", str(svg),
+                                    "--icons-dir", str(icons)])
             content = readme.read_text(encoding="utf-8")
         self.assertEqual(rc, 0)
         self.assertIn(
@@ -319,7 +364,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
 
     def test_fixture_snapshot_fetch_normalizes_descriptions(self):
         items = [
-            dict(item(name="described", stars=3, langs=(),
+            dict(item(name="described", stars=3,
+                      langs=(("Go", 400000), ("HTML", 5)),
                       created="2024-02-02T00:00:00Z"),
                  description="live description"),
             dict(item(name="nullish", stars=1, langs=()), description=None),
@@ -328,21 +374,25 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(
             fetch("lavantien/described"),
             {"stars": 3, "description": "live description",
-             "createdAt": "2024-02-02T00:00:00Z"},
+             "createdAt": "2024-02-02T00:00:00Z",
+             "langs": (("Go", 400000),)},
         )
         self.assertEqual(fetch("lavantien/nullish")["description"], "")
+        self.assertEqual(fetch("lavantien/nullish")["langs"], ())
         self.assertIsNone(fetch("lavantien/absent"))
 
     @mock.patch("scripts.github_client.fetch_repo_snapshot",
                 return_value={"stars": 9, "description": "lib",
-                              "createdAt": "2023-01-01T00:00:00Z"})
+                              "createdAt": "2023-01-01T00:00:00Z",
+                              "langs": (("Go", 400000), ("Python", 50000))})
     @mock.patch("scripts.github_client.fetch_repos")
     def test_live_mode_wires_gh_client(self, fetch_repos, snapshot_fetch):
         fetch_repos.return_value = json.loads(
             config.FIXTURE_SAMPLE.read_text(encoding="utf-8"))
         with silence():
             rc = generate.main(["--live", "--readme", str(self.readme),
-                                "--svg", str(self.svg)])
+                                "--svg", str(self.svg),
+                                "--icons-dir", str(self.icons)])
         self.assertEqual(rc, 0)
         fetch_repos.assert_called_once_with()
         snapshot_fetch.assert_called_once_with("lavantien/modern-swe-library")
@@ -350,9 +400,24 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
-            + NBSP_JOIN + BADGE_IMG,
+            + NBSP_JOIN + BADGE_IMG
+            + '<br><img src="assets/lang-icons/go-plain.svg" alt="Go"'
+              ' width="14" height="14">&nbsp;Go&nbsp;400K'
+              ' <img src="assets/lang-icons/python-plain.svg" alt="Python"'
+              ' width="14" height="14">&nbsp;Python&nbsp;50K',
             content,
         )
+
+    def test_icons_dir_defaults_to_config_path(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            icons = pathlib.Path(tmp) / "from-config"
+            with mock.patch.object(config, "LANG_ICONS_DIR", icons), silence():
+                rc = generate.main([
+                    "--from-json", str(config.FIXTURE_SAMPLE),
+                    "--readme", str(self.readme), "--svg", str(self.svg),
+                ])
+            self.assertEqual(rc, 0)
+            self.assertGreater(len(list(icons.glob("*.svg"))), 0)
 
     def test_bootstrap_outranks_shadowing_scripts_package(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -380,15 +445,18 @@ class TestEndToEndFromFixture(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             readme = pathlib.Path(tmp) / "README.md"
             svg = pathlib.Path(tmp) / "languages.svg"
+            icons = pathlib.Path(tmp) / "icons"
             proc = subprocess.run(
                 [sys.executable, str(config.REPO_ROOT / "scripts" / "generate.py"),
                  "--from-json", str(config.FIXTURE_SAMPLE),
-                 "--readme", str(readme), "--svg", str(svg)],
+                 "--readme", str(readme), "--svg", str(svg),
+                 "--icons-dir", str(icons)],
                 capture_output=True, text=True,
             )
             self.assertEqual(proc.returncode, 0, proc.stderr)
-            self.assertIn("2 changed", proc.stdout)
+            self.assertIn("changed", proc.stdout)
             self.assertTrue(svg.is_file())
+            self.assertTrue(any(icons.glob("*.svg")))
             self.assertTrue(readme.read_text(encoding="utf-8")
                             .startswith(config.MARKER_START))
 

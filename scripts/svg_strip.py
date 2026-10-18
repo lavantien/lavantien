@@ -123,6 +123,20 @@ def _render_empty():
     return "\n".join(lines) + "\n"
 
 
+def render_icon_svg(name):
+    """Standalone recolored icon document for one language, or None when
+    no vendored icon resolves; shares load_icon's recolor and screening."""
+    icon = load_icon(name)
+    if icon is None:
+        return None
+    inner, view_box = icon
+    return (
+        f'<svg xmlns="{SVG_NS}" viewBox="{escape_xml(view_box)}" '
+        f'width="{config.TABLE_LANG_ICON_SIZE}" '
+        f'height="{config.TABLE_LANG_ICON_SIZE}">{inner}</svg>\n'
+    )
+
+
 def render_strip(langs: Sequence[tuple[str, int]]) -> str:
     langs = list(langs)
     if not langs:

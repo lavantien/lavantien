@@ -3,7 +3,13 @@ import unittest
 from unittest import mock
 
 from scripts import config
-from scripts.aggregate import Aggregation, aggregate, select_rows, top_languages
+from scripts.aggregate import (
+    Aggregation,
+    aggregate,
+    item_top_langs,
+    select_rows,
+    top_languages,
+)
 
 
 def item(name, stars=0, langs=(), created="2024-01-01T00:00:00Z",
@@ -60,6 +66,17 @@ class TestAggregate(unittest.TestCase):
             item("svc-b", langs=[("Go", 260000), ("Go", 5)]),
         ])
         self.assertEqual(agg.lang_sizes, {"Go": 560005, "HTML": 10})
+
+    def test_top_langs_per_repo(self):
+        agg = aggregate([
+            item("svc", langs=[("Go", 300), ("HTML", 999), ("Python", 200)]),
+            item("plain", langs=[]),
+        ])
+        by_name = {r.name: r.top_langs for r in agg.repos}
+        self.assertEqual(by_name, {
+            "svc": (("Go", 300), ("Python", 200)),
+            "plain": (),
+        })
 
     def test_year_taken_from_created_at(self):
         agg = aggregate([
@@ -125,6 +142,39 @@ class TestNoAiFlag(unittest.TestCase):
         self.assertEqual(flags, {"ancient": True, "equal": False, "modern": False})
 
 
+class TestItemTopLangs(unittest.TestCase):
+    def test_sums_duplicate_edges_filters_and_orders(self):
+        entry = lambda name, size: {"size": size, "node": {"name": name}}
+        self.assertEqual(
+            item_top_langs({"languages": [
+                entry("Go", 10), entry("Go", 5), entry("TypeScript", 50),
+                entry("C", 30), entry("HTML", 999),
+            ]}),
+            (("TypeScript", 50), ("C", 30)),
+        )
+
+    def test_single_language(self):
+        self.assertEqual(
+            item_top_langs({"languages": [{"size": 7, "node": {"name": "Go"}}]}),
+            (("Go", 7),),
+        )
+
+    def test_missing_null_or_empty_languages(self):
+        no_key = {}
+        self.assertEqual(item_top_langs(no_key), ())
+        self.assertEqual(item_top_langs({"languages": None}), ())
+        self.assertEqual(item_top_langs({"languages": []}), ())
+
+    def test_zero_size_edges_dropped(self):
+        self.assertEqual(
+            item_top_langs({"languages": [
+                {"node": {"name": "Go"}},
+                {"size": 0, "node": {"name": "Python"}},
+            ]}),
+            (),
+        )
+
+
 class TestTopLanguages(unittest.TestCase):
     def test_prog_only_and_positive_sizes(self):
         sizes = {"HTML": 999999, "Go": 10, "Rust": 0}
@@ -170,7 +220,8 @@ class TestSelectRows(unittest.TestCase):
         def snapshot_fetch(full_name):
             calls.append(full_name)
             return {"stars": 9, "description": "lib",
-                    "createdAt": "2025-01-01T20:30:10Z"}
+                    "createdAt": "2025-01-01T20:30:10Z",
+                    "langs": (("Go", 400000), ("Python", 50000))}
 
         rows = select_rows(
             self.repos, snapshot_fetch=snapshot_fetch, cutoff=self.cutoff
@@ -201,6 +252,11 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
         self.assertEqual(rows[1].stars, 9)
         self.assertEqual(rows[1].stars_display, "200+9")
+        self.assertEqual(rows[1].top_langs, (("Go", 400000), ("Python", 50000)))
+        by_name = {r.name: r.top_langs for r in rows}
+        self.assertEqual(by_name["dotfiles"], (("Typst", 10304702), ("Lua", 50000)))
+        self.assertEqual(by_name["go-worker-pool"], (("Go", 260000), ("Python", 140000)))
+        self.assertEqual(by_name["blind-trainer"], ())
         badged = {r.name for r in rows if r.no_ai}
         self.assertEqual(badged, {
             "dotfiles", "modern-swe-library", "FlowerShop", "genetic-cpp",
@@ -215,7 +271,8 @@ class TestSelectRows(unittest.TestCase):
         rows = select_rows(
             self.repos,
             snapshot_fetch=lambda full_name: {"stars": 1, "description": "",
-                                              "createdAt": self.cutoff},
+                                              "createdAt": self.cutoff,
+                                              "langs": ()},
             cutoff=self.cutoff,
         )
         names = [r.name for r in rows]
@@ -254,7 +311,8 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(modern.stars_display, "200+0")
 
     def test_no_pinned_matches_builds_rows_from_config(self):
-        snap = {"stars": 7, "description": "", "createdAt": "2030-01-01T00:00:00Z"}
+        snap = {"stars": 7, "description": "", "createdAt": "2030-01-01T00:00:00Z",
+                "langs": (("Zig", 1),)}
         rows = select_rows(
             [], snapshot_fetch=lambda full_name: snap,
             cutoff=config.NO_AI_FALLBACK_CUTOFF,
@@ -264,6 +322,7 @@ class TestSelectRows(unittest.TestCase):
             [(e["name"], e["year"]) for e in config.PINNED_REPOS],
         )
         self.assertTrue(all(r.stars == 7 for r in rows))
+        self.assertTrue(all(r.top_langs == (("Zig", 1),) for r in rows))
         modern = next(r for r in rows if r.name == "modern-swe-library")
         self.assertEqual(
             modern.description,
@@ -281,9 +340,11 @@ class TestSelectRows(unittest.TestCase):
         agg = aggregate(items)
         snaps = {
             "lavantien/legacy": {"stars": 21, "description": "batch description",
-                                 "createdAt": "2024-06-01T00:00:00Z"},
+                                 "createdAt": "2024-06-01T00:00:00Z",
+                                 "langs": (("Java", 90),)},
             "lavantien/fresh": {"stars": 3, "description": "fresh batch description",
-                                "createdAt": "2026-01-01T00:00:00Z"},
+                                "createdAt": "2026-01-01T00:00:00Z",
+                                "langs": ()},
         }
         entries = ({"name": "legacy", "year": 2024}, {"name": "fresh", "year": 2026})
         with mock.patch.object(config, "PINNED_REPOS", entries):
@@ -292,8 +353,9 @@ class TestSelectRows(unittest.TestCase):
         by_name = {r.name: r for r in rows}
         self.assertEqual(
             (by_name["legacy"].stars, by_name["legacy"].description,
-             by_name["legacy"].year, by_name["legacy"].no_ai),
-            (21, "batch description", 2024, True),
+             by_name["legacy"].year, by_name["legacy"].no_ai,
+             by_name["legacy"].top_langs),
+            (21, "batch description", 2024, True, (("Java", 90),)),
         )
         self.assertEqual(
             (by_name["fresh"].stars, by_name["fresh"].description,
@@ -320,7 +382,8 @@ class TestSelectRows(unittest.TestCase):
     def test_snapshot_empty_description_falls_back_to_config(self):
         entries = ({"name": "described", "year": 2021,
                     "description": "config description"},)
-        snap = {"stars": 4, "description": "", "createdAt": "2020-01-01T00:00:00Z"}
+        snap = {"stars": 4, "description": "", "createdAt": "2020-01-01T00:00:00Z",
+                "langs": ()}
         with mock.patch.object(config, "PINNED_REPOS", entries):
             rows = select_rows(
                 [], snapshot_fetch=lambda full_name: snap,
@@ -332,7 +395,7 @@ class TestSelectRows(unittest.TestCase):
         items = [item("llm-tournament", created="2025-03-10T11:22:33Z")]
         agg = aggregate(items)
         snap = {"stars": 2, "description": "same moment",
-                "createdAt": "2025-03-10T11:22:33Z"}
+                "createdAt": "2025-03-10T11:22:33Z", "langs": ()}
         entries = ({"name": "twin", "year": 2025},)
         with mock.patch.object(config, "PINNED_REPOS", entries):
             rows = select_rows(

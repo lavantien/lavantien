@@ -117,20 +117,23 @@ class TestFetchRepos(unittest.TestCase):
 
 class TestFetchRepoSnapshot(unittest.TestCase):
     @mock.patch("scripts.github_client.subprocess.run")
-    def test_parses_all_three_fields(self, run):
+    def test_parses_all_fields(self, run):
         run.return_value = gh_result(stdout=json.dumps({
             "stargazerCount": 1234,
             "description": "curated resources",
             "createdAt": "2023-05-06T07:08:09Z",
+            "languages": [{"size": 400000, "node": {"name": "Go"}},
+                          {"size": 50000, "node": {"name": "Python"}}],
         }))
         self.assertEqual(
             fetch_repo_snapshot("lavantien/modern-swe-library"),
             {"stars": 1234, "description": "curated resources",
-             "createdAt": "2023-05-06T07:08:09Z"},
+             "createdAt": "2023-05-06T07:08:09Z",
+             "langs": (("Go", 400000), ("Python", 50000))},
         )
         run.assert_called_once_with(
             ["gh", "repo", "view", "lavantien/modern-swe-library",
-             "--json", "stargazerCount,description,createdAt"],
+             "--json", "stargazerCount,description,createdAt,languages"],
             capture_output=True, text=True, timeout=60,
         )
 
@@ -143,7 +146,8 @@ class TestFetchRepoSnapshot(unittest.TestCase):
         }))
         self.assertEqual(
             fetch_repo_snapshot("x/y"),
-            {"stars": 3, "description": "", "createdAt": "2024-01-01T00:00:00Z"},
+            {"stars": 3, "description": "", "createdAt": "2024-01-01T00:00:00Z",
+             "langs": ()},
         )
 
     @mock.patch("scripts.github_client.subprocess.run")
@@ -204,7 +208,8 @@ class TestFetchRepoSnapshot(unittest.TestCase):
         ]
         self.assertEqual(
             fetch_repo_snapshot("x/y"),
-            {"stars": 7, "description": "d", "createdAt": "2024-01-01T00:00:00Z"},
+            {"stars": 7, "description": "d", "createdAt": "2024-01-01T00:00:00Z",
+             "langs": ()},
         )
         self.assertEqual(run.call_count, 2)
 

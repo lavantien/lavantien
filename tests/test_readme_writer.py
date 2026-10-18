@@ -27,14 +27,51 @@ _CELL_RE = re.compile(
     r'<td width="[^"]*"><a href="https://github\.com/lavantien/(?P<name>[^"]+)">'
     r"(?P=name)</a>"
     r"<br>\(<i>(?P<year>\d{4})</i>\)&nbsp;\(<b>(?P<stars>[^<]*)⭐</b>\)"
-    r"(?P<badge>&nbsp;<img [^>]+>)?</td><td width=\"[^\"]*\">(?P<desc>.*?)</td>"
+    r"(?P<badge>&nbsp;<img [^>]+>)?"
+    r"(?P<langsrow>(?:<br>(?:(?!</td>).)*))?"
+    r'</td><td width="[^"]*">(?P<desc>.*?)</td>'
+)
+_CHIP_RE = re.compile(
+    r'(?:<img src="(?P<src>[^"]+)" alt="[^"]+" width="\d+" height="\d+">'
+    r"&nbsp;)?"
+    r"(?P<lang>[A-Za-z][A-Za-z0-9+#]*)&nbsp;(?P<size>\d+(?:\.\d+)?[MK]?)"
 )
 
 
-def repo(name, year, stars, description, stars_display="", no_ai=False):
+def size_bytes(text):
+    if text.endswith("M"):
+        return round(float(text[:-1]) * 1_000_000)
+    if text.endswith("K"):
+        return round(float(text[:-1]) * 1_000)
+    return int(text)
+
+
+def parse_langs(langsrow):
+    if not langsrow:
+        return (), {}
+    text = langsrow.removeprefix("<br>")
+    chips = []
+    icon_srcs = {}
+    pos = 0
+    for match in _CHIP_RE.finditer(text):
+        expected = "" if pos == 0 else config.LANG_CHIP_JOIN
+        gap = text[pos:match.start()]
+        if gap != expected:
+            raise ValueError(f"unexpected content between chips: {gap!r}")
+        pos = match.end()
+        chips.append((match["lang"], size_bytes(match["size"])))
+        if match["src"]:
+            icon_srcs[match["lang"]] = match["src"]
+    if text[pos:]:
+        raise ValueError(f"trailing content after chips: {text[pos:]!r}")
+    return tuple(chips), icon_srcs
+
+
+def repo(name, year, stars, description, stars_display="", no_ai=False,
+         top_langs=()):
     return types.SimpleNamespace(
         name=name, year=year, stars=stars, description=description,
-        stars_display=stars_display, no_ai=no_ai,
+        stars_display=stars_display, no_ai=no_ai, top_langs=top_langs,
     )
 
 
@@ -47,9 +84,12 @@ def parse_fixture_table(messy):
     end = messy.index("</table>") + len("</table>")
     table = messy[start:end]
     rows = []
+    icon_srcs: dict[str, str] = {}
     for tr in _ROW_RE.findall(table):
         for match in _CELL_RE.finditer(tr):
             stars_text = match["stars"]
+            top_langs, srcs = parse_langs(match["langsrow"])
+            icon_srcs.update(srcs)
             rows.append(
                 repo(
                     match["name"],
@@ -58,16 +98,17 @@ def parse_fixture_table(messy):
                     match["desc"],
                     stars_display=stars_text if "+" in stars_text else "",
                     no_ai=match["badge"] is not None,
+                    top_langs=top_langs,
                 )
             )
-    return table, rows
+    return table, rows, icon_srcs
 
 
 def rewrite_kwargs():
-    _, rows = parse_fixture_table(load_messy())
+    _, rows, icon_srcs = parse_fixture_table(load_messy())
     return {
         "languages_block": build_languages_block(),
-        "repo_table": render_repo_table(rows),
+        "repo_table": render_repo_table(rows, icon_srcs=icon_srcs),
         "updated_line": UPDATED_NEW,
     }
 
@@ -84,13 +125,20 @@ class TestBuildLanguagesBlock(unittest.TestCase):
 
 
 class TestRenderRepoTable(unittest.TestCase):
+    ICONS = {
+        "Go": "assets/lang-icons/go-plain.svg",
+        "Python": "assets/lang-icons/python-plain.svg",
+        "Kotlin": "assets/lang-icons/kotlin-plain.svg",
+    }
+
     def test_odd_rows_last_row_alone(self):
         table = render_repo_table(
             [
                 repo("alpha", 2020, 1, "first"),
                 repo("beta", 2021, 2, "second"),
                 repo("gamma", 2022, 3, "third"),
-            ]
+            ],
+            icon_srcs={},
         )
         expected = "\n".join(
             (
@@ -110,13 +158,15 @@ class TestRenderRepoTable(unittest.TestCase):
         self.assertEqual(table, expected)
 
     def test_empty_rows(self):
-        self.assertEqual(render_repo_table([]), '<table width="100%">\n</table>')
+        self.assertEqual(
+            render_repo_table([], icon_srcs={}), '<table width="100%">\n</table>'
+        )
 
     def test_badged_prefixed_cell_exact(self):
         table = render_repo_table([
             repo("modern-swe-library", 2023, 9, "lib",
                  stars_display="200+9", no_ai=True),
-        ])
+        ], icon_srcs={})
         self.assertEqual(
             table,
             '<table width="100%">\n'
@@ -129,7 +179,7 @@ class TestRenderRepoTable(unittest.TestCase):
         )
 
     def test_plain_cell_exact_without_img(self):
-        table = render_repo_table([repo("plain", 2020, 3, "doc")])
+        table = render_repo_table([repo("plain", 2020, 3, "doc")], icon_srcs={})
         self.assertEqual(
             table,
             '<table width="100%">\n'
@@ -139,12 +189,57 @@ class TestRenderRepoTable(unittest.TestCase):
             '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
+    def test_two_lang_chips_row_exact(self):
+        table = render_repo_table([
+            repo("svc", 2024, 8, "doc",
+                 top_langs=(("Go", 2221713), ("Python", 140000))),
+        ], icon_srcs=self.ICONS)
+        self.assertEqual(
+            table,
+            '<table width="100%">\n'
+            '<tr><td width="25%">'
+            '<a href="https://github.com/lavantien/svc">svc</a>'
+            "<br>(<i>2024</i>)&nbsp;(<b>8⭐</b>)"
+            "<br>"
+            '<img src="assets/lang-icons/go-plain.svg" alt="Go"'
+            ' width="14" height="14">'
+            "&nbsp;Go&nbsp;2.2M"
+            " "
+            '<img src="assets/lang-icons/python-plain.svg" alt="Python"'
+            ' width="14" height="14">'
+            "&nbsp;Python&nbsp;140K"
+            '</td><td width="25%">doc</td></tr>\n</table>',
+        )
+
+    def test_lang_chip_text_only_without_icon(self):
+        table = render_repo_table([
+            repo("svc", 2024, 8, "doc", top_langs=(("Kotlin", 75000),)),
+        ], icon_srcs={})
+        self.assertEqual(
+            table,
+            '<table width="100%">\n'
+            '<tr><td width="25%">'
+            '<a href="https://github.com/lavantien/svc">svc</a>'
+            "<br>(<i>2024</i>)&nbsp;(<b>8⭐</b>)"
+            "<br>Kotlin&nbsp;75K"
+            '</td><td width="25%">doc</td></tr>\n</table>',
+        )
+
+    def test_empty_langs_omit_the_row(self):
+        table = render_repo_table([
+            repo("svc", 2024, 8, "doc", top_langs=()),
+        ], icon_srcs=self.ICONS)
+        self.assertNotIn("<br>K", table)
+        self.assertNotIn("lang-icons", table)
+
     def test_byte_matches_fixture_table(self):
         messy = load_messy()
-        table, rows = parse_fixture_table(messy)
+        table, rows, icon_srcs = parse_fixture_table(messy)
         self.assertEqual(len(rows), 20)
         self.assertEqual(sum(1 for r in rows if r.no_ai), 15)
-        self.assertEqual(render_repo_table(rows), table)
+        self.assertEqual(sum(1 for r in rows if r.top_langs), 10)
+        self.assertGreater(len(icon_srcs), 0)
+        self.assertEqual(render_repo_table(rows, icon_srcs=icon_srcs), table)
 
 
 class TestNormalize(unittest.TestCase):
