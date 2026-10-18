@@ -1,5 +1,75 @@
 [
   {
+    "createdAt": "2023-06-02T20:56:02Z",
+    "description": "Dotfiles for Linux and Windows: Neovim, WezTerm, zsh, PowerShell, git hooks, Claude Code and OpenCode config, plus deploy, update, healthcheck, backup, restore, and uninstall scripts.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 8218,
+        "node": {
+          "name": "Lua"
+        }
+      },
+      {
+        "size": 369866,
+        "node": {
+          "name": "Shell"
+        }
+      },
+      {
+        "size": 217969,
+        "node": {
+          "name": "PowerShell"
+        }
+      },
+      {
+        "size": 11584096,
+        "node": {
+          "name": "Typst"
+        }
+      },
+      {
+        "size": 4885,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 829,
+        "node": {
+          "name": "Dockerfile"
+        }
+      }
+    ],
+    "name": "dotfiles",
+    "stargazerCount": 35,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2021-12-19T15:03:46Z",
+    "description": "Config files for my GitHub profile.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 1212,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 152214,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "lavantien",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2026-10-11T18:50:28Z",
     "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
     "isArchived": false,
@@ -206,29 +276,6 @@
     "visibility": "PUBLIC"
   },
   {
-    "createdAt": "2021-12-19T15:03:46Z",
-    "description": "Config files for my GitHub profile.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 1212,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 132199,
-        "node": {
-          "name": "Python"
-        }
-      }
-    ],
-    "name": "lavantien",
-    "stargazerCount": 5,
-    "visibility": "PUBLIC"
-  },
-  {
     "createdAt": "2019-11-23T10:53:04Z",
     "description": "FlowerShop full features web system and full backoffice powered by Java 27/Spring Boot 4 and Angular 22",
     "isArchived": false,
@@ -285,53 +332,6 @@
     ],
     "name": "FlowerShop",
     "stargazerCount": 15,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2023-06-02T20:56:02Z",
-    "description": "Dotfiles for Linux and Windows: Neovim, WezTerm, zsh, PowerShell, git hooks, Claude Code and OpenCode config, plus deploy, update, healthcheck, backup, restore, and uninstall scripts.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 8218,
-        "node": {
-          "name": "Lua"
-        }
-      },
-      {
-        "size": 369866,
-        "node": {
-          "name": "Shell"
-        }
-      },
-      {
-        "size": 217969,
-        "node": {
-          "name": "PowerShell"
-        }
-      },
-      {
-        "size": 11584096,
-        "node": {
-          "name": "Typst"
-        }
-      },
-      {
-        "size": 4885,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 829,
-        "node": {
-          "name": "Dockerfile"
-        }
-      }
-    ],
-    "name": "dotfiles",
-    "stargazerCount": 35,
     "visibility": "PUBLIC"
   },
   {
