@@ -99,8 +99,9 @@ def select_rows(
 ) -> list[Repo]:
     """Build the table rows: pinned entries first at their fixed years
     (a pinned repo missing from the aggregate, e.g. archived, private,
-    or forked, is rebuilt from a live repo snapshot with the config
-    description as last resort, so it never drops or loses its badge),
+    or forked, is rebuilt from a live repo snapshot, whose description
+    wins verbatim even when empty, the config description serving only
+    when the fetch itself fails, so it never drops or loses its badge),
     then the free market sorted by stars filling up to the table limit.
     Pinned years always win over createdAt; stars, description, and the
     derived no-AI flag stay live from the snapshot unless the config
@@ -118,7 +119,7 @@ def select_rows(
                 stars=snap["stars"] if snap else 0,
                 description=(
                     snap["description"]
-                    if snap and snap["description"]
+                    if snap is not None
                     else entry.get("description", "")
                 ),
                 year=entry["year"],

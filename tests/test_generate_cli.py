@@ -267,18 +267,18 @@ class TestEndToEndFromFixture(unittest.TestCase):
             "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/go-plain.svg" alt="Go"'
-              ' width="14" height="14">&nbsp;Go&nbsp;400K'
+              ' width="14" height="14">&nbsp;400K'
               ' <img src="assets/lang-icons/python-plain.svg" alt="Python"'
-              ' width="14" height="14">&nbsp;Python&nbsp;50K',
+              ' width="14" height="14">&nbsp;50K',
             content,
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
             "<br>(<i>2023</i>)&nbsp;(<b>42⭐</b>)" + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/typst-original.svg" alt="Typst"'
-              ' width="14" height="14">&nbsp;Typst&nbsp;10.3M'
+              ' width="14" height="14">&nbsp;10.3M'
               ' <img src="assets/lang-icons/lua-plain.svg" alt="Lua"'
-              ' width="14" height="14">&nbsp;Lua&nbsp;50K',
+              ' width="14" height="14">&nbsp;50K',
             content,
         )
         self.assertNotIn(
@@ -299,7 +299,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             "<br>(<i>2022</i>)&nbsp;(<b>7⭐</b>)"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/bash-plain.svg" alt="Shell"'
-              ' width="14" height="14">&nbsp;Shell&nbsp;526',
+              ' width="14" height="14">&nbsp;526',
             content,
         )
 
@@ -410,9 +410,9 @@ class TestEndToEndFromFixture(unittest.TestCase):
             "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/go-plain.svg" alt="Go"'
-              ' width="14" height="14">&nbsp;Go&nbsp;400K'
+              ' width="14" height="14">&nbsp;400K'
               ' <img src="assets/lang-icons/python-plain.svg" alt="Python"'
-              ' width="14" height="14">&nbsp;Python&nbsp;50K',
+              ' width="14" height="14">&nbsp;50K',
             content,
         )
 

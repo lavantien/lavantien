@@ -334,10 +334,7 @@ class TestSelectRows(unittest.TestCase):
         self.assertTrue(all(r.stars == 7 for r in rows))
         self.assertTrue(all(r.top_langs == (("Zig", 1),) for r in rows))
         modern = next(r for r in rows if r.name == "modern-swe-library")
-        self.assertEqual(
-            modern.description,
-            "Open knowledge library: curated resources for modern software engineering",
-        )
+        self.assertEqual(modern.description, "")
         self.assertTrue(modern.no_ai)
         others = [r for r in rows if r.name != "modern-swe-library"]
         self.assertTrue(all(r.description == "" for r in others))
@@ -389,7 +386,7 @@ class TestSelectRows(unittest.TestCase):
             "described": (0, "config description", False),
         })
 
-    def test_snapshot_empty_description_falls_back_to_config(self):
+    def test_snapshot_empty_description_wins_over_config(self):
         entries = ({"name": "described", "year": 2021,
                     "description": "config description"},)
         snap = {"stars": 4, "description": "", "createdAt": "2020-01-01T00:00:00Z",
@@ -399,7 +396,7 @@ class TestSelectRows(unittest.TestCase):
                 [], snapshot_fetch=lambda full_name: snap,
                 cutoff=config.NO_AI_FALLBACK_CUTOFF,
             )
-        self.assertEqual(rows[0].description, "config description")
+        self.assertEqual(rows[0].description, "")
 
     def test_snapshot_created_exactly_at_cutoff_is_not_badged(self):
         items = [item("llm-tournament", created="2025-03-10T11:22:33Z")]

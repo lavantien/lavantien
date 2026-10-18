@@ -84,14 +84,14 @@ def _repo_cell(row: RepoLike, icon_srcs: Mapping[str, str]) -> str:
 
 
 def _lang_chip(lang: str, size: int, icon_src: str | None) -> str:
-    label = f"{lang}{config.META_JOIN}{svg_strip.format_bytes(size)}"
+    count = svg_strip.format_bytes(size)
     if icon_src is None:
-        return label
+        return f"{lang}{config.META_JOIN}{count}"
     return (
         f'<img src="{icon_src}" alt="{lang}"'
         f' width="{config.TABLE_LANG_ICON_SIZE}"'
         f' height="{config.TABLE_LANG_ICON_SIZE}">'
-        f"{config.META_JOIN}{label}"
+        f"{config.META_JOIN}{count}"
     )
 
 

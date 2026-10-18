@@ -32,9 +32,10 @@ _CELL_RE = re.compile(
     r'</td><td width="[^"]*">(?P<desc>.*?)</td>'
 )
 _CHIP_RE = re.compile(
-    r'(?:<img src="(?P<src>[^"]+)" alt="[^"]+" width="\d+" height="\d+">'
-    r"&nbsp;)?"
-    r"(?P<lang>[A-Za-z][A-Za-z0-9+#]*)&nbsp;(?P<size>\d+(?:\.\d+)?[MK]?)"
+    r'<img src="(?P<src>[^"]+)" alt="(?P<alt>[A-Za-z][A-Za-z0-9+#]*)"'
+    r' width="\d+" height="\d+">'
+    r"&nbsp;(?P<isize>\d+(?:\.\d+)?[MK]?)"
+    r"|(?P<lang>[A-Za-z][A-Za-z0-9+#]*)&nbsp;(?P<tsize>\d+(?:\.\d+)?[MK]?)"
 )
 
 
@@ -59,9 +60,12 @@ def parse_langs(langsrow):
         if gap != expected:
             raise ValueError(f"unexpected content between chips: {gap!r}")
         pos = match.end()
-        chips.append((match["lang"], size_bytes(match["size"])))
-        if match["src"]:
-            icon_srcs[match["lang"]] = match["src"]
+        if match["src"] is not None:
+            lang, size = match["alt"], match["isize"]
+            icon_srcs[lang] = match["src"]
+        else:
+            lang, size = match["lang"], match["tsize"]
+        chips.append((lang, size_bytes(size)))
     if text[pos:]:
         raise ValueError(f"trailing content after chips: {text[pos:]!r}")
     return tuple(chips), icon_srcs
@@ -203,11 +207,11 @@ class TestRenderRepoTable(unittest.TestCase):
             "<br>"
             '<img src="assets/lang-icons/go-plain.svg" alt="Go"'
             ' width="14" height="14">'
-            "&nbsp;Go&nbsp;2.2M"
+            "&nbsp;2.2M"
             " "
             '<img src="assets/lang-icons/python-plain.svg" alt="Python"'
             ' width="14" height="14">'
-            "&nbsp;Python&nbsp;140K"
+            "&nbsp;140K"
             '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
