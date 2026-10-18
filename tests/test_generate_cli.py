@@ -270,7 +270,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>4♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
-              ' width="14" height="14">&nbsp;1K',
+              ' width="14" height="14">&nbsp;1.2K',
             content,
         )
         self.assertNotIn("&nbsp;400K", content)
@@ -422,7 +422,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>4♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
-              ' width="14" height="14">&nbsp;1K',
+              ' width="14" height="14">&nbsp;1.2K',
             content,
         )
 

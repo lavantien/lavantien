@@ -263,13 +263,13 @@ class TestRenderRepoTable(unittest.TestCase):
     def test_chip_parser_accepts_hyphenated_language(self):
         chips, srcs = parse_langs(
             '<br><img src="assets/lang-icons/objectivec-plain.svg"'
-            ' alt="Objective-C" width="14" height="14">&nbsp;12K'
+            ' alt="Objective-C" width="14" height="14">&nbsp;120K'
         )
-        self.assertEqual(chips, (("Objective-C", 12000),))
+        self.assertEqual(chips, (("Objective-C", 120000),))
         self.assertEqual(
             srcs, {"Objective-C": "assets/lang-icons/objectivec-plain.svg"}
         )
-        self.assertEqual(parse_langs("<br>Objective-C&nbsp;12K"), ((("Objective-C", 12000),), {}))
+        self.assertEqual(parse_langs("<br>Objective-C&nbsp;120K"), ((("Objective-C", 120000),), {}))
 
     def test_hostile_lang_is_escaped_in_chips(self):
         hostile = ('a&b<c>"', 5000)

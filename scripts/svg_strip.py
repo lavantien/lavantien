@@ -21,11 +21,16 @@ _RECOLOR_TAGS = frozenset(
 
 
 def format_bytes(b):
-    if b >= 999_500:
-        return f"{b / 1_000_000:.1f}M"
-    if b >= 1_000:
-        return f"{b / 1_000:.0f}K"
-    return str(b)
+    if b >= 1_000_000:
+        units, scale = "M", 100_000
+    elif b >= 1_000:
+        units, scale = "K", 100
+    else:
+        return str(b)
+    tenths = b // scale
+    if tenths % 10 == 0:
+        return f"{tenths // 10}{units}"
+    return f"{tenths / 10:.1f}{units}"
 
 
 def escape_xml(s):
