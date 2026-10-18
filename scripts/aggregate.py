@@ -15,10 +15,10 @@ from scripts import config
 class Repo:
     name: str
     stars: int
+    forks: int
     description: str
     year: int
     stars_display: str = ""
-    forks: int = 0
     no_ai: bool = False
     top_langs: tuple[tuple[str, int], ...] = ()
 
