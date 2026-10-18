@@ -438,7 +438,10 @@ class TestEndToEndFromFixture(unittest.TestCase):
             with silence() as out:
                 rc = generate.main(self.args)
         self.assertEqual(rc, 0)
-        self.assertIn("warning: no vendored icon for Go", out.getvalue())
+        self.assertIn(
+            "warning: no vendored icon for Go; chip renders text-only\n",
+            out.getvalue(),
+        )
         content = self.readme.read_text(encoding="utf-8")
         self.assertNotIn("assets/lang-icons/go-plain.svg", content)
         self.assertIn("Go&nbsp;400K", content)
