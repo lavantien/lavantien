@@ -164,7 +164,7 @@ class TestItemTopLangs(unittest.TestCase):
                 entry("Go", 10), entry("Go", 5), entry("TypeScript", 50),
                 entry("C", 30), entry("HTML", 999),
             ]}),
-            (("TypeScript", 50), ("C", 30)),
+            (("TypeScript", 50), ("C", 30), ("Go", 15)),
         )
 
     def test_single_language(self):
@@ -180,7 +180,7 @@ class TestItemTopLangs(unittest.TestCase):
                 entry("Typst", 11584096), entry("Shell", 369866),
                 entry("PowerShell", 217969), entry("Lua", 8218),
             ]}),
-            (("Typst", 11584096), ("Shell", 369866)),
+            (("Typst", 11584096), ("Shell", 369866), ("PowerShell", 217969)),
         )
 
     def test_missing_null_or_empty_languages(self):
@@ -283,7 +283,8 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(by_forks["quotes-manager"], 2)
         self.assertEqual(by_forks["distributed-booking-microservices"], 2)
         by_name = {r.name: r.top_langs for r in rows}
-        self.assertEqual(by_name["dotfiles"], (("Typst", 10304702), ("Lua", 50000)))
+        self.assertEqual(by_name["dotfiles"],
+                         (("Typst", 10304702), ("Lua", 50000), ("Shell", 30000)))
         self.assertEqual(by_name["go-worker-pool"], (("Go", 260000), ("Python", 140000)))
         self.assertEqual(by_name["blind-trainer"], ())
         badged = {r.name for r in rows if r.no_ai}
