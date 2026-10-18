@@ -1,5 +1,237 @@
 [
   {
+    "createdAt": "2021-12-19T15:03:46Z",
+    "description": "Config files for my GitHub profile.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 1212,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 180487,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "lavantien",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2019-10-02T07:35:27Z",
+    "description": "Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 6074,
+        "node": {
+          "name": "C"
+        }
+      }
+    ],
+    "name": "SumoBot",
+    "stargazerCount": 6,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2023-05-12T05:20:08Z",
+    "description": "An Docker-based Edge distributed mesh data processing system, with fake sensors, pure Go bootstrapper, pseudo-thirdparty and web UI. Integrated with Mosquitto MQTT, Telegraf, InfluxDB, and Grafana visualization",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 29826,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 894,
+        "node": {
+          "name": "Dockerfile"
+        }
+      },
+      {
+        "size": 22712,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 11126,
+        "node": {
+          "name": "Shell"
+        }
+      },
+      {
+        "size": 5619,
+        "node": {
+          "name": "Go Template"
+        }
+      }
+    ],
+    "name": "go-edge-mesh",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2022-04-28T14:17:43Z",
+    "description": "go-flutter-microservices-skeleton",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 2242,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 3042,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 5516,
+        "node": {
+          "name": "Dart"
+        }
+      },
+      {
+        "size": 126,
+        "node": {
+          "name": "Kotlin"
+        }
+      },
+      {
+        "size": 404,
+        "node": {
+          "name": "Swift"
+        }
+      },
+      {
+        "size": 38,
+        "node": {
+          "name": "Objective-C"
+        }
+      },
+      {
+        "size": 15184,
+        "node": {
+          "name": "CMake"
+        }
+      },
+      {
+        "size": 20877,
+        "node": {
+          "name": "C++"
+        }
+      },
+      {
+        "size": 1425,
+        "node": {
+          "name": "C"
+        }
+      },
+      {
+        "size": 6226,
+        "node": {
+          "name": "HTML"
+        }
+      },
+      {
+        "size": 7739,
+        "node": {
+          "name": "Go Template"
+        }
+      }
+    ],
+    "name": "go-flutter-microservices-skeleton",
+    "stargazerCount": 6,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2023-05-06T12:59:15Z",
+    "description": "A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [],
+    "name": "chess-repertoire-database",
+    "stargazerCount": 6,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2022-01-05T23:08:34Z",
+    "description": "Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 1990,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 44056,
+        "node": {
+          "name": "Go"
+        }
+      },
+      {
+        "size": 1531,
+        "node": {
+          "name": "Shell"
+        }
+      }
+    ],
+    "name": "distributed-booking-microservices",
+    "stargazerCount": 6,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2019-09-25T16:12:38Z",
+    "description": "An eCommerce Demo, written in .Net Core 3 & Angular 8 & MS SQL Server",
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 6849,
+        "node": {
+          "name": "TypeScript"
+        }
+      },
+      {
+        "size": 2978,
+        "node": {
+          "name": "HTML"
+        }
+      },
+      {
+        "size": 30799,
+        "node": {
+          "name": "C#"
+        }
+      },
+      {
+        "size": 733,
+        "node": {
+          "name": "SCSS"
+        }
+      }
+    ],
+    "name": "DotnetCoreAngularDemo",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2024-12-12T13:13:02Z",
     "description": "TUI program to concurrently scrap the web, then save to local sqlite with fts5, which enable full text search",
     "isArchived": false,
@@ -24,7 +256,7 @@
   },
   {
     "createdAt": "2021-04-04T04:51:23Z",
-    "description": "An Optimized Sudoku Solver and Generator written in Go",
+    "description": "A giga optimized Sudoku solver and generator",
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -41,7 +273,7 @@
   },
   {
     "createdAt": "2022-03-29T17:49:22Z",
-    "description": "A simple program to determine space allocation for a office renter",
+    "description": "A simple program to determine space allocation for an office renter",
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -75,7 +307,7 @@
   },
   {
     "createdAt": "2023-06-02T20:56:02Z",
-    "description": "Dotfiles for Linux and Windows: Neovim, WezTerm, zsh, PowerShell, git hooks, Claude Code and OpenCode config, plus deploy, update, healthcheck, backup, restore, and uninstall scripts.",
+    "description": "Universal SWE dotfiles for both linux/windows. Neovim, wezterm/winterm, zsh/pwsh, git hooks, claudecode/opencode, plus deploy. Preconfig dev env idempotent bootstrap, 1 single command to update all packages, healthcheck, backup/restore.",
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -118,29 +350,6 @@
     ],
     "name": "dotfiles",
     "stargazerCount": 35,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2021-12-19T15:03:46Z",
-    "description": "Config files for my GitHub profile.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 1212,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 152214,
-        "node": {
-          "name": "Python"
-        }
-      }
-    ],
-    "name": "lavantien",
-    "stargazerCount": 5,
     "visibility": "PUBLIC"
   },
   {
@@ -239,7 +448,7 @@
   },
   {
     "createdAt": "2025-12-28T10:01:24Z",
-    "description": "16x16 gomoku/caro variant engine and PvP arena: exact-five bitboard rules, zero-alloc PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, mutation-gated Go 1.27+, SQLite/DuckDB, mobile-first HTMX 4+",
+    "description": "16x16 gomoku/caro variant engine and PvP arena: alpha-beta engine, bitboard, zero-alloc parallel PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, self-sustained opening book, full mutation/fuzz, SQLite/DuckDB, mobile-first HTMX4",
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -298,7 +507,7 @@
   },
   {
     "createdAt": "2026-09-23T03:23:56Z",
-    "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then empirical-Bayes shrinkage, cross-validated ALS matrix completion, rank normalization, and expectimax-style scoring with weights fitted by guarded coordinate ascent. Apriori, Naive Bayes, k-NN, and bagged ensembles benchmark the model.",
+    "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then programmatically normalize, analyze, and produce the score matrix with Bayes, ALS, kNN, and expectimax.",
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -547,23 +756,6 @@
     ],
     "name": "llm-tournament",
     "stargazerCount": 8,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2019-10-02T07:35:27Z",
-    "description": "Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 6074,
-        "node": {
-          "name": "C"
-        }
-      }
-    ],
-    "name": "SumoBot",
-    "stargazerCount": 6,
     "visibility": "PUBLIC"
   },
   {
@@ -1017,124 +1209,6 @@
     "visibility": "PUBLIC"
   },
   {
-    "createdAt": "2022-04-28T14:17:43Z",
-    "description": "go-flutter-microservices-skeleton",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 2242,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 3042,
-        "node": {
-          "name": "Go"
-        }
-      },
-      {
-        "size": 5516,
-        "node": {
-          "name": "Dart"
-        }
-      },
-      {
-        "size": 126,
-        "node": {
-          "name": "Kotlin"
-        }
-      },
-      {
-        "size": 404,
-        "node": {
-          "name": "Swift"
-        }
-      },
-      {
-        "size": 38,
-        "node": {
-          "name": "Objective-C"
-        }
-      },
-      {
-        "size": 15184,
-        "node": {
-          "name": "CMake"
-        }
-      },
-      {
-        "size": 20877,
-        "node": {
-          "name": "C++"
-        }
-      },
-      {
-        "size": 1425,
-        "node": {
-          "name": "C"
-        }
-      },
-      {
-        "size": 6226,
-        "node": {
-          "name": "HTML"
-        }
-      },
-      {
-        "size": 7739,
-        "node": {
-          "name": "Go Template"
-        }
-      }
-    ],
-    "name": "go-flutter-microservices-skeleton",
-    "stargazerCount": 6,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2023-05-12T05:20:08Z",
-    "description": "An Docker-based Edge distributed mesh data processing system, with fake sensors, pure Go bootstrapper, pseudo-thirdparty and web UI. Integrated with Mosquitto MQTT, Telegraf, InfluxDB, and Grafana visualization",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 29826,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 894,
-        "node": {
-          "name": "Dockerfile"
-        }
-      },
-      {
-        "size": 22712,
-        "node": {
-          "name": "Go"
-        }
-      },
-      {
-        "size": 11126,
-        "node": {
-          "name": "Shell"
-        }
-      },
-      {
-        "size": 5619,
-        "node": {
-          "name": "Go Template"
-        }
-      }
-    ],
-    "name": "go-edge-mesh",
-    "stargazerCount": 5,
-    "visibility": "PUBLIC"
-  },
-  {
     "createdAt": "2022-11-22T16:08:14Z",
     "description": "A big unsigned integer implementation in Go, including reading, parsing, randomizing, and other operations, with multiplication implemented with FFT and other optimization techniques",
     "isArchived": false,
@@ -1166,80 +1240,6 @@
     ],
     "name": "fft-mult-golang",
     "stargazerCount": 3,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2019-09-25T16:12:38Z",
-    "description": "An eCommerce Demo, written in .Net Core 3 & Angular 8 & MS SQL Server",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 6849,
-        "node": {
-          "name": "TypeScript"
-        }
-      },
-      {
-        "size": 2978,
-        "node": {
-          "name": "HTML"
-        }
-      },
-      {
-        "size": 30799,
-        "node": {
-          "name": "C#"
-        }
-      },
-      {
-        "size": 733,
-        "node": {
-          "name": "SCSS"
-        }
-      }
-    ],
-    "name": "DotnetCoreAngularDemo",
-    "stargazerCount": 5,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2022-01-05T23:08:34Z",
-    "description": "Laptop Booking Application in Golang and gRPC, load-balancing with NGINX, and fully compatible with HTTPS OpenAPI v3",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 1990,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 44056,
-        "node": {
-          "name": "Go"
-        }
-      },
-      {
-        "size": 1531,
-        "node": {
-          "name": "Shell"
-        }
-      }
-    ],
-    "name": "distributed-booking-microservices",
-    "stargazerCount": 6,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2023-05-06T12:59:15Z",
-    "description": "A SCID repertoire database I'm making, based on what I've learned from Chessbrah's Building Habits series",
-    "isArchived": false,
-    "isFork": false,
-    "languages": [],
-    "name": "chess-repertoire-database",
-    "stargazerCount": 6,
     "visibility": "PUBLIC"
   },
   {
