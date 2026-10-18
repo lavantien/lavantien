@@ -262,7 +262,7 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
         self.assertEqual(rows[1].stars, 9)
         self.assertEqual(rows[1].stars_display, "200+9")
-        self.assertEqual(rows[1].top_langs, (("Go", 400000), ("Python", 50000)))
+        self.assertEqual(rows[1].top_langs, (("Markdown", 1114),))
         by_name = {r.name: r.top_langs for r in rows}
         self.assertEqual(by_name["dotfiles"], (("Typst", 10304702), ("Lua", 50000)))
         self.assertEqual(by_name["go-worker-pool"], (("Go", 260000), ("Python", 140000)))
@@ -332,8 +332,12 @@ class TestSelectRows(unittest.TestCase):
             [(e["name"], e["year"]) for e in config.PINNED_REPOS],
         )
         self.assertTrue(all(r.stars == 7 for r in rows))
-        self.assertTrue(all(r.top_langs == (("Zig", 1),) for r in rows))
+        self.assertTrue(all(
+            r.top_langs == (("Zig", 1),)
+            for r in rows if r.name != "modern-swe-library"
+        ))
         modern = next(r for r in rows if r.name == "modern-swe-library")
+        self.assertEqual(modern.top_langs, (("Markdown", 1114),))
         self.assertEqual(modern.description, "")
         self.assertTrue(modern.no_ai)
         others = [r for r in rows if r.name != "modern-swe-library"]
@@ -430,6 +434,22 @@ class TestSelectRows(unittest.TestCase):
         flags = {r.name: r.no_ai for r in rows}
         self.assertFalse(flags["older"])
         self.assertTrue(flags["newer"])
+
+    def test_pinned_langs_override_wins(self):
+        repos = aggregate([
+            item("llm-tournament", created="2025-03-10T11:22:33Z"),
+            item("noted", created="2024-01-01T00:00:00Z",
+                 langs=[("Go", 900), ("Python", 100)]),
+        ]).repos
+        entries = ({"name": "noted", "year": 2024,
+                    "langs": (("Markdown", 1114),)},)
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(
+                repos, snapshot_fetch=lambda full_name: None,
+                cutoff="2025-03-10T11:22:33Z",
+            )
+        by_name = {r.name: r.top_langs for r in rows}
+        self.assertEqual(by_name["noted"], (("Markdown", 1114),))
 
     def test_pinned_saturation_appends_no_remaining_rows(self):
         pinned = [{"name": f"pinned-{i}", "year": 2000 + i} for i in range(20)]

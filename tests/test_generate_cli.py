@@ -266,11 +266,13 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
             + NBSP_JOIN + BADGE_IMG
-            + '<br><img src="assets/lang-icons/go-plain.svg" alt="Go"'
-              ' width="14" height="14">&nbsp;400K'
-              ' <img src="assets/lang-icons/python-plain.svg" alt="Python"'
-              ' width="14" height="14">&nbsp;50K',
+            + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
+              ' width="14" height="14">&nbsp;1K',
             content,
+        )
+        self.assertNotIn("&nbsp;400K", content)
+        self.assertNotIn(
+            'alt="Python" width="14" height="14">&nbsp;50K</td>', content
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
@@ -291,8 +293,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(icon_names, [
             "bash-plain.svg", "c-original.svg", "go-plain.svg", "java-plain.svg",
             "javascript-plain.svg", "kotlin-plain.svg", "lua-plain.svg",
-            "perl-plain.svg", "python-plain.svg", "ruby-plain.svg",
-            "typescript-plain.svg", "typst-original.svg",
+            "markdown-original.svg", "perl-plain.svg", "python-plain.svg",
+            "ruby-plain.svg", "typescript-plain.svg", "typst-original.svg",
         ])
         self.assertIn(
             '<a href="https://github.com/lavantien/tied-zebra">tied-zebra</a>'
@@ -409,10 +411,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
             + NBSP_JOIN + BADGE_IMG
-            + '<br><img src="assets/lang-icons/go-plain.svg" alt="Go"'
-              ' width="14" height="14">&nbsp;400K'
-              ' <img src="assets/lang-icons/python-plain.svg" alt="Python"'
-              ' width="14" height="14">&nbsp;50K',
+            + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
+              ' width="14" height="14">&nbsp;1K',
             content,
         )
 
@@ -444,7 +444,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         content = self.readme.read_text(encoding="utf-8")
         self.assertNotIn("assets/lang-icons/go-plain.svg", content)
-        self.assertIn("Go&nbsp;400K", content)
+        self.assertIn("Go&nbsp;300K", content)
         self.assertFalse((self.icons / "go-plain.svg").exists())
         self.assertTrue((self.icons / "python-plain.svg").exists())
 

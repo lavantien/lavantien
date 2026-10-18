@@ -84,7 +84,8 @@ class TestPinnedRepos(unittest.TestCase):
             {"name": "dotfiles", "year": 2023},
             {"name": "modern-swe-library", "year": 2023, "stars_prefix": 200,
              "no_ai": True,
-             "description": "Open knowledge library: curated resources for modern software engineering"},
+             "description": "Open knowledge library: curated resources for modern software engineering",
+             "langs": (("Markdown", 1114),)},
             {"name": "FlowerShop", "year": 2018},
             {"name": "caro-ai-pvp", "year": 2025},
             {"name": "blind-trainer", "year": 2026},
@@ -116,11 +117,16 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(
             config.LANG_ICONS_DIR, config.REPO_ROOT / "assets" / "lang-icons"
         )
-        self.assertEqual(config.TABLE_LANGS_EXTRA, frozenset({"Shell", "PowerShell"}))
+        self.assertEqual(
+            config.TABLE_LANGS_EXTRA,
+            frozenset({"Shell", "PowerShell", "Markdown"}),
+        )
         self.assertEqual(config.LANG_COLORS["Shell"], "#4EAA25")
         self.assertEqual(config.DEVICON_MAP["Shell"], ("bash", "plain"))
         self.assertEqual(config.LANG_COLORS["PowerShell"], "#5391FE")
         self.assertEqual(config.DEVICON_MAP["PowerShell"], ("powershell", "plain"))
+        self.assertEqual(config.LANG_COLORS["Markdown"], "#083fa1")
+        self.assertEqual(config.DEVICON_MAP["Markdown"], ("markdown", "original"))
 
     def test_excluded_repo_names(self):
         self.assertEqual(

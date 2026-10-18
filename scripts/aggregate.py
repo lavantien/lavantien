@@ -105,7 +105,8 @@ def select_rows(
     then the free market sorted by stars filling up to the table limit.
     Pinned years always win over createdAt; stars, description, and the
     derived no-AI flag stay live from the snapshot unless the config
-    entry pins them."""
+    entry pins them, and a pinned langs entry replaces the language row
+    outright (the raw markdown line count linguist never reports)."""
     by_name = {r.name: r for r in repos}
     rows: list[Repo] = []
     for entry in config.PINNED_REPOS:
@@ -130,6 +131,8 @@ def select_rows(
             row = replace(row, no_ai=entry["no_ai"])
         if "stars_prefix" in entry:
             row = replace(row, stars_display=f"{entry['stars_prefix']}+{row.stars}")
+        if "langs" in entry:
+            row = replace(row, top_langs=tuple(entry["langs"]))
         rows.append(row)
     pinned_names = {entry["name"] for entry in config.PINNED_REPOS}
     remaining = sorted(

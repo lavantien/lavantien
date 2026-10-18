@@ -54,7 +54,8 @@ PINNED_REPOS = (
     {"name": "dotfiles", "year": 2023},
     {"name": "modern-swe-library", "year": 2023, "stars_prefix": 200,
      "no_ai": True,
-     "description": "Open knowledge library: curated resources for modern software engineering"},
+     "description": "Open knowledge library: curated resources for modern software engineering",
+     "langs": (("Markdown", 1114),)},
     {"name": "FlowerShop", "year": 2018},
     {"name": "caro-ai-pvp", "year": 2025},
     {"name": "blind-trainer", "year": 2026},
@@ -72,7 +73,7 @@ TABLE_WIDTH = "100%"
 TABLE_CELL_WIDTH = "25%"
 META_JOIN = "&nbsp;"
 TABLE_LANGS_N = 2
-TABLE_LANGS_EXTRA = frozenset({"Shell", "PowerShell"})
+TABLE_LANGS_EXTRA = frozenset({"Shell", "PowerShell", "Markdown"})
 TABLE_LANGS_ALLOW = PROG_LANGS | TABLE_LANGS_EXTRA
 TABLE_LANG_ICON_SIZE = 14
 LANG_CHIP_JOIN = " "
@@ -130,6 +131,7 @@ LANG_COLORS = {
     "Typst": "#239dad",
     "Shell": "#4EAA25",
     "PowerShell": "#5391FE",
+    "Markdown": "#083fa1",
 }
 DEFAULT_COLOR = "#8b949e"
 TEXT_MAIN = "#6e7781"
@@ -166,6 +168,7 @@ DEVICON_MAP = {
     "Typst": ("typst", "original"),
     "Shell": ("bash", "plain"),
     "PowerShell": ("powershell", "plain"),
+    "Markdown": ("markdown", "original"),
 }
 
 ICON_SOURCES = {
