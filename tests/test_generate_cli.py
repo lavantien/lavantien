@@ -56,14 +56,15 @@ BADGE_IMG = (
     f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
     f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
 )
-NBSP_JOIN = "&nbsp;"
+NBSP_JOIN = "&nbsp;&nbsp;"
 
 
 def item(name="svc", stars=5, langs=(("Go", 100),), created="2024-01-01T00:00:00Z",
-         description="d", fork=False, archived=False, visibility="public"):
+         description="d", fork=False, archived=False, visibility="public", forks=0):
     return {
         "name": name,
         "stargazerCount": stars,
+        "forkCount": forks,
         "description": description,
         "createdAt": created,
         "isFork": fork,
@@ -92,6 +93,7 @@ FUZZ_VARIANTS = [
     ("missing name", [drop(item(), "name")]),
     ("null name", [dict(item(), name=None)]),
     ("missing stargazerCount", [drop(item(), "stargazerCount")]),
+    ("missing forkCount", [drop(item(), "forkCount")]),
     ("truthy non-bool isFork", [dict(item(), isFork=1)]),
     ("truthy non-bool isArchived", [dict(item(), isArchived="yes")]),
     ("language entry missing size",
@@ -264,7 +266,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
+            "modern-swe-library</a><br>(<i>2023</i>)"
+            "&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;<b>4♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
               ' width="14" height="14">&nbsp;1K',
@@ -276,16 +279,18 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn(
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
-            "<br>(<i>2023</i>)&nbsp;(<b>42⭐</b>)" + NBSP_JOIN + BADGE_IMG
+            "<br>(<i>2023</i>)&nbsp;&nbsp;<b>42✪</b>&nbsp;&nbsp;<b>3♆</b>"
+            + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/typst-original.svg" alt="Typst"'
               ' width="14" height="14">&nbsp;10.3M'
-              ' <img src="assets/lang-icons/lua-plain.svg" alt="Lua"'
+              '&nbsp; <img src="assets/lang-icons/lua-plain.svg" alt="Lua"'
               ' width="14" height="14">&nbsp;50K',
             content,
         )
         self.assertNotIn(
             '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
-            "<br>(<i>2025</i>)&nbsp;(<b>15⭐</b>)" + NBSP_JOIN + BADGE_IMG,
+            "<br>(<i>2025</i>)&nbsp;&nbsp;<b>15✪</b>&nbsp;&nbsp;<b>0♆</b>"
+            + NBSP_JOIN + BADGE_IMG,
             content,
         )
         self.assertEqual(content.count(BADGE_IMG), 15)
@@ -298,7 +303,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         ])
         self.assertIn(
             '<a href="https://github.com/lavantien/tied-zebra">tied-zebra</a>'
-            "<br>(<i>2022</i>)&nbsp;(<b>7⭐</b>)"
+            "<br>(<i>2022</i>)&nbsp;&nbsp;<b>7✪</b>&nbsp;&nbsp;<b>0♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/bash-plain.svg" alt="Shell"'
               ' width="14" height="14">&nbsp;526',
@@ -366,11 +371,12 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+17⭐</b>)"
+            "modern-swe-library</a><br>(<i>2023</i>)"
+            "&nbsp;&nbsp;<b>200+17✪</b>&nbsp;&nbsp;<b>0♆</b>"
             + NBSP_JOIN + BADGE_IMG,
             content,
         )
-        self.assertIn("(<b>0⭐</b>)", content)
+        self.assertIn("<b>0✪</b>&nbsp;&nbsp;<b>0♆</b>", content)
 
     def test_fixture_snapshot_fetch_normalizes_descriptions(self):
         items = [
@@ -383,7 +389,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         fetch = generate._fixture_snapshot_fetch(items)
         self.assertEqual(
             fetch("lavantien/described"),
-            {"stars": 3, "description": "live description",
+            {"stars": 3, "forks": 0, "description": "live description",
              "createdAt": "2024-02-02T00:00:00Z",
              "langs": (("Go", 400000),)},
         )
@@ -392,7 +398,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
         self.assertIsNone(fetch("lavantien/absent"))
 
     @mock.patch("scripts.github_client.fetch_repo_snapshot",
-                return_value={"stars": 9, "description": "lib",
+                return_value={"stars": 9, "forks": 4, "description": "lib",
                               "createdAt": "2023-01-01T00:00:00Z",
                               "langs": (("Go", 400000), ("Python", 50000))})
     @mock.patch("scripts.github_client.fetch_repos")
@@ -409,7 +415,8 @@ class TestEndToEndFromFixture(unittest.TestCase):
         content = self.readme.read_text(encoding="utf-8")
         self.assertIn(
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
+            "modern-swe-library</a><br>(<i>2023</i>)"
+            "&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;<b>4♆</b>"
             + NBSP_JOIN + BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
               ' width="14" height="14">&nbsp;1K',

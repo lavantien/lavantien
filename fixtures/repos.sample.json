@@ -2,6 +2,7 @@
   {
     "createdAt": "2016-03-01T00:00:00Z",
     "description": "profile readme",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -12,6 +13,7 @@
   {
     "createdAt": "2015-05-05T00:00:00Z",
     "description": "archived college coursework, must be ignored everywhere",
+    "forkCount": 1,
     "isArchived": true,
     "isFork": false,
     "languages": [
@@ -25,6 +27,7 @@
   {
     "createdAt": "2023-08-14T09:30:00Z",
     "description": "Universal SWE Dotfiles (Neovim/Wezterm/zsh/pwsh, ClaudeCode/Git Hooks, Linux/Windows) - Battery Included",
+    "forkCount": 3,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -41,6 +44,7 @@
   {
     "createdAt": "2025-03-10T11:22:33Z",
     "description": "Simple and blazingly fast dynamic evaluation platform for benchmarking Large Language Models",
+    "forkCount": 1,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -54,6 +58,7 @@
   {
     "createdAt": "2025-12-28T10:01:24Z",
     "description": "16x16 gomoku/caro variant engine and PvP arena: exact-five bitboard rules, zero-alloc PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, mutation-gated Go 1.27+, SQLite/DuckDB, mobile-first HTMX 4+",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -70,6 +75,7 @@
   {
     "createdAt": "2020-06-15T00:00:00Z",
     "description": "FlowerShop full features web app powered by Spring Boot and Angular",
+    "forkCount": 1,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -85,6 +91,7 @@
   {
     "createdAt": "2023-11-11T00:00:00Z",
     "description": "http service with server-rendered templates, half of the Go byte-sum pair",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -98,6 +105,7 @@
   {
     "createdAt": "2024-07-07T00:00:00Z",
     "description": "background jobs in Go with python ops tooling, other half of the Go byte-sum pair",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -111,6 +119,7 @@
   {
     "createdAt": "2019-04-01T00:00:00Z",
     "description": "Full detail of design and implementation of a Sumo Robot, embedded C on AT89S52 micro-controller. This robot was achieved the 1st position at UIT Sumo Robot 2017.",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -124,6 +133,7 @@
   {
     "createdAt": "2022-03-23T00:00:00Z",
     "description": "data migration scripts, Ruby half of the byte tie with Kotlin plus a tiny Perl share",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -137,6 +147,7 @@
   {
     "createdAt": "2022-02-22T00:00:00Z",
     "description": "android playground, Kotlin half of the byte tie with Ruby",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -149,6 +160,7 @@
   {
     "createdAt": "2024-01-20T00:00:00Z",
     "description": "fork of a rust-based editor, huge Rust byte count must be ignored",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": true,
     "languages": [
@@ -161,6 +173,7 @@
   {
     "createdAt": "2021-01-15T00:00:00Z",
     "description": "private experiments, must never count toward the public profile stats",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -173,6 +186,7 @@
   {
     "createdAt": "2021-06-06T00:00:00Z",
     "description": "visibility field absent, strict filter must drop it",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [
@@ -184,6 +198,7 @@
   {
     "createdAt": "2024-02-02T00:00:00Z",
     "description": "scratch notes with no languages key at all",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "name": "sandbox-notes",
@@ -193,6 +208,7 @@
   {
     "createdAt": "2025-01-01T14:21:49Z",
     "description": "",
+    "forkCount": 4,
     "isArchived": true,
     "isFork": false,
     "languages": [
@@ -206,6 +222,7 @@
   {
     "createdAt": "2026-10-11T18:50:28Z",
     "description": "3BLD-first cubing trainer: multi-event algorithm repository with mechanical verification, FSRS-5 case drills, SQLite persistence, 3D replay, and a mutation-gated quality chain",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -216,6 +233,7 @@
   {
     "createdAt": "2026-06-29T00:58:46Z",
     "description": "Offline, single-user Go + SQLite app for curating a corpus of sutta quotes, with dual-pane HTMX editing, collections, categories, near-duplicate detection, and full-text search.",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -226,6 +244,7 @@
   {
     "createdAt": "2026-09-23T03:23:56Z",
     "description": "Offline Dota 2 draft advisor and hero-pool guide. Mines divine-immortal STRATZ drafts into DuckDB, then empirical-Bayes shrinkage, cross-validated ALS matrix completion, rank normalization, and expectimax-style scoring with weights fitted by guarded coordinate ascent. Apriori, Naive Bayes, k-NN, and bagged ensembles benchmark the model.",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -236,6 +255,7 @@
   {
     "createdAt": "2019-12-06T17:13:03Z",
     "description": "An implementation of Genetic Algorithm to solve the general Travelling Salesman problem.",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -246,6 +266,7 @@
   {
     "createdAt": "2023-05-12T05:20:08Z",
     "description": "An Docker-based Edge distributed mesh data processing system, with fake sensors, pure Go bootstrapper, pseudo-thirdparty and web UI. Integrated with Mosquitto MQTT, Telegraf, InfluxDB, and Grafana visualization",
+    "forkCount": 1,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -256,6 +277,7 @@
   {
     "createdAt": "2021-12-20T16:15:11Z",
     "description": "A production-ready simple order service demo",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -266,6 +288,7 @@
   {
     "createdAt": "2022-04-28T14:17:43Z",
     "description": "go-flutter-microservices-skeleton",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -276,6 +299,7 @@
   {
     "createdAt": "2020-08-08T00:00:00Z",
     "description": "free-market filler with the highest star count",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -286,6 +310,7 @@
   {
     "createdAt": "2021-09-09T00:00:00Z",
     "description": "free-market filler sorted right after high-alpha",
+    "forkCount": 1,
     "isArchived": false,
     "isFork": false,
     "languages": [],
@@ -296,6 +321,7 @@
   {
     "createdAt": "2022-10-10T00:00:00Z",
     "description": "free-market filler tying go-worker-pool at seven stars, sorted after it",
+    "forkCount": 0,
     "isArchived": false,
     "isFork": false,
     "languages": [

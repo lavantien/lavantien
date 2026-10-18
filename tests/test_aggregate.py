@@ -13,10 +13,12 @@ from scripts.aggregate import (
 
 
 def item(name, stars=0, langs=(), created="2024-01-01T00:00:00Z",
-         description="", fork=False, archived=False, visibility="public"):
+         description="", fork=False, archived=False, visibility="public",
+         forks=0):
     return {
         "name": name,
         "stargazerCount": stars,
+        "forkCount": forks,
         "description": description,
         "createdAt": created,
         "isFork": fork,
@@ -87,6 +89,14 @@ class TestAggregate(unittest.TestCase):
         years = {r.name: r.year for r in agg.repos}
         self.assertEqual(years, {"SumoBot": 2019, "FlowerShop": 2020, "plain": 2025})
 
+    def test_forks_taken_from_fork_count(self):
+        agg = aggregate([
+            item("popular", forks=7),
+            item("quiet"),
+        ])
+        self.assertEqual({r.name: r.forks for r in agg.repos},
+                         {"popular": 7, "quiet": 0})
+
     def test_description_none_becomes_empty(self):
         agg = aggregate([dict(item("x"), description=None)])
         self.assertEqual(agg.repos[0].description, "")
@@ -112,6 +122,10 @@ class TestAggregate(unittest.TestCase):
         del no_name["name"]
         with self.assertRaises(KeyError):
             aggregate([no_name])
+        no_forks = item("x")
+        del no_forks["forkCount"]
+        with self.assertRaises(KeyError):
+            aggregate([no_forks])
 
 
 class TestNoAiFlag(unittest.TestCase):
@@ -229,7 +243,7 @@ class TestSelectRows(unittest.TestCase):
 
         def snapshot_fetch(full_name):
             calls.append(full_name)
-            return {"stars": 9, "description": "lib",
+            return {"stars": 9, "forks": 4, "description": "lib",
                     "createdAt": "2025-01-01T20:30:10Z",
                     "langs": (("Go", 400000), ("Python", 50000))}
 
@@ -262,7 +276,11 @@ class TestSelectRows(unittest.TestCase):
         self.assertEqual(len(rows), config.TABLE_REPO_LIMIT)
         self.assertEqual(rows[1].stars, 9)
         self.assertEqual(rows[1].stars_display, "200+9")
+        self.assertEqual(rows[1].forks, 4)
         self.assertEqual(rows[1].top_langs, (("Markdown", 1296),))
+        by_forks = {r.name: r.forks for r in rows}
+        self.assertEqual(by_forks["dotfiles"], 3)
+        self.assertEqual(by_forks["quotes-manager"], 2)
         by_name = {r.name: r.top_langs for r in rows}
         self.assertEqual(by_name["dotfiles"], (("Typst", 10304702), ("Lua", 50000)))
         self.assertEqual(by_name["go-worker-pool"], (("Go", 260000), ("Python", 140000)))
@@ -280,7 +298,8 @@ class TestSelectRows(unittest.TestCase):
     def test_excluded_names_absent_and_no_duplicates(self):
         rows = select_rows(
             self.repos,
-            snapshot_fetch=lambda full_name: {"stars": 1, "description": "",
+            snapshot_fetch=lambda full_name: {"stars": 1, "forks": 0,
+                                              "description": "",
                                               "createdAt": self.cutoff,
                                               "langs": ()},
             cutoff=self.cutoff,
@@ -317,11 +336,13 @@ class TestSelectRows(unittest.TestCase):
         )
         self.assertEqual(len(rows), len(config.PINNED_REPOS))
         self.assertTrue(all(r.stars == 0 for r in rows))
+        self.assertTrue(all(r.forks == 0 for r in rows))
         modern = next(r for r in rows if r.name == "modern-swe-library")
         self.assertEqual(modern.stars_display, "200+0")
 
     def test_no_pinned_matches_builds_rows_from_config(self):
-        snap = {"stars": 7, "description": "", "createdAt": "2030-01-01T00:00:00Z",
+        snap = {"stars": 7, "forks": 5, "description": "",
+                "createdAt": "2030-01-01T00:00:00Z",
                 "langs": (("Zig", 1),)}
         rows = select_rows(
             [], snapshot_fetch=lambda full_name: snap,
@@ -332,6 +353,7 @@ class TestSelectRows(unittest.TestCase):
             [(e["name"], e["year"]) for e in config.PINNED_REPOS],
         )
         self.assertTrue(all(r.stars == 7 for r in rows))
+        self.assertTrue(all(r.forks == 5 for r in rows))
         self.assertTrue(all(
             r.top_langs == (("Zig", 1),)
             for r in rows if r.name != "modern-swe-library"
@@ -350,10 +372,12 @@ class TestSelectRows(unittest.TestCase):
         ]
         agg = aggregate(items)
         snaps = {
-            "lavantien/legacy": {"stars": 21, "description": "batch description",
+            "lavantien/legacy": {"stars": 21, "forks": 6,
+                                 "description": "batch description",
                                  "createdAt": "2024-06-01T00:00:00Z",
                                  "langs": (("Java", 90),)},
-            "lavantien/fresh": {"stars": 3, "description": "fresh batch description",
+            "lavantien/fresh": {"stars": 3, "forks": 2,
+                                "description": "fresh batch description",
                                 "createdAt": "2026-01-01T00:00:00Z",
                                 "langs": ()},
         }
@@ -363,15 +387,17 @@ class TestSelectRows(unittest.TestCase):
                                cutoff=agg.no_ai_cutoff)
         by_name = {r.name: r for r in rows}
         self.assertEqual(
-            (by_name["legacy"].stars, by_name["legacy"].description,
+            (by_name["legacy"].stars, by_name["legacy"].forks,
+             by_name["legacy"].description,
              by_name["legacy"].year, by_name["legacy"].no_ai,
              by_name["legacy"].top_langs),
-            (21, "batch description", 2024, True, (("Java", 90),)),
+            (21, 6, "batch description", 2024, True, (("Java", 90),)),
         )
         self.assertEqual(
-            (by_name["fresh"].stars, by_name["fresh"].description,
+            (by_name["fresh"].stars, by_name["fresh"].forks,
+             by_name["fresh"].description,
              by_name["fresh"].year, by_name["fresh"].no_ai),
-            (3, "fresh batch description", 2026, False),
+            (3, 2, "fresh batch description", 2026, False),
         )
 
     def test_snapshot_none_keeps_config_description_and_zero_stars(self):
@@ -393,7 +419,8 @@ class TestSelectRows(unittest.TestCase):
     def test_snapshot_empty_description_wins_over_config(self):
         entries = ({"name": "described", "year": 2021,
                     "description": "config description"},)
-        snap = {"stars": 4, "description": "", "createdAt": "2020-01-01T00:00:00Z",
+        snap = {"stars": 4, "forks": 0, "description": "",
+                "createdAt": "2020-01-01T00:00:00Z",
                 "langs": ()}
         with mock.patch.object(config, "PINNED_REPOS", entries):
             rows = select_rows(
@@ -405,7 +432,7 @@ class TestSelectRows(unittest.TestCase):
     def test_snapshot_created_exactly_at_cutoff_is_not_badged(self):
         items = [item("llm-tournament", created="2025-03-10T11:22:33Z")]
         agg = aggregate(items)
-        snap = {"stars": 2, "description": "same moment",
+        snap = {"stars": 2, "forks": 0, "description": "same moment",
                 "createdAt": "2025-03-10T11:22:33Z", "langs": ()}
         entries = ({"name": "twin", "year": 2025},)
         with mock.patch.object(config, "PINNED_REPOS", entries):

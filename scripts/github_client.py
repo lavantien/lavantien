@@ -67,15 +67,16 @@ def fetch_repo_snapshot(full_name: str, gh_exec: str = "gh") -> dict | None:
 
     One retry: a transient gh failure must not strip a day of live data
     from the fixed repo (the readme commits whatever we return). A
-    payload without an int stargazerCount or missing any of the three
-    fields is a total failure and yields None, so callers fall back to
-    config values instead of half-built data.
+    payload without an int stargazerCount or forkCount, or missing any
+    of the other fields, is a total failure and yields None, so callers
+    fall back to config values instead of half-built data.
     """
     for _ in range(_SNAPSHOT_ATTEMPTS):
         try:
             proc = _run(gh_exec, [
                 "repo", "view", full_name,
-                "--json", "stargazerCount,description,createdAt,languages",
+                "--json", "stargazerCount,forkCount,description,"
+                          "createdAt,languages",
             ])
         except (OSError, subprocess.TimeoutExpired):
             continue
@@ -90,10 +91,14 @@ def fetch_repo_snapshot(full_name: str, gh_exec: str = "gh") -> dict | None:
         stars = data.get("stargazerCount")
         if isinstance(stars, bool) or not isinstance(stars, int):
             return None
+        forks = data.get("forkCount")
+        if isinstance(forks, bool) or not isinstance(forks, int):
+            return None
         if "description" not in data or "createdAt" not in data:
             return None
         return {
             "stars": stars,
+            "forks": forks,
             "description": data["description"] or "",
             "createdAt": data["createdAt"],
             "langs": item_top_langs(data),

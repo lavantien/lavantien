@@ -32,6 +32,7 @@ class RepoLike(Protocol):
     description: str
     year: int
     stars_display: str
+    forks: int
     no_ai: bool
     top_langs: tuple[tuple[str, int], ...]
 
@@ -62,11 +63,15 @@ def _repo_cell(row: RepoLike, icon_srcs: Mapping[str, str]) -> str:
     link = (
         f'<td width="{config.TABLE_CELL_WIDTH}">'
         f'<a href="{config.REPO_URL_BASE}/{name}">{name}</a><br>'
-        f"(<i>{row.year}</i>){config.META_JOIN}(<b>{row.stars_display or row.stars}⭐</b>)"
+        f"(<i>{row.year}</i>)"
+        f"{config.META_ITEM_JOIN}"
+        f"<b>{row.stars_display or row.stars}{config.STAR_GLYPH}</b>"
+        f"{config.META_ITEM_JOIN}"
+        f"<b>{row.forks}{config.FORK_GLYPH}</b>"
     )
     if row.no_ai:
         link += (
-            f"{config.META_JOIN}"
+            f"{config.META_ITEM_JOIN}"
             f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
             f' width="{config.NO_AI_IMG_WIDTH}"'
             f' height="{config.NO_AI_IMG_HEIGHT}">'

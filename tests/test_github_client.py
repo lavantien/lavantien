@@ -120,6 +120,7 @@ class TestFetchRepoSnapshot(unittest.TestCase):
     def test_parses_all_fields(self, run):
         run.return_value = gh_result(stdout=json.dumps({
             "stargazerCount": 1234,
+            "forkCount": 4,
             "description": "curated resources",
             "createdAt": "2023-05-06T07:08:09Z",
             "languages": [{"size": 400000, "node": {"name": "Go"}},
@@ -127,13 +128,14 @@ class TestFetchRepoSnapshot(unittest.TestCase):
         }))
         self.assertEqual(
             fetch_repo_snapshot("lavantien/modern-swe-library"),
-            {"stars": 1234, "description": "curated resources",
+            {"stars": 1234, "forks": 4, "description": "curated resources",
              "createdAt": "2023-05-06T07:08:09Z",
              "langs": (("Go", 400000), ("Python", 50000))},
         )
         run.assert_called_once_with(
             ["gh", "repo", "view", "lavantien/modern-swe-library",
-             "--json", "stargazerCount,description,createdAt,languages"],
+             "--json", "stargazerCount,forkCount,description,"
+                       "createdAt,languages"],
             capture_output=True, text=True, timeout=60,
         )
 
@@ -141,12 +143,14 @@ class TestFetchRepoSnapshot(unittest.TestCase):
     def test_null_description_normalizes_to_empty(self, run):
         run.return_value = gh_result(stdout=json.dumps({
             "stargazerCount": 3,
+            "forkCount": 1,
             "description": None,
             "createdAt": "2024-01-01T00:00:00Z",
         }))
         self.assertEqual(
             fetch_repo_snapshot("x/y"),
-            {"stars": 3, "description": "", "createdAt": "2024-01-01T00:00:00Z",
+            {"stars": 3, "forks": 1, "description": "",
+             "createdAt": "2024-01-01T00:00:00Z",
              "langs": ()},
         )
 
@@ -156,6 +160,19 @@ class TestFetchRepoSnapshot(unittest.TestCase):
             with self.subTest(bad=bad):
                 run.return_value = gh_result(stdout=json.dumps({
                     "stargazerCount": bad,
+                    "forkCount": 4,
+                    "description": "d",
+                    "createdAt": "2024-01-01T00:00:00Z",
+                }))
+                self.assertIsNone(fetch_repo_snapshot("x/y"))
+
+    @mock.patch("scripts.github_client.subprocess.run")
+    def test_non_int_fork_count_returns_none(self, run):
+        for bad in ("4", True):
+            with self.subTest(bad=bad):
+                run.return_value = gh_result(stdout=json.dumps({
+                    "stargazerCount": 5,
+                    "forkCount": bad,
                     "description": "d",
                     "createdAt": "2024-01-01T00:00:00Z",
                 }))
@@ -165,6 +182,7 @@ class TestFetchRepoSnapshot(unittest.TestCase):
     def test_missing_fields_return_none(self, run):
         base = {
             "stargazerCount": 5,
+            "forkCount": 4,
             "description": "d",
             "createdAt": "2024-01-01T00:00:00Z",
         }
@@ -202,13 +220,15 @@ class TestFetchRepoSnapshot(unittest.TestCase):
             gh_result(stderr="boom", returncode=1),
             gh_result(stdout=json.dumps({
                 "stargazerCount": 7,
+                "forkCount": 2,
                 "description": "d",
                 "createdAt": "2024-01-01T00:00:00Z",
             })),
         ]
         self.assertEqual(
             fetch_repo_snapshot("x/y"),
-            {"stars": 7, "description": "d", "createdAt": "2024-01-01T00:00:00Z",
+            {"stars": 7, "forks": 2, "description": "d",
+             "createdAt": "2024-01-01T00:00:00Z",
              "langs": ()},
         )
         self.assertEqual(run.call_count, 2)

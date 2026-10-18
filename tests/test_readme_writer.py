@@ -20,14 +20,16 @@ BADGE_IMG = (
     f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
     f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
 )
-NBSP_JOIN = "&nbsp;"
+NBSP_JOIN = "&nbsp;&nbsp;"
 
 _ROW_RE = re.compile(r"<tr>(.*?)</tr>", re.DOTALL)
 _CELL_RE = re.compile(
     r'<td width="[^"]*"><a href="https://github\.com/lavantien/(?P<name>[^"]+)">'
     r"(?P=name)</a>"
-    r"<br>\(<i>(?P<year>\d{4})</i>\)&nbsp;\(<b>(?P<stars>[^<]*)⭐</b>\)"
-    r"(?P<badge>&nbsp;<img [^>]+>)?"
+    r"<br>\(<i>(?P<year>\d{4})</i>\)"
+    r"&nbsp;&nbsp;<b>(?P<stars>[^<]*)✪</b>"
+    r"&nbsp;&nbsp;<b>(?P<forks>\d+)♆</b>"
+    r"(?P<badge>&nbsp;&nbsp;<img [^>]+>)?"
     r"(?P<langsrow>(?:<br>(?:(?!</td>).)*))?"
     r'</td><td width="[^"]*">(?P<desc>.*?)</td>'
 )
@@ -72,10 +74,11 @@ def parse_langs(langsrow):
 
 
 def repo(name, year, stars, description, stars_display="", no_ai=False,
-         top_langs=()):
+         top_langs=(), forks=0):
     return types.SimpleNamespace(
         name=name, year=year, stars=stars, description=description,
         stars_display=stars_display, no_ai=no_ai, top_langs=top_langs,
+        forks=forks,
     )
 
 
@@ -103,6 +106,7 @@ def parse_fixture_table(messy):
                     stars_display=stars_text if "+" in stars_text else "",
                     no_ai=match["badge"] is not None,
                     top_langs=top_langs,
+                    forks=int(match["forks"]),
                 )
             )
     return table, rows, icon_srcs
@@ -148,13 +152,13 @@ class TestRenderRepoTable(unittest.TestCase):
             (
                 '<table width="100%">',
                 '<tr><td width="25%"><a href="https://github.com/lavantien/alpha">'
-                "alpha</a><br>(<i>2020</i>)&nbsp;(<b>1⭐</b>)"
+                "alpha</a><br>(<i>2020</i>)&nbsp;&nbsp;<b>1✪</b>&nbsp;&nbsp;<b>0♆</b>"
                 '</td><td width="25%">first</td>'
                 '<td width="25%"><a href="https://github.com/lavantien/beta">'
-                "beta</a><br>(<i>2021</i>)&nbsp;(<b>2⭐</b>)"
+                "beta</a><br>(<i>2021</i>)&nbsp;&nbsp;<b>2✪</b>&nbsp;&nbsp;<b>0♆</b>"
                 '</td><td width="25%">second</td></tr>',
                 '<tr><td width="25%"><a href="https://github.com/lavantien/gamma">'
-                "gamma</a><br>(<i>2022</i>)&nbsp;(<b>3⭐</b>)"
+                "gamma</a><br>(<i>2022</i>)&nbsp;&nbsp;<b>3✪</b>&nbsp;&nbsp;<b>0♆</b>"
                 '</td><td width="25%">third</td></tr>',
                 "</table>",
             )
@@ -169,14 +173,15 @@ class TestRenderRepoTable(unittest.TestCase):
     def test_badged_prefixed_cell_exact(self):
         table = render_repo_table([
             repo("modern-swe-library", 2023, 9, "lib",
-                 stars_display="200+9", no_ai=True),
+                 stars_display="200+9", no_ai=True, forks=1),
         ], icon_srcs={})
         self.assertEqual(
             table,
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/modern-swe-library">'
-            "modern-swe-library</a><br>(<i>2023</i>)&nbsp;(<b>200+9⭐</b>)"
+            "modern-swe-library</a><br>(<i>2023</i>)"
+            "&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;<b>1♆</b>"
             + NBSP_JOIN
             + BADGE_IMG
             + '</td><td width="25%">lib</td></tr>\n</table>',
@@ -189,7 +194,7 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/plain">plain</a>'
-            "<br>(<i>2020</i>)&nbsp;(<b>3⭐</b>)"
+            "<br>(<i>2020</i>)&nbsp;&nbsp;<b>3✪</b>&nbsp;&nbsp;<b>0♆</b>"
             '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
@@ -203,12 +208,12 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/svc">svc</a>'
-            "<br>(<i>2024</i>)&nbsp;(<b>8⭐</b>)"
+            "<br>(<i>2024</i>)&nbsp;&nbsp;<b>8✪</b>&nbsp;&nbsp;<b>0♆</b>"
             "<br>"
             '<img src="assets/lang-icons/go-plain.svg" alt="Go"'
             ' width="14" height="14">'
             "&nbsp;2.2M"
-            " "
+            "&nbsp; "
             '<img src="assets/lang-icons/python-plain.svg" alt="Python"'
             ' width="14" height="14">'
             "&nbsp;140K"
@@ -224,7 +229,7 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n'
             '<tr><td width="25%">'
             '<a href="https://github.com/lavantien/svc">svc</a>'
-            "<br>(<i>2024</i>)&nbsp;(<b>8⭐</b>)"
+            "<br>(<i>2024</i>)&nbsp;&nbsp;<b>8✪</b>&nbsp;&nbsp;<b>0♆</b>"
             "<br>Kotlin&nbsp;75K"
             '</td><td width="25%">doc</td></tr>\n</table>',
         )

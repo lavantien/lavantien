@@ -72,11 +72,14 @@ TABLE_REPO_LIMIT = 20
 TABLE_WIDTH = "100%"
 TABLE_CELL_WIDTH = "25%"
 META_JOIN = "&nbsp;"
+META_ITEM_JOIN = "&nbsp;&nbsp;"
+STAR_GLYPH = "✪"
+FORK_GLYPH = "♆"
 TABLE_LANGS_N = 2
 TABLE_LANGS_EXTRA = frozenset({"Shell", "PowerShell", "Markdown"})
 TABLE_LANGS_ALLOW = PROG_LANGS | TABLE_LANGS_EXTRA
 TABLE_LANG_ICON_SIZE = 14
-LANG_CHIP_JOIN = " "
+LANG_CHIP_JOIN = "&nbsp; "
 LANG_ICONS_SRC_DIR = "assets/lang-icons"
 LANG_ICONS_DIR = REPO_ROOT / "assets" / "lang-icons"
 EXCLUDED_REPO_NAMES = frozenset({"lavantien", "neovim"})
@@ -93,8 +96,8 @@ NO_AI_TEXT_COLOR = "#008000"
 GH_OWNER = "lavantien"
 REPO_URL_BASE = f"https://github.com/{GH_OWNER}"
 GH_JSON_FIELDS = (
-    "name,stargazerCount,description,languages,isFork,isArchived,"
-    "createdAt,visibility"
+    "name,stargazerCount,forkCount,description,languages,isFork,"
+    "isArchived,createdAt,visibility"
 )
 GH_REPO_LIMIT = 300
 GH_TIMEOUT_SECONDS = 60

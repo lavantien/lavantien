@@ -108,11 +108,14 @@ class TestPinnedRepos(unittest.TestCase):
         self.assertEqual(config.TABLE_WIDTH, "100%")
         self.assertEqual(config.TABLE_CELL_WIDTH, "25%")
         self.assertEqual(config.META_JOIN, "&nbsp;")
+        self.assertEqual(config.META_ITEM_JOIN, "&nbsp;&nbsp;")
+        self.assertEqual(config.STAR_GLYPH, "✪")
+        self.assertEqual(config.FORK_GLYPH, "♆")
 
     def test_table_language_row_constants(self):
         self.assertEqual(config.TABLE_LANGS_N, 2)
         self.assertEqual(config.TABLE_LANG_ICON_SIZE, 14)
-        self.assertEqual(config.LANG_CHIP_JOIN, " ")
+        self.assertEqual(config.LANG_CHIP_JOIN, "&nbsp; ")
         self.assertEqual(config.LANG_ICONS_SRC_DIR, "assets/lang-icons")
         self.assertEqual(
             config.LANG_ICONS_DIR, config.REPO_ROOT / "assets" / "lang-icons"
@@ -174,6 +177,11 @@ class TestLiteralPins(unittest.TestCase):
         self.assertEqual(config.FONT_SIZE, 13)
         self.assertEqual(config.TEXT_MAIN, "#6e7781")
         self.assertEqual(config.GH_TIMEOUT_SECONDS, 60)
+        self.assertEqual(
+            config.GH_JSON_FIELDS,
+            "name,stargazerCount,forkCount,description,languages,"
+            "isFork,isArchived,createdAt,visibility",
+        )
         self.assertEqual(
             config.RECOLOR_FILLS,
             frozenset({"#000", "#000000", "#000080", "black"}),

@@ -18,6 +18,7 @@ class Repo:
     description: str
     year: int
     stars_display: str = ""
+    forks: int = 0
     no_ai: bool = False
     top_langs: tuple[tuple[str, int], ...] = ()
 
@@ -68,6 +69,7 @@ def aggregate(items: Iterable[dict]) -> Aggregation:
         repos.append(Repo(
             name=item["name"],
             stars=item["stargazerCount"],
+            forks=item["forkCount"],
             description=item.get("description") or "",
             year=int(item["createdAt"][:4]),
             no_ai=item["createdAt"] < cutoff,
@@ -103,10 +105,11 @@ def select_rows(
     wins verbatim even when empty, the config description serving only
     when the fetch itself fails, so it never drops or loses its badge),
     then the free market sorted by stars filling up to the table limit.
-    Pinned years always win over createdAt; stars, description, and the
-    derived no-AI flag stay live from the snapshot unless the config
-    entry pins them, and a pinned langs entry replaces the language row
-    outright (the raw markdown line count linguist never reports)."""
+    Pinned years always win over createdAt; stars, forks, description,
+    and the derived no-AI flag stay live from the snapshot unless the
+    config entry pins them, and a pinned langs entry replaces the
+    language row outright (the raw markdown line count linguist never
+    reports)."""
     by_name = {r.name: r for r in repos}
     rows: list[Repo] = []
     for entry in config.PINNED_REPOS:
@@ -118,6 +121,7 @@ def select_rows(
             row = Repo(
                 name=entry["name"],
                 stars=snap["stars"] if snap else 0,
+                forks=snap["forks"] if snap else 0,
                 description=(
                     snap["description"]
                     if snap is not None

@@ -63,6 +63,7 @@ def _fixture_snapshot_fetch(items: list[dict]) -> Callable[[str], dict | None]:
     own = {
         f"{config.GH_OWNER}/{item['name']}": {
             "stars": item["stargazerCount"],
+            "forks": item["forkCount"],
             "description": item.get("description") or "",
             "createdAt": item["createdAt"],
             "langs": item_top_langs(item),
