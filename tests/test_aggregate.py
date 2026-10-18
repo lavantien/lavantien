@@ -307,6 +307,20 @@ class TestSelectRows(unittest.TestCase):
             )
         self.assertEqual(rows[0].description, "config description")
 
+    def test_snapshot_created_exactly_at_cutoff_is_not_badged(self):
+        items = [item("llm-tournament", created="2025-03-10T11:22:33Z")]
+        agg = aggregate(items)
+        snap = {"stars": 2, "description": "same moment",
+                "createdAt": "2025-03-10T11:22:33Z"}
+        entries = ({"name": "twin", "year": 2025},)
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(
+                [], snapshot_fetch=lambda full_name: snap,
+                cutoff=agg.no_ai_cutoff,
+            )
+        self.assertEqual((rows[0].stars, rows[0].description), (2, "same moment"))
+        self.assertFalse(rows[0].no_ai)
+
     def test_pinned_no_ai_override_wins(self):
         repos = aggregate([
             item("llm-tournament", created="2025-03-10T11:22:33Z"),

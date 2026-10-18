@@ -310,6 +310,22 @@ class TestEndToEndFromFixture(unittest.TestCase):
         )
         self.assertIn("(<b>0⭐</b>)", content)
 
+    def test_fixture_snapshot_fetch_normalizes_descriptions(self):
+        items = [
+            dict(item(name="described", stars=3, langs=(),
+                      created="2024-02-02T00:00:00Z"),
+                 description="live description"),
+            dict(item(name="nullish", stars=1, langs=()), description=None),
+        ]
+        fetch = generate._fixture_snapshot_fetch(items)
+        self.assertEqual(
+            fetch("lavantien/described"),
+            {"stars": 3, "description": "live description",
+             "createdAt": "2024-02-02T00:00:00Z"},
+        )
+        self.assertEqual(fetch("lavantien/nullish")["description"], "")
+        self.assertIsNone(fetch("lavantien/absent"))
+
     @mock.patch("scripts.github_client.fetch_repo_snapshot",
                 return_value={"stars": 9, "description": "lib",
                               "createdAt": "2023-01-01T00:00:00Z"})
