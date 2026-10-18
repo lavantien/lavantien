@@ -1,5 +1,23 @@
 [
   {
+    "createdAt": "2025-01-24T07:01:02Z",
+    "description": "Transform Google Takeout emails into organized, archival-quality PDFs with attachments",
+    "forkCount": 3,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 6545,
+        "node": {
+          "name": "Python"
+        }
+      }
+    ],
+    "name": "takeout-to-pdf",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
     "createdAt": "2021-12-19T15:03:46Z",
     "description": "Config files for my GitHub profile.",
     "forkCount": 2,
@@ -13,7 +31,7 @@
         }
       },
       {
-        "size": 188667,
+        "size": 191991,
         "node": {
           "name": "Python"
         }
@@ -25,7 +43,7 @@
   },
   {
     "createdAt": "2026-10-11T18:50:28Z",
-    "description": "3BLD/WCA cubing trainer in Rust/Bevy: alg repository with mechanical cube verification, FSRS-5 case drills, SQLite persistence, 3D replay, full fuzz/mutation",
+    "description": "3BLD/WCA cubing trainer in Rust/Bevy: alg repository with mechanical cube verification, evolved optimal audio/image pairs, commutator-to-plain-alg, FSRS-5 case drills, SQLite persistence, 3D replay, full fuzz/mutation",
     "forkCount": 2,
     "isArchived": false,
     "isFork": false,
@@ -109,7 +127,7 @@
   },
   {
     "createdAt": "2026-06-29T00:58:46Z",
-    "description": "Offline single-user app: a dual-pane quote workspace and the full text corpus explorer, with the sync/parse/load/triangulate pipeline, graph, analytics, qm CLI.",
+    "description": "Offline textual analysis app: a dual-pane quote workspace and the full text corpus explorer, with the sync/parse/load/triangulate pipeline, graph, analytics, qm CLI.",
     "forkCount": 2,
     "isArchived": false,
     "isFork": false,
@@ -896,24 +914,6 @@
     ],
     "name": "TwoWarriors",
     "stargazerCount": 4,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2025-01-24T07:01:02Z",
-    "description": "Transform Google Takeout emails into organized, archival-quality PDFs with attachments",
-    "forkCount": 3,
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 6545,
-        "node": {
-          "name": "Python"
-        }
-      }
-    ],
-    "name": "takeout-to-pdf",
-    "stargazerCount": 5,
     "visibility": "PUBLIC"
   },
   {
