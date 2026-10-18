@@ -32,7 +32,6 @@ def render_icons(langs, directory) -> tuple[dict[str, str], list, list]:
     the php mark) get language-suffixed files so their brand colors
     never collapse onto one overwritten image."""
     names = sorted(name for name in langs if name in config.DEVICON_MAP)
-    skipped = sorted(set(langs) - set(names))
     bases = {
         name: f"{config.DEVICON_MAP[name][0]}-{config.DEVICON_MAP[name][1]}.svg"
         for name in names
@@ -53,7 +52,7 @@ def render_icons(langs, directory) -> tuple[dict[str, str], list, list]:
             base = f"{base[:-4]}-{suffix}.svg"
         mapping[name] = f"{config.LANG_ICONS_SRC_DIR}/{base}"
         planned.append((pathlib.Path(directory) / base, content))
-    return mapping, planned, skipped
+    return mapping, planned, sorted(set(langs) - set(mapping))
 
 
 def ensure_icons(langs, directory) -> tuple[dict[str, str], int]:
