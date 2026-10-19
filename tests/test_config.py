@@ -166,12 +166,13 @@ class TestBadgeAssets(unittest.TestCase):
         )
         self.assertTrue(all(p.get("d") for p in paths))
 
-    def test_ai_logo_is_letters_only(self):
+    def test_ai_logo_pins_green_ring_and_letters(self):
         root = ET.parse(config.REPO_ROOT / config.AI_IMG_SRC).getroot()
         paths = root.findall(self.SVG_PATH)
         self.assertEqual(
             {p.get("id"): p.get("fill") for p in paths},
-            {"letters": config.BADGE_TEXT_COLOR},
+            {"ring": config.BADGE_TEXT_COLOR,
+             "letters": config.BADGE_TEXT_COLOR},
         )
         self.assertTrue(all(p.get("d") for p in paths))
 
