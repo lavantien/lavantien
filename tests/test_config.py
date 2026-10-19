@@ -176,6 +176,18 @@ class TestBadgeAssets(unittest.TestCase):
         )
         self.assertTrue(all(p.get("d") for p in paths))
 
+    def test_ai_ring_is_a_plain_annulus(self):
+        """The no-ai ring path embeds the prohibition slash as diagonal
+        chord subpaths, which repainted green reads as a stripe crossing
+        the letters; the ai mark must rebuild the ring from pure arcs."""
+        root = ET.parse(config.REPO_ROOT / config.AI_IMG_SRC).getroot()
+        ring = next(
+            p for p in root.findall(self.SVG_PATH) if p.get("id") == "ring"
+        )
+        self.assertEqual(ring.get("fill-rule"), "evenodd")
+        commands = set(re.findall(r"[A-Za-z]", ring.get("d")))
+        self.assertLessEqual(commands, {"M", "a", "Z"})
+
 
 class TestLiteralPins(unittest.TestCase):
     def test_pinned_constants(self):
