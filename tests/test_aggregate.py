@@ -414,9 +414,31 @@ class TestSelectRows(unittest.TestCase):
             )
         by_name = {r.name: (r.stars, r.description, r.no_ai) for r in rows}
         self.assertEqual(by_name, {
-            "plain": (0, "", False),
-            "described": (0, "config description", False),
+            "plain": (0, "", True),
+            "described": (0, "config description", True),
         })
+
+    def test_snapshot_none_derives_no_ai_from_pinned_year(self):
+        entries = (
+            {"name": "ancient", "year": 2020},
+            {"name": "modern-era", "year": 2025},
+        )
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(
+                [], snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        by_name = {r.name: r.no_ai for r in rows}
+        self.assertEqual(by_name, {"ancient": True, "modern-era": False})
+
+    def test_snapshot_none_entry_no_ai_pin_wins_over_year_fallback(self):
+        entries = ({"name": "twin", "year": 2024, "no_ai": False},)
+        with mock.patch.object(config, "PINNED_REPOS", entries):
+            rows = select_rows(
+                [], snapshot_fetch=lambda full_name: None,
+                cutoff=config.NO_AI_FALLBACK_CUTOFF,
+            )
+        self.assertFalse(rows[0].no_ai)
 
     def test_snapshot_empty_description_wins_over_config(self):
         entries = ({"name": "described", "year": 2021,

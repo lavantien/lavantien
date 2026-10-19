@@ -52,7 +52,7 @@ def aggregate(items: Iterable[dict]) -> Aggregation:
     of the reference repo in this batch, falling back to
     NO_AI_FALLBACK_CUTOFF when it is absent so the cutoff is never None:
     ISO 8601 Z strings compare correctly as text, and strictly-before
-    wins so the reference repo itself is never badged.
+    wins so the reference repo itself never carries the no-AI badge.
     """
     items = list(items)
     repos: list[Repo] = []
@@ -103,13 +103,15 @@ def select_rows(
     (a pinned repo missing from the aggregate, e.g. archived, private,
     or forked, is rebuilt from a live repo snapshot, whose description
     wins verbatim even when empty, the config description serving only
-    when the fetch itself fails, so it never drops or loses its badge),
-    then the free market sorted by stars filling up to the table limit.
-    Pinned years always win over createdAt; stars, forks, description,
-    and the derived no-AI flag stay live from the snapshot unless the
-    config entry pins them, and a pinned langs entry replaces the
-    language row outright (the raw markdown line count linguist never
-    reports)."""
+    when the fetch itself fails, so it never drops or loses its badge;
+    on that total failure the no-AI flag falls back to the pinned year
+    against the cutoff year, so a pre-cutoff pin never renders the AI
+    badge from missing data alone), then the free market sorted by
+    stars filling up to the table limit. Pinned years always win over
+    createdAt; stars, forks, description, and the derived no-AI flag
+    stay live from the snapshot unless the config entry pins them, and
+    a pinned langs entry replaces the language row outright (the raw
+    markdown line count linguist never reports)."""
     by_name = {r.name: r for r in repos}
     rows: list[Repo] = []
     for entry in config.PINNED_REPOS:
@@ -128,7 +130,11 @@ def select_rows(
                     else entry.get("description", "")
                 ),
                 year=entry["year"],
-                no_ai=snap is not None and snap["createdAt"] < cutoff,
+                no_ai=(
+                    snap["createdAt"] < cutoff
+                    if snap is not None
+                    else entry["year"] < int(cutoff[:4])
+                ),
                 top_langs=snap["langs"] if snap else (),
             )
         if "no_ai" in entry:

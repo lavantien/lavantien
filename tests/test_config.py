@@ -91,7 +91,7 @@ class TestPinnedRepos(unittest.TestCase):
             {"name": "blind-trainer", "year": 2026},
             {"name": "quotes-manager", "year": 2026},
             {"name": "dota-helper", "year": 2026},
-            {"name": "llm-tournament", "year": 2024},
+            {"name": "llm-tournament", "year": 2024, "no_ai": False},
             {"name": "genetic-cpp", "year": 2016},
             {"name": "SumoBot", "year": 2017},
             {"name": "go-edge-mesh", "year": 2021},
