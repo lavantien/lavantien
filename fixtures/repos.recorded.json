@@ -1,19 +1,43 @@
 [
   {
-    "createdAt": "2025-01-24T07:01:02Z",
-    "description": "Transform Google Takeout emails into organized, archival-quality PDFs with attachments",
-    "forkCount": 3,
+    "createdAt": "2021-04-04T04:51:23Z",
+    "description": "A giga optimized Sudoku solver and generator",
+    "forkCount": 2,
     "isArchived": false,
     "isFork": false,
     "languages": [
       {
-        "size": 6545,
+        "size": 386661,
         "node": {
-          "name": "Python"
+          "name": "Go"
+        }
+      },
+      {
+        "size": 9971,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 3410,
+        "node": {
+          "name": "CSS"
+        }
+      },
+      {
+        "size": 590,
+        "node": {
+          "name": "JavaScript"
+        }
+      },
+      {
+        "size": 3752,
+        "node": {
+          "name": "HTML"
         }
       }
     ],
-    "name": "takeout-to-pdf",
+    "name": "go-sudoku-solver",
     "stargazerCount": 5,
     "visibility": "PUBLIC"
   },
@@ -31,7 +55,7 @@
         }
       },
       {
-        "size": 191991,
+        "size": 191771,
         "node": {
           "name": "Python"
         }
@@ -39,42 +63,6 @@
     ],
     "name": "lavantien",
     "stargazerCount": 5,
-    "visibility": "PUBLIC"
-  },
-  {
-    "createdAt": "2026-10-11T18:50:28Z",
-    "description": "3BLD/WCA cubing trainer in Rust/Bevy: alg repository with mechanical cube verification, evolved optimal audio/image pairs, commutator-to-plain-alg, FSRS-5 case drills, SQLite persistence, 3D replay, full fuzz/mutation",
-    "forkCount": 2,
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 12528,
-        "node": {
-          "name": "Makefile"
-        }
-      },
-      {
-        "size": 2466211,
-        "node": {
-          "name": "Rust"
-        }
-      },
-      {
-        "size": 106141,
-        "node": {
-          "name": "Python"
-        }
-      },
-      {
-        "size": 80474,
-        "node": {
-          "name": "PowerShell"
-        }
-      }
-    ],
-    "name": "blind-trainer",
-    "stargazerCount": 3,
     "visibility": "PUBLIC"
   },
   {
@@ -123,6 +111,66 @@
     ],
     "name": "dotfiles",
     "stargazerCount": 35,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2025-01-24T07:01:02Z",
+    "description": "Transform Google Takeout emails into organized, archival-quality PDFs with attachments",
+    "forkCount": 3,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 13040,
+        "node": {
+          "name": "Python"
+        }
+      },
+      {
+        "size": 1751,
+        "node": {
+          "name": "Makefile"
+        }
+      }
+    ],
+    "name": "takeout-to-pdf",
+    "stargazerCount": 5,
+    "visibility": "PUBLIC"
+  },
+  {
+    "createdAt": "2026-10-11T18:50:28Z",
+    "description": "3BLD/WCA cubing trainer in Rust/Bevy: alg repository with mechanical cube verification, evolved optimal audio/image pairs, commutator-to-plain-alg, FSRS-5 case drills, SQLite persistence, 3D replay, full fuzz/mutation",
+    "forkCount": 2,
+    "isArchived": false,
+    "isFork": false,
+    "languages": [
+      {
+        "size": 12528,
+        "node": {
+          "name": "Makefile"
+        }
+      },
+      {
+        "size": 2466211,
+        "node": {
+          "name": "Rust"
+        }
+      },
+      {
+        "size": 106141,
+        "node": {
+          "name": "Python"
+        }
+      },
+      {
+        "size": 80474,
+        "node": {
+          "name": "PowerShell"
+        }
+      }
+    ],
+    "name": "blind-trainer",
+    "stargazerCount": 3,
     "visibility": "PUBLIC"
   },
   {
@@ -425,24 +473,6 @@
     "visibility": "PUBLIC"
   },
   {
-    "createdAt": "2021-04-04T04:51:23Z",
-    "description": "A giga optimized Sudoku solver and generator",
-    "forkCount": 2,
-    "isArchived": false,
-    "isFork": false,
-    "languages": [
-      {
-        "size": 32556,
-        "node": {
-          "name": "Go"
-        }
-      }
-    ],
-    "name": "go-sudoku-solver",
-    "stargazerCount": 5,
-    "visibility": "PUBLIC"
-  },
-  {
     "createdAt": "2022-03-29T17:49:22Z",
     "description": "A simple program to determine space allocation for an office renter",
     "forkCount": 2,
@@ -480,7 +510,7 @@
   },
   {
     "createdAt": "2025-12-28T10:01:24Z",
-    "description": "16x16 gomoku/caro variant engine and PvP arena: alpha-beta engine, bitboard, zero-alloc parallel PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, self-sustained opening book, full mutation/fuzz, SQLite/DuckDB, mobile-first HTMX4",
+    "description": "16x16 gomoku/caro variant engine and PvP arena: alpha-beta engine, evolved eval-fit, bitboards, zero-alloc parallel PVS+TT search, lazy SMP tiers, VCF/VCT threat solvers, PID clock manager, self-play opening book, full mutation/fuzz, SQLite/DuckDB, mobile-first HTMX4",
     "forkCount": 3,
     "isArchived": false,
     "isFork": false,
