@@ -52,9 +52,13 @@ EXPECTED_LANGS = [
     ("Lua", 50000),
 ]
 
-BADGE_IMG = (
+NO_AI_BADGE_IMG = (
     f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
-    f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
+    f' width="{config.BADGE_IMG_WIDTH}" height="{config.BADGE_IMG_HEIGHT}">'
+)
+AI_BADGE_IMG = (
+    f'<img src="{config.AI_IMG_SRC}" alt="{config.AI_ALT_TEXT}"'
+    f' width="{config.BADGE_IMG_WIDTH}" height="{config.BADGE_IMG_HEIGHT}">'
 )
 NBSP_JOIN = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
@@ -279,7 +283,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>4♆</b>"
-            + NBSP_JOIN + BADGE_IMG
+            + NBSP_JOIN + NO_AI_BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
               ' width="14" height="14">&nbsp;1.2K',
             content,
@@ -292,21 +296,29 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/dotfiles">dotfiles</a>'
             "<br>(<i>2023</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>42✪</b>"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>3♆</b>"
-            + NBSP_JOIN + BADGE_IMG
+            + NBSP_JOIN + NO_AI_BADGE_IMG
             + '<br><img src="assets/lang-icons/typst-original.svg" alt="Typst"'
               ' width="14" height="14">&nbsp;10.3M'
               '&nbsp;&nbsp;&nbsp; <img src="assets/lang-icons/lua-plain.svg"'
               ' alt="Lua" width="14" height="14">&nbsp;50K',
             content,
         )
+        self.assertIn(
+            '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
+            "<br>(<i>2025</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>15✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
+            + NBSP_JOIN + AI_BADGE_IMG,
+            content,
+        )
         self.assertNotIn(
             '<a href="https://github.com/lavantien/caro-ai-pvp">caro-ai-pvp</a>'
             "<br>(<i>2025</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>15✪</b>"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-            + NBSP_JOIN + BADGE_IMG,
+            + NBSP_JOIN + NO_AI_BADGE_IMG,
             content,
         )
-        self.assertEqual(content.count(BADGE_IMG), 15)
+        self.assertEqual(content.count(NO_AI_BADGE_IMG), 15)
+        self.assertEqual(content.count(AI_BADGE_IMG), 5)
         icon_names = sorted(p.name for p in self.icons.glob("*.svg"))
         self.assertEqual(icon_names, [
             "bash-plain.svg", "c-original.svg", "go-plain.svg", "java-plain.svg",
@@ -318,7 +330,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/tied-zebra">tied-zebra</a>'
             "<br>(<i>2022</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>7✪</b>"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-            + NBSP_JOIN + BADGE_IMG
+            + NBSP_JOIN + NO_AI_BADGE_IMG
             + '<br><img src="assets/lang-icons/bash-plain.svg" alt="Shell"'
               ' width="14" height="14">&nbsp;526',
             content,
@@ -387,7 +399,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+17✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-            + NBSP_JOIN + BADGE_IMG,
+            + NBSP_JOIN + NO_AI_BADGE_IMG,
             content,
         )
         self.assertIn("<b>0✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>", content)
@@ -431,7 +443,7 @@ class TestEndToEndFromFixture(unittest.TestCase):
             '<a href="https://github.com/lavantien/modern-swe-library">'
             "modern-swe-library</a><br>(<i>2023</i>)"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>4♆</b>"
-            + NBSP_JOIN + BADGE_IMG
+            + NBSP_JOIN + NO_AI_BADGE_IMG
             + '<br><img src="assets/lang-icons/markdown-original.svg" alt="Markdown"'
               ' width="14" height="14">&nbsp;1.2K',
             content,

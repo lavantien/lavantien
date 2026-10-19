@@ -69,13 +69,16 @@ def _repo_cell(row: RepoLike, icon_srcs: Mapping[str, str]) -> str:
         f"{config.META_ITEM_JOIN}"
         f"<b>{row.forks}{config.FORK_GLYPH}</b>"
     )
-    if row.no_ai:
-        link += (
-            f"{config.META_ITEM_JOIN}"
-            f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
-            f' width="{config.NO_AI_IMG_WIDTH}"'
-            f' height="{config.NO_AI_IMG_HEIGHT}">'
-        )
+    badge_src, badge_alt = (
+        (config.NO_AI_IMG_SRC, config.NO_AI_ALT_TEXT) if row.no_ai
+        else (config.AI_IMG_SRC, config.AI_ALT_TEXT)
+    )
+    link += (
+        f"{config.META_ITEM_JOIN}"
+        f'<img src="{badge_src}" alt="{badge_alt}"'
+        f' width="{config.BADGE_IMG_WIDTH}"'
+        f' height="{config.BADGE_IMG_HEIGHT}">'
+    )
     if row.top_langs:
         chips = [
             _lang_chip(lang, size, icon_srcs.get(lang))

@@ -140,26 +140,38 @@ class TestPinnedRepos(unittest.TestCase):
             config.EXCLUDED_REPO_NAMES, frozenset({"lavantien", "neovim", "dev"})
         )
 
-    def test_no_ai_badge_constants(self):
+    def test_badge_constants(self):
         self.assertEqual(config.NO_AI_REFERENCE_REPO, "llm-tournament")
         self.assertEqual(config.NO_AI_FALLBACK_CUTOFF, "2025-01-01T20:30:10Z")
         self.assertEqual(config.NO_AI_IMG_SRC, "assets/no-ai.svg")
         self.assertEqual(config.NO_AI_ALT_TEXT, "no AI")
-        self.assertEqual(config.NO_AI_IMG_WIDTH, 14)
-        self.assertEqual(config.NO_AI_IMG_HEIGHT, 14)
-        self.assertEqual(config.NO_AI_BORDER_COLOR, "#ff0000")
-        self.assertEqual(config.NO_AI_TEXT_COLOR, "#008000")
+        self.assertEqual(config.AI_IMG_SRC, "assets/ai.svg")
+        self.assertEqual(config.AI_ALT_TEXT, "AI")
+        self.assertEqual(config.BADGE_IMG_WIDTH, 14)
+        self.assertEqual(config.BADGE_IMG_HEIGHT, 14)
+        self.assertEqual(config.NO_AI_RING_COLOR, "#ff0000")
+        self.assertEqual(config.BADGE_TEXT_COLOR, "#008000")
 
 
-class TestNoAiBadgeAsset(unittest.TestCase):
-    def test_single_logo_with_id_pinned_colors(self):
-        path = config.REPO_ROOT / config.NO_AI_IMG_SRC
-        root = ET.parse(path).getroot()
-        paths = root.findall("{http://www.w3.org/2000/svg}path")
+class TestBadgeAssets(unittest.TestCase):
+    SVG_PATH = "{http://www.w3.org/2000/svg}path"
+
+    def test_no_ai_logo_pins_ring_and_letters(self):
+        root = ET.parse(config.REPO_ROOT / config.NO_AI_IMG_SRC).getroot()
+        paths = root.findall(self.SVG_PATH)
         self.assertEqual(
             {p.get("id"): p.get("fill") for p in paths},
-            {"ring": config.NO_AI_BORDER_COLOR,
-             "letters": config.NO_AI_TEXT_COLOR},
+            {"ring": config.NO_AI_RING_COLOR,
+             "letters": config.BADGE_TEXT_COLOR},
+        )
+        self.assertTrue(all(p.get("d") for p in paths))
+
+    def test_ai_logo_is_letters_only(self):
+        root = ET.parse(config.REPO_ROOT / config.AI_IMG_SRC).getroot()
+        paths = root.findall(self.SVG_PATH)
+        self.assertEqual(
+            {p.get("id"): p.get("fill") for p in paths},
+            {"letters": config.BADGE_TEXT_COLOR},
         )
         self.assertTrue(all(p.get("d") for p in paths))
 

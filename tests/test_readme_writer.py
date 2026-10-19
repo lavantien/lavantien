@@ -16,9 +16,13 @@ EXPECTED_IMG = (
     ' alt="Top languages by code volume"></p>'
 )
 UPDATED_NEW = config.UPDATED_PREFIX + "2026-10-06" + config.UPDATED_SUFFIX
-BADGE_IMG = (
+NO_AI_BADGE_IMG = (
     f'<img src="{config.NO_AI_IMG_SRC}" alt="{config.NO_AI_ALT_TEXT}"'
-    f' width="{config.NO_AI_IMG_WIDTH}" height="{config.NO_AI_IMG_HEIGHT}">'
+    f' width="{config.BADGE_IMG_WIDTH}" height="{config.BADGE_IMG_HEIGHT}">'
+)
+AI_BADGE_IMG = (
+    f'<img src="{config.AI_IMG_SRC}" alt="{config.AI_ALT_TEXT}"'
+    f' width="{config.BADGE_IMG_WIDTH}" height="{config.BADGE_IMG_HEIGHT}">'
 )
 NBSP_JOIN = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
@@ -29,7 +33,7 @@ _CELL_RE = re.compile(
     r"<br>\(<i>(?P<year>\d{4})</i>\)"
     r"&nbsp;&nbsp;&nbsp;&nbsp;<b>(?P<stars>[^<]*)✪</b>"
     r"&nbsp;&nbsp;&nbsp;&nbsp;<b>(?P<forks>\d+)♆</b>"
-    r"(?P<badge>&nbsp;&nbsp;&nbsp;&nbsp;<img [^>]+>)?"
+    r"(?P<badge>&nbsp;&nbsp;&nbsp;&nbsp;<img [^>]+>)"
     r"(?P<langsrow>(?:<br>(?:(?!</td>).)*))?"
     r'</td><td width="[^"]*">(?P<desc>.*?)</td>'
 )
@@ -100,6 +104,9 @@ def parse_fixture_table(messy):
             stars_text = match["stars"]
             top_langs, srcs = parse_langs(match["langsrow"])
             icon_srcs.update(srcs)
+            badge_src = re.search(r'src="([^"]+)"', match["badge"]).group(1)
+            if badge_src not in (config.NO_AI_IMG_SRC, config.AI_IMG_SRC):
+                raise ValueError(f"unknown badge src: {badge_src!r}")
             rows.append(
                 repo(
                     match["name"],
@@ -107,7 +114,7 @@ def parse_fixture_table(messy):
                     int(stars_text.rsplit("+", 1)[-1]),
                     match["desc"],
                     stars_display=stars_text if "+" in stars_text else "",
-                    no_ai=match["badge"] is not None,
+                    no_ai=badge_src == config.NO_AI_IMG_SRC,
                     top_langs=top_langs,
                     forks=int(match["forks"]),
                 )
@@ -157,15 +164,18 @@ class TestRenderRepoTable(unittest.TestCase):
                 '<tr><td width="25%"><a href="https://github.com/lavantien/alpha">'
                 "alpha</a><br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>1✪</b>"
                 "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-                '</td><td width="25%">first</td>'
+                + NBSP_JOIN + AI_BADGE_IMG
+                + '</td><td width="25%">first</td>'
                 '<td width="25%"><a href="https://github.com/lavantien/beta">'
                 "beta</a><br>(<i>2021</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>2✪</b>"
                 "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-                '</td><td width="25%">second</td></tr>',
+                + NBSP_JOIN + AI_BADGE_IMG
+                + '</td><td width="25%">second</td></tr>',
                 '<tr><td width="25%"><a href="https://github.com/lavantien/gamma">'
                 "gamma</a><br>(<i>2022</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>3✪</b>"
                 "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-                '</td><td width="25%">third</td></tr>',
+                + NBSP_JOIN + AI_BADGE_IMG
+                + '</td><td width="25%">third</td></tr>',
                 "</table>",
             )
         )
@@ -189,11 +199,11 @@ class TestRenderRepoTable(unittest.TestCase):
             "modern-swe-library</a><br>(<i>2023</i>)"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>200+9✪</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>1♆</b>"
             + NBSP_JOIN
-            + BADGE_IMG
+            + NO_AI_BADGE_IMG
             + '</td><td width="25%">lib</td></tr>\n</table>',
         )
 
-    def test_plain_cell_exact_without_img(self):
+    def test_plain_cell_exact_with_ai_badge(self):
         table = render_repo_table([repo("plain", 2020, 3, "doc")], icon_srcs={})
         self.assertEqual(
             table,
@@ -202,7 +212,8 @@ class TestRenderRepoTable(unittest.TestCase):
             '<a href="https://github.com/lavantien/plain">plain</a>'
             "<br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>3✪</b>"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-            '</td><td width="25%">doc</td></tr>\n</table>',
+            + NBSP_JOIN + AI_BADGE_IMG
+            + '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
     def test_two_lang_chips_row_exact(self):
@@ -217,7 +228,8 @@ class TestRenderRepoTable(unittest.TestCase):
             '<a href="https://github.com/lavantien/svc">svc</a>'
             "<br>(<i>2024</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>8✪</b>"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-            "<br>"
+            + NBSP_JOIN + AI_BADGE_IMG
+            + "<br>"
             '<img src="assets/lang-icons/go-plain.svg" alt="Go"'
             ' width="14" height="14">'
             "&nbsp;2.2M"
@@ -239,7 +251,8 @@ class TestRenderRepoTable(unittest.TestCase):
             '<a href="https://github.com/lavantien/svc">svc</a>'
             "<br>(<i>2024</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>8✪</b>"
             "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>"
-            "<br>Kotlin&nbsp;75K"
+            + NBSP_JOIN + AI_BADGE_IMG
+            + "<br>Kotlin&nbsp;75K"
             '</td><td width="25%">doc</td></tr>\n</table>',
         )
 
@@ -303,6 +316,18 @@ class TestRenderRepoTable(unittest.TestCase):
             '<table width="100%">\n<tr><td width="25%">'
             '<a href="https://github.com/lavantien/x">x</a>'
             "<br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>1✪</b>"
+            '</td><td width="25%">d</td></tr>\n</table>'
+        )
+        with self.assertRaises(ValueError):
+            parse_fixture_table(f"lead\n{table}\ntrail")
+
+    def test_unknown_badge_src_raises(self):
+        table = (
+            '<table width="100%">\n<tr><td width="25%">'
+            '<a href="https://github.com/lavantien/x">x</a>'
+            "<br>(<i>2020</i>)&nbsp;&nbsp;&nbsp;&nbsp;<b>1✪</b>"
+            "&nbsp;&nbsp;&nbsp;&nbsp;<b>0♆</b>&nbsp;&nbsp;&nbsp;&nbsp;"
+            '<img src="assets/other.svg" alt="x" width="14" height="14">'
             '</td><td width="25%">d</td></tr>\n</table>'
         )
         with self.assertRaises(ValueError):
